@@ -68,22 +68,17 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="logoutButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel1" min="-2" pref="62" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                              <Component id="logoutButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" pref="62" max="-2" attributes="0"/>
+                          <Component id="logoutButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="17" max="32767" attributes="0"/>
                   </Group>
@@ -142,22 +137,28 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanel5" alignment="0" max="32767" attributes="0"/>
-                      <Component id="profileButton" alignment="0" max="32767" attributes="0"/>
                       <Component id="jButton1" alignment="0" max="32767" attributes="0"/>
+                      <Component id="leaveManagementButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jPanel5" alignment="1" max="32767" attributes="0"/>
+                      <Component id="timeOut" alignment="0" max="32767" attributes="0"/>
+                      <Component id="timeIn" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                          <Component id="profilePictureLabel" min="-2" pref="66" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="empNumValue" max="32767" attributes="0"/>
-                              <Component id="fullNameValue2" max="32767" attributes="0"/>
-                              <Component id="usernameLabel" alignment="0" max="32767" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                                  <Component id="profilePictureLabel" min="-2" pref="66" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="empNumValue" max="32767" attributes="0"/>
+                                      <Component id="fullNameValue2" max="32767" attributes="0"/>
+                                      <Component id="usernameLabel" alignment="0" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Component id="profileButton" alignment="1" max="32767" attributes="0"/>
+                              <Component id="payrollButton" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
-                      <Component id="payrollButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="leaveManagementButton" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -174,15 +175,19 @@
                               </Group>
                               <Component id="profilePictureLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                          <Component id="timeIn" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                          <Component id="timeOut" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                           <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="profileButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="payrollButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="leaveManagementButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="633" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="563" max="-2" attributes="0"/>
                           <Component id="jButton1" min="-2" pref="34" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -233,19 +238,19 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                              <Component id="jLabel4" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="127" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel4" min="-2" pref="82" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -360,6 +365,40 @@
                     <Property name="text" type="java.lang.String" value="empNum"/>
                   </Properties>
                 </Component>
+                <Component class="javax.swing.JButton" name="timeIn">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="66" red="33" type="rgb"/>
+                    </Property>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Century Gothic" size="12" style="1"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="TIME IN"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="timeInActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="timeOut">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="66" red="33" type="rgb"/>
+                    </Property>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Century Gothic" size="12" style="1"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="TIME OUT"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="timeOutActionPerformed"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="mphCards">
@@ -387,16 +426,16 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="profileLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                                      <Component id="jPanel6" min="-2" pref="1046" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <EmptySpace pref="58" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -407,9 +446,10 @@
                               <Component id="profileLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                                   <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -456,33 +496,30 @@
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="tinLabelValue" alignment="0" max="32767" attributes="0"/>
-                                      <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="clothingLabelValue" alignment="0" max="32767" attributes="0"/>
-                                                      <Component id="phoneAllowanceValue" alignment="0" max="32767" attributes="0"/>
-                                                      <Group type="102" attributes="0">
-                                                          <Group type="103" groupAlignment="0" attributes="0">
-                                                              <Component id="hourlyrateLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
-                                                              <Component id="riceLabelValue" min="-2" pref="146" max="-2" attributes="0"/>
-                                                          </Group>
-                                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                                      </Group>
-                                                  </Group>
-                                                  <EmptySpace min="-2" pref="186" max="-2" attributes="0"/>
-                                              </Group>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="tinLabelValue" alignment="0" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
                                               <Component id="basicSalaryLabelValue" max="32767" attributes="0"/>
+                                              <EmptySpace min="-2" pref="421" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                          <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="clothingLabelValue" alignment="0" max="32767" attributes="0"/>
+                                                  <Component id="phoneAllowanceValue" alignment="0" max="32767" attributes="0"/>
+                                                  <Group type="102" attributes="0">
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Component id="hourlyrateLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
+                                                          <Component id="riceLabelValue" min="-2" pref="146" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                              <EmptySpace min="-2" pref="315" max="-2" attributes="0"/>
+                                              <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                                               <Component id="addressLabelValue" min="-2" max="-2" attributes="0"/>
                                               <Component id="fullNameValue" min="-2" max="-2" attributes="0"/>
                                               <Component id="positionLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -491,10 +528,13 @@
                                               <Component id="phoneLabelValue" alignment="0" min="-2" pref="155" max="-2" attributes="0"/>
                                               <Component id="bdayLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
                                               <Component id="philhealthLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
-                                              <Component id="supervisorLabelValue" alignment="0" min="-2" pref="282" max="-2" attributes="0"/>
-                                              <Component id="sssLabelValue" min="-2" pref="107" max="-2" attributes="0"/>
-                                              <Component id="pagibigLabelValue" min="-2" pref="107" max="-2" attributes="0"/>
+                                              <Component id="sssLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
+                                              <Component id="pagibigLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
                                           </Group>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                                          <Component id="supervisorLabelValue" min="-2" pref="465" max="-2" attributes="0"/>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -531,9 +571,9 @@
                                       <Component id="phoneLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="supervisorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="supervisorLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="supervisorLabel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="supervisorLabelValue" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -587,7 +627,7 @@
                                               <Component id="riceSubsidyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="riceLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace pref="67" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace max="32767" attributes="0"/>
@@ -899,11 +939,11 @@
                                       <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel17" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="newPasswordTField" alignment="0" pref="209" max="32767" attributes="0"/>
+                                      <Component id="newPasswordTField" alignment="0" max="32767" attributes="0"/>
                                       <Component id="existingPasswordTField" alignment="0" max="32767" attributes="0"/>
                                       <Component id="confirmPasswordTField" alignment="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="26" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -926,7 +966,7 @@
                                   <Component id="confirmPasswordTField" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                                   <Component id="changePassword" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="22" max="32767" attributes="0"/>
+                                  <EmptySpace pref="25" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1000,186 +1040,6 @@
                     </Container>
                   </SubComponents>
                 </Container>
-                <Container class="javax.swing.JPanel" name="attendance">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="e5" green="e5" red="e5" type="rgb"/>
-                    </Property>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                      <CardConstraints cardName="card2"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-                                      <Component id="attendanceLabel1" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                                      <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                              <Component id="attendanceLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="javax.swing.JLabel" name="attendanceLabel1">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Century Gothic" size="36" style="1"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Attendance Tracker"/>
-                      </Properties>
-                    </Component>
-                    <Container class="javax.swing.JPanel" name="jPanel3">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="jComboBox2" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="jScrollPane1" min="-2" pref="742" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace pref="150" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace pref="27" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane1" min="-2" pref="399" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JComboBox" name="jComboBox2">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="5">
-                                <StringItem index="0" value="--Select Month---"/>
-                                <StringItem index="1" value="August"/>
-                                <StringItem index="2" value="September"/>
-                                <StringItem index="3" value="October"/>
-                                <StringItem index="4" value="November"/>
-                              </StringArray>
-                            </Property>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                          </AuxValues>
-                        </Component>
-                        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-                          <AuxValues>
-                            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                          </AuxValues>
-
-                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                          <SubComponents>
-                            <Component class="javax.swing.JTable" name="jTable1">
-                              <Properties>
-                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                  <Table columnCount="5" rowCount="4">
-                                    <Column editable="true" title="Date" type="java.lang.Object"/>
-                                    <Column editable="true" title="Day" type="java.lang.Object"/>
-                                    <Column editable="true" title="Time-in" type="java.lang.Object"/>
-                                    <Column editable="true" title="Time-out" type="java.lang.Object"/>
-                                    <Column editable="true" title="Time Worked" type="java.lang.Object"/>
-                                  </Table>
-                                </Property>
-                                <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                                  <TableColumnModel selectionModel="0">
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                  </TableColumnModel>
-                                </Property>
-                                <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                                  <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
-                                </Property>
-                              </Properties>
-                            </Component>
-                          </SubComponents>
-                        </Container>
-                        <Component class="javax.swing.JComboBox" name="jComboBox1">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="--Select Year--"/>
-                                <StringItem index="1" value="2023"/>
-                                <StringItem index="2" value="2024"/>
-                                <StringItem index="3" value="2025"/>
-                              </StringArray>
-                            </Property>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                          </AuxValues>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                  </SubComponents>
-                </Container>
                 <Container class="javax.swing.JPanel" name="payroll">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -1201,7 +1061,7 @@
                                   <Component id="salarySlips" min="-2" max="-2" attributes="0"/>
                                   <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="117" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>

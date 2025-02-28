@@ -272,7 +272,7 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/icons/employees.png"/>
+                      <Image iconType="3" name="/icons/settings-4-16.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value=" Role Management"/>
                     <Property name="contentAreaFilled" type="boolean" value="false"/>

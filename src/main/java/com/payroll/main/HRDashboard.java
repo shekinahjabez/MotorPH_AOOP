@@ -4,24 +4,25 @@
  */
 package com.payroll.main;
 
-import com.payroll.domain.ComboItem;
-import com.payroll.domain.EmployeeAccount;
-import com.payroll.domain.EmployeeDetails;
-import com.payroll.domain.EmployeeHours;
-import com.payroll.domain.EmployeePosition;
-import com.payroll.domain.EmployeeStatus;
+import com.payroll.subdomain.ComboItem;
+import com.payroll.domain.IT;
+import com.payroll.domain.Person;
+import com.payroll.domain.Employee;
+import com.payroll.subdomain.EmployeePosition;
+import com.payroll.subdomain.EmployeeStatus;
+import com.payroll.domain.Finance;
 import com.payroll.domain.LeaveBalance;
-import com.payroll.domain.LeaveDetails;
-import com.payroll.services.EmployeeDetailsService;
-import com.payroll.services.EmployeeAccountService;
-import com.payroll.services.LeaveDetailsService;
-import com.payroll.services.PayrollService;
+import com.payroll.domain.HR;
+import com.payroll.services.HRService;
+import com.payroll.services.ITService;
+import com.payroll.services.EmployeeService;
+import com.payroll.services.FinanceService;
 import com.payroll.table.TableActionCellEditor;
 import com.payroll.table.TableActionCellRender;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.table.TableActionCellRender;
 import com.payroll.table.TableActionEvent;
-import com.payroll.util.PayrollUtils;
+import com.payroll.domain.SalaryCalculation;
 import static japgolly.scalajs.react.vdom.all.table;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -47,30 +48,30 @@ import org.apache.commons.lang3.StringUtils;
 public class HRDashboard extends javax.swing.JFrame {
     private DatabaseConnection dbConnection;
     private CardLayout cardLayout;
-    private EmployeeAccount empAccount;
-    private EmployeeAccountService empAccountService;
-    private EmployeeDetailsService empDetailsService;
-    private PayrollService payrollService;
-    private LeaveDetailsService leaveDetailsService;
+    private IT empAccount;
+    private ITService empAccountService;
+    private HRService hrService;
+    private FinanceService payrollService;
+    private EmployeeService leaveDetailsService;
     private Integer employeeSearchID;
     
-    public HRDashboard(EmployeeAccount empAccount) {
+    public HRDashboard(IT empAccount) {
         initComponents();
         cardLayout = (CardLayout)(mphCards.getLayout());
         this.empAccount=empAccount;
         this.dbConnection = new DatabaseConnection();
         updateUserLabels(empAccount);
-        this.empAccountService = new EmployeeAccountService(this.dbConnection);
-        this.empDetailsService = new EmployeeDetailsService(this.dbConnection);  
-        this.payrollService = new PayrollService(this.dbConnection);
-        this. leaveDetailsService = new LeaveDetailsService(this.dbConnection);
+        this.empAccountService = new ITService(this.dbConnection);
+        this.hrService = new HRService(this.dbConnection);  
+        this.payrollService = new FinanceService(this.dbConnection);
+        this. leaveDetailsService = new EmployeeService(this.dbConnection);
         TableActionEvent event = new TableActionEvent(){
             @Override
             public void onApprove(int row){
                 DefaultTableModel model = (DefaultTableModel) leaveManagementTable.getModel();
                 int leaveId = (int) model.getValueAt(row, 0); 
                 int empID = (int) model.getValueAt(row, 1); 
-                leaveDetailsService.updateLeaveRequestStatus(LeaveDetails.LeaveStatus.APPROVED, leaveId);
+                leaveDetailsService.updateLeaveRequestStatus(HR.LeaveStatus.APPROVED, leaveId);
                 updateLeaveBalance(empID);
                 refreshLeaveManagementTable();
             }
@@ -80,7 +81,7 @@ public class HRDashboard extends javax.swing.JFrame {
                 DefaultTableModel model = (DefaultTableModel) leaveManagementTable.getModel();
                 int leaveId = (int) model.getValueAt(row, 0);
                 int empID = (int) model.getValueAt(row, 1); 
-                leaveDetailsService.updateLeaveRequestStatus(LeaveDetails.LeaveStatus.DECLINED, leaveId);
+                leaveDetailsService.updateLeaveRequestStatus(HR.LeaveStatus.DECLINED, leaveId);
                 updateLeaveBalance(empID);
                 refreshLeaveManagementTable(); 
             }
@@ -97,70 +98,108 @@ public class HRDashboard extends javax.swing.JFrame {
     public HRDashboard(){
         
     }
-    public EmployeeAccount getEmpAccount() {
+    public IT getEmpAccount() {
         return empAccount;
     }
     
-     public EmployeeAccount getUsername() {
+     public IT getUsername() {
         return empAccount;
     }
 
-    public void setEmpAccount(EmployeeAccount empAccount) {
+    public void setEmpAccount(IT empAccount) {
         this.empAccount = empAccount;
     }
     
     private void updateLeaveBalance(int empID){
-        List<LeaveDetails> leaveDetails =  leaveDetailsService.getLeavesByEmployee(empID);
+        List<HR> leaveDetails =  leaveDetailsService.getLeavesByEmployee(empID);
         LeaveBalance balance = new LeaveBalance();
         balance.setEmpID(empID);
         balance.updateLeaveBalance(leaveDetails);
         leaveDetailsService.updateLeaveBalance(balance);
     }
     
-    private void updateUserLabels(EmployeeAccount empAccount) {
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String tin = empAccount.getEmpDetails().getEmpTIN() != null ? empAccount.getEmpDetails().getEmpTIN() : "";
-        String phone = empAccount.getEmpDetails().getEmpPhoneNumber() != null ? empAccount.getEmpDetails().getEmpPhoneNumber(): "" ;
-        String pagIbig = empAccount.getEmpDetails().getEmpPagibig() != 0 ? String.valueOf(empAccount.getEmpDetails().getEmpPagibig()) : "";
-        String philhealth = empAccount.getEmpDetails().getEmpPhilHealth() != 0 ? String.valueOf(empAccount.getEmpDetails().getEmpPhilHealth()) : "";
-        String sss = empAccount.getEmpDetails().getEmpSSS() !=null ? empAccount.getEmpDetails().getEmpSSS() : "";
-      
-        
-        usernameLabel.setText("@"+ empAccount.getEmpUserName()); 
-        fullNameValue.setText(empAccount.getEmpDetails().getFormattedName());
-        fullNameValue2.setText(empAccount.getEmpDetails().getFormattedName());
-        empNumValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpID()));
-        empIDLabelValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpID()));
-        addressLabelValue.setText(empAccount.getEmpDetails().getEmpAddress());
-        phoneLabelValue.setText(phone);
-        basicSalaryLabelValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpBasicSalary()));
-        riceLabelValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpRice()));
-        phoneAllowanceValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpPhone()));
-        clothingLabelValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpClothing()));
-        hourlyrateLabelValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpHourlyRate()));
-        tinLabelValue.setText(tin);
-        pagibigLabelValue.setText(pagIbig);
-        sssLabelValue.setText(sss);
-        philhealthLabelValue.setText(philhealth);
-        
-        if(empAccount.getEmpDetails().getEmpBirthday() != null){
-             bdayLabelValue.setText(formatter.format(empAccount.getEmpDetails().getEmpBirthday()));
+    private void updateUserLabels(IT empAccount) {
+        if (empAccount == null) {
+            System.err.println("Error: empAccount is null");
+            return;
         }
 
-        if(empAccount.getEmpDetails().getEmpImmediateSupervisor() != null){
-            supervisorLabelValue.setText(empAccount.getEmpDetails().getEmpImmediateSupervisor().getFormattedName());
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+        // ✅ Check if EmpDetails is null before accessing its properties
+        if (empAccount.getEmpDetails() != null) {
+            Person empDetails = empAccount.getEmpDetails();
+
+            String tin = empDetails.getEmpTIN() != null ? empDetails.getEmpTIN() : "";
+            String phone = empDetails.getEmpPhoneNumber() != null ? empDetails.getEmpPhoneNumber() : "";
+            String pagIbig = empDetails.getEmpPagibig() != 0 ? String.valueOf(empDetails.getEmpPagibig()) : "";
+            String philhealth = empDetails.getEmpPhilHealth() != 0 ? String.valueOf(empDetails.getEmpPhilHealth()) : "";
+            String sss = empDetails.getEmpSSS() != null ? empDetails.getEmpSSS() : "";
+
+            usernameLabel.setText("@" + empAccount.getEmpUserName());
+            fullNameValue.setText(empDetails.getFormattedName());
+            fullNameValue2.setText(empDetails.getFormattedName());
+            empNumValue.setText(String.valueOf(empDetails.getEmpID()));
+            addressLabelValue.setText(empDetails.getEmpAddress() != null ? empDetails.getEmpAddress() : "");
+            phoneLabelValue.setText(phone);
+            tinLabelValue.setText(tin);
+            pagibigLabelValue.setText(pagIbig);
+            sssLabelValue.setText(sss);
+            philhealthLabelValue.setText(philhealth);
+
+            // ✅ Fixed incorrect method calls and ensured salary values are properly formatted
+            basicSalaryLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpBasicSalary()));
+            riceLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpRice()));
+            phoneAllowanceValue.setText("PHP " + String.format("%.2f", empDetails.getEmpPhone()));
+            clothingLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpClothing()));
+            hourlyrateLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpHourlyRate()));
+
+            // ✅ Payroll Labels
+            empIDPayLabelValue.setText(String.valueOf(empDetails.getEmpID()));
+            namePayLabelValue.setText(empDetails.getFormattedName());
+            hourlyRatePayLabelValue.setText(String.format("%.2f", empDetails.getEmpHourlyRate()));
+            ricePayLabelValue.setText(String.format("%.2f", empDetails.getEmpRice()));
+            phonePayLabelValue.setText(String.format("%.2f", empDetails.getEmpPhone()));
+            clothingPayLabelValue.setText(String.format("%.2f", empDetails.getEmpClothing()));
+
+            // ✅ Fixed incorrect reference for total allowance calculation
+            totalAllowPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTotalAllowance(empDetails)));
+            basicSalaryPayLabelValue.setText(String.format("%.2f", empDetails.getEmpBasicSalary()));
+
+            // ✅ Check for supervisor existence before accessing
+            if (empDetails.getEmpImmediateSupervisor() != null) {
+                supervisorLabelValue.setText(empDetails.getEmpImmediateSupervisor().getFormattedName());
+            } else {
+                supervisorLabelValue.setText("N/A");
+            }
+
+            // ✅ Check for job position existence before accessing
+            if (empDetails.getEmpPosition() != null) {
+                positionLabelValue.setText(empDetails.getEmpPosition().getPosition());
+            } else {
+                positionLabelValue.setText("N/A");
+            }
+
+            // ✅ Check for employment status existence before accessing
+            if (empDetails.getEmpStatus() != null) {
+                statusLabelValue.setText(empDetails.getEmpStatus().getStatus());
+            } else {
+                statusLabelValue.setText("N/A");
+            }
+
+            // ✅ Check for birthday existence before formatting
+            if (empDetails.getEmpBirthday() != null) {
+                String formattedBirthday = formatter.format(empDetails.getEmpBirthday());
+                bdayLabelValue.setText(formattedBirthday);
+                birthdayPayLabelValue.setText(formattedBirthday);
+            } else {
+                bdayLabelValue.setText("N/A");
+                birthdayPayLabelValue.setText("N/A");
+            }
         }
-        if(empAccount.getEmpDetails().getEmpPosition() != null){
-            positionLabelValue.setText(empAccount.getEmpDetails().getEmpPosition().getPosition());
-        }
-        if(empAccount.getEmpDetails().getEmpStatus() != null){
-            statusLabelValue.setText(empAccount.getEmpDetails().getEmpStatus().getStatus());
-        }
-        
-        updatePayrollEmpLabels(empAccount);
-    }   
-    
-    private void updatePayrollEmpLabels(EmployeeAccount empAccount){
+   
+    }
+    private void updatePayrollEmpLabels(IT empAccount){
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         if(empAccount.getEmpDetails().getEmpBirthday() != null){
@@ -184,35 +223,35 @@ public class HRDashboard extends javax.swing.JFrame {
         ricePayLabelValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpRice()));
         phonePayLabelValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpPhone()));
         clothingPayLabelValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpClothing()));
-        totalAllowPayLabelValue.setText(String.valueOf(PayrollUtils.getTotalAllowance(empAccount.getEmpDetails())));
+        totalAllowPayLabelValue.setText(String.valueOf(SalaryCalculation.getTotalAllowance(empAccount.getEmpDetails())));
         basicSalaryPayLabelValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpBasicSalary()));
     }
     
-    private void updatePayrollLabels(List<EmployeeHours> employeeHours){
+    private void updatePayrollLabels(List<Employee> employeeHours){
         
         if(employeeHours.isEmpty()){
             resetPayrollLabels();
         }else{
-            totalHoursPayLabelValue.setText(PayrollUtils.getFormattedTotalHoursWorked(employeeHours));
+            totalHoursPayLabelValue.setText(SalaryCalculation.getFormattedTotalHoursWorked(employeeHours));
         
-            double basicSalary = PayrollUtils.getBasicSalary(employeeHours, empAccount);
+            double basicSalary = SalaryCalculation.getBasicSalary(employeeHours, empAccount);
             computedSalaryLabelValue.setText(String.format("%.2f",basicSalary));
 
-            double grossPay = PayrollUtils.getGrossSalary(employeeHours, empAccount);
+            double grossPay = SalaryCalculation.getGrossSalary(employeeHours, empAccount);
             grossSalaryPayLabelValue.setText(String.format("%.2f", grossPay));
 
             double sssContri = payrollService.calculateSssContribution(basicSalary);
 
             // Contributions
-            philhealthContriPayLabelValue.setText(String.format("%.2f", PayrollUtils.calculatePhilHealthContribution(grossPay)));
-            pagibigContriPayLabelValue.setText(String.format("%.2f", PayrollUtils.calculatePagibigContribution(grossPay)));
+            philhealthContriPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculatePhilHealthContribution(grossPay)));
+            pagibigContriPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculatePagibigContribution(grossPay)));
             sssContriPayLabelValue.setText(String.format("%.2f", sssContri));
-            totalDeductionsPayLabelValue.setText(String.format("%.2f", PayrollUtils.getTotalDeductions(grossPay,sssContri)));
+            totalDeductionsPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTotalDeductions(grossPay,sssContri)));
 
             // Tax and Net Pay
-            taxableIncomePayLabelValue.setText(String.format("%.2f", PayrollUtils.getTaxableIncome(grossPay,sssContri)));
-            taxPayLabelValue.setText(String.format("%.2f", PayrollUtils.calculateWithholdingTax(grossPay)));
-            netPayLabelValue.setText(String.format("%.2f", PayrollUtils.getNetPay(grossPay,sssContri)));
+            taxableIncomePayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTaxableIncome(grossPay,sssContri)));
+            taxPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculateWithholdingTax(grossPay)));
+            netPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getNetPay(grossPay,sssContri)));
          }
     }
     
@@ -231,7 +270,7 @@ public class HRDashboard extends javax.swing.JFrame {
     }
     
     private void loadAllPositions(){
-        List<EmployeePosition> positions = empDetailsService.getAllPosition();
+        List<EmployeePosition> positions = hrService.getAllPosition();
         positionDropdown.addItem(new ComboItem(null,"Select Position"));
         for(EmployeePosition empPosition : positions){
             positionDropdown.addItem(new ComboItem(empPosition.getId(),empPosition.getPosition()));
@@ -239,7 +278,7 @@ public class HRDashboard extends javax.swing.JFrame {
     }  
     
     private void loadAllStatus(){
-        List<EmployeeStatus> statuses = empDetailsService.getAllStatuses();
+        List<EmployeeStatus> statuses = hrService.getAllStatuses();
         statusDropdown.addItem(new ComboItem(null,"Select Status"));
         for(EmployeeStatus empStatus : statuses){
             statusDropdown.addItem(new ComboItem(empStatus.getId(),empStatus.getStatus()));
@@ -247,9 +286,9 @@ public class HRDashboard extends javax.swing.JFrame {
     }
     
     private void loadAllEmployee(){
-        List<EmployeeDetails> allEmployee = empDetailsService.getAllEmployee();
+        List<Person> allEmployee = hrService.getAllEmployee();
         supervisorDropdown.addItem(new ComboItem(null,"Select Supervisor"));
-        for(EmployeeDetails employeeDetails: allEmployee){
+        for(Person employeeDetails: allEmployee){
             supervisorDropdown.addItem(new ComboItem(employeeDetails.getEmpID(),employeeDetails.getFormattedName()));
         }
     }   
@@ -2165,15 +2204,15 @@ public class HRDashboard extends javax.swing.JFrame {
      
     }//GEN-LAST:event_jButton1ActionPerformed
     private void refreshLeaveManagementTable(){  
-        List<LeaveDetails> leaveDetails =  leaveDetailsService.getAllLeaveRequestByStatus(LeaveDetails.LeaveStatus.PENDING);
+        List<HR> leaveDetails =  leaveDetailsService.getAllLeaveRequestByStatus(HR.LeaveStatus.PENDING);
             DefaultTableModel model = (DefaultTableModel) leaveManagementTable.getModel();
             model.setRowCount(0);
 
-            for(LeaveDetails leave : leaveDetails) {
+            for(HR leave : leaveDetails) {
                 Vector<Object> rowData = new Vector<>();
-                rowData.add(leave.getId());
+                rowData.add(leave.getLeaveId());
                 rowData.add(leave.getEmpID());
-                EmployeeDetails empDetails = empDetailsService.getByEmpID(leave.getEmpID());
+                Person empDetails = hrService.getByEmpID(leave.getEmpID());
                 rowData.add(empDetails.getFormattedName());
                 rowData.add(leave.getSubject());
                 rowData.add(leave.getLeaveType());
@@ -2191,7 +2230,9 @@ public class HRDashboard extends javax.swing.JFrame {
     }
     
     private void loadEmployeeValues(int empID){
-        EmployeeDetails empDetails = empDetailsService.getByEmpID(empID);
+ 
+        
+        Person empDetails = hrService.getByEmpID(empID);
         employeeIDTField.setText(String.valueOf(empDetails.getEmpID()));
         lastNameTField.setText(empDetails.getLastName());
         firstNameTField.setText(empDetails.getFirstName());
@@ -2208,6 +2249,7 @@ public class HRDashboard extends javax.swing.JFrame {
         riceTField.setText(String.valueOf(empDetails.getEmpRice()));
         phoneAllowTField.setText(String.valueOf(empDetails.getEmpPhone()));
         clothingTField.setText(String.valueOf(empDetails.getEmpClothing()));
+
         
         statusDropdown.setSelectedIndex(0);
         positionDropdown.setSelectedIndex(0);
@@ -2222,12 +2264,13 @@ public class HRDashboard extends javax.swing.JFrame {
             supervisorDropdown.setSelectedItem(new ComboItem(empDetails.getEmpImmediateSupervisor().getEmpID(),empDetails.getEmpImmediateSupervisor().getFormattedName()));
         }
         
-        EmployeeAccount empAccount = empAccountService.getByEmpID(empID);
+        IT empAccount = empAccountService.getByEmpID(empID);
         usernameTField.setText(empAccount.getEmpUserName());
-        passwordTField.setText(empAccount.getEmpPassword());
+        passwordTField.setText(empAccount.getEmpPassword());   
+
     }
     
-    private void validateRequiredFields(EmployeeDetails empDetails){
+    private void validateRequiredFields(Person empDetails){
         List<String> errors = new ArrayList();
         
         if(StringUtils.isEmpty(empDetails.getFirstName())){
@@ -2270,7 +2313,7 @@ public class HRDashboard extends javax.swing.JFrame {
         }
     }
     
-    private EmployeeDetails updateEmpDetailValues(){
+    private Person updateEmpDetailValues(){
         String lastname = lastNameTField.getText().trim() !=null ? lastNameTField.getText() : "";
         String firstname= firstNameTField.getText().trim() !=null ?  firstNameTField.getText().trim() : "";
         //String birthday = birthdayTField.getText().trim()) !=null ? Date(birthdayTField.getText().trim()) : "";
@@ -2288,7 +2331,8 @@ public class HRDashboard extends javax.swing.JFrame {
         long philhealth = !philhealthTField.getText().equals("") ? Long.valueOf(philhealthTField.getText().trim()): 0;
     
         
-        EmployeeDetails empDetails = new EmployeeDetails();
+        Person empDetails = new Employee();
+        Finance payrollDetails = new Finance();
         
         empDetails.setLastName(lastname);
         empDetails.setFirstName(firstname);
@@ -2311,13 +2355,13 @@ public class HRDashboard extends javax.swing.JFrame {
         }
         
         empDetails.setEmpAddress(address);
-        empDetails.setEmpBasicSalary(salary);
+        payrollDetails.setEmpBasicSalary(salary);
         empDetails.setEmpPhoneNumber(phoneNumber);
-        empDetails.setEmpHourlyRate(hourlyRate);
-        empDetails.setEmpMonthlyRate(biMonthly); 
-        empDetails.setEmpRice(rice);
-        empDetails.setEmpPhone(phoneAllow);
-        empDetails.setEmpClothing(clothing);
+        payrollDetails.setEmpHourlyRate(hourlyRate);
+        payrollDetails.setEmpMonthlyRate(biMonthly); 
+        payrollDetails.setEmpRice(rice);
+        payrollDetails.setEmpPhone(phoneAllow);
+        payrollDetails.setEmpClothing(clothing);
         empDetails.setEmpPagibig(pagibig);
         empDetails.setEmpSSS(sss);
         empDetails.setEmpTIN(tin);
@@ -2328,21 +2372,21 @@ public class HRDashboard extends javax.swing.JFrame {
         ComboItem supervisorValue = (ComboItem) supervisorDropdown.getSelectedItem();
         
         if(positionValue.getKey() != null){
-            empDetails.setEmpPosition(empDetailsService.getPositionById(positionValue.getKey()));
+            empDetails.setEmpPosition(hrService.getPositionById(positionValue.getKey()));
         }
         if(statusValue.getKey() != null){
-            empDetails.setEmpStatus(empDetailsService.getStatusById(statusValue.getKey()));
+            empDetails.setEmpStatus(hrService.getStatusById(statusValue.getKey()));
         }
         if(supervisorValue.getKey() !=null){
-            empDetails.setEmpImmediateSupervisor(empDetailsService.getByEmpID(supervisorValue.getKey()));  
+            empDetails.setEmpImmediateSupervisor(hrService.getByEmpID(supervisorValue.getKey()));  
         }
         
         validateRequiredFields(empDetails);
         
         return empDetails;
     }
-    private EmployeeAccount updateEmpAccountValues(){
-        EmployeeAccount empAccount = new EmployeeAccount();
+    private IT updateEmpAccountValues(){
+        IT empAccount = new IT();
         empAccount.setEmpUserName(usernameTField.getText());
         empAccount.setEmpPassword(passwordTField.getText());
         return empAccount;
@@ -2426,11 +2470,11 @@ public class HRDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_clothingTFieldActionPerformed
 
-    private void populateAttendanceTable(List<EmployeeHours> empHours){
+    private void populateAttendanceTable(List<Employee> empHours){
         DefaultTableModel model = (DefaultTableModel) attendanceTable.getModel();
         model.setRowCount(0);
 
-        for(EmployeeHours employeeHours : empHours) {
+        for(Employee employeeHours : empHours) {
             Vector<Object> rowData = new Vector<>();
             rowData.add(employeeHours.getDate());
             rowData.add(employeeHours.getTimeIn());
@@ -2440,11 +2484,11 @@ public class HRDashboard extends javax.swing.JFrame {
         }
     }
     private void viewAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAllButtonActionPerformed
-        List<EmployeeDetails> allEmployee =  empDetailsService.getAllEmployee();
+        List<Person> allEmployee =  hrService.getAllEmployee();
         DefaultTableModel model = (DefaultTableModel) employeeTable.getModel();
         model.setRowCount(0);
 
-        for(EmployeeDetails empDetails : allEmployee) {
+        for(Person empDetails : allEmployee) {
             Vector<Object> rowData = new Vector<>();
             rowData.add(empDetails.getEmpID());
             rowData.add(empDetails.getLastName());
@@ -2516,7 +2560,7 @@ public class HRDashboard extends javax.swing.JFrame {
                 leaveDetailsService.deleteLeaveBalance(empID);
                 leaveDetailsService.deleteLeaveRequestbyEmpID(empID);
                 empAccountService.deleteEmpAccount(empID);
-                empDetailsService.deleteEmpDetails(empID);
+                hrService.deleteEmpDetails(empID);
                 
             }catch(RuntimeException e ){
                 JOptionPane.showMessageDialog(this, "Error: Employee not deleted");
@@ -2532,11 +2576,11 @@ public class HRDashboard extends javax.swing.JFrame {
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
             // Update employee details
-            EmployeeDetails empDetails = updateEmpDetailValues();
-            empDetailsService.updateEmployeeDetails(empDetails);
+            Person empDetails = updateEmpDetailValues();
+            hrService.updateEmployeeDetails(empDetails);
 
             // Update employee account
-            EmployeeAccount empAccount = updateEmpAccountValues();
+            IT empAccount = updateEmpAccountValues();
             empAccount.setEmpID(empDetails.getEmpID()); // Linking account with details
             empAccount.setEmpDetails(empDetails);
             empAccountService.updateEmployeeAccount(empAccount);
@@ -2558,10 +2602,10 @@ public class HRDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        EmployeeDetails empDetails = updateEmpDetailValues();
-        empDetailsService.saveEmployeeDetails(empDetails);
+        Person empDetails = updateEmpDetailValues();
+        hrService.saveEmployeeDetails(empDetails);
 
-        EmployeeAccount empAccount = updateEmpAccountValues();
+        IT empAccount = updateEmpAccountValues();
         empAccountService.saveUserAccount(empAccount,empDetails);
         
         LeaveBalance  leaveBalance = new LeaveBalance();
@@ -2621,7 +2665,7 @@ public class HRDashboard extends javax.swing.JFrame {
         employeeSearchID = (empId == "" || empId == null) ? null : Integer.parseInt(empId);
         
         if(employeeSearchID !=null){
-            EmployeeAccount empAccount = empAccountService.getByEmpID(employeeSearchID);
+            IT empAccount = empAccountService.getByEmpID(employeeSearchID);
             if(empAccount != null){
                 updatePayrollEmpLabels(empAccount);
                 if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
@@ -2629,7 +2673,7 @@ public class HRDashboard extends javax.swing.JFrame {
                     Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
 
                     if(monthValue != null & year != null){
-                        List<EmployeeHours> empHours = getEmployeeHours(monthValue,year,employeeSearchID);
+                        List<Employee> empHours = getEmployeeHours(monthValue,year,employeeSearchID);
                         populateAttendanceTable(empHours);
                         updatePayrollLabels(empHours);
                     }
@@ -2676,7 +2720,7 @@ public class HRDashboard extends javax.swing.JFrame {
     
     private void loadAllYears(){
         yearDropdown.addItem(new ComboItem(null, "Select Year"));
-        Arrays.asList(2022, 2023, 2024).forEach(year -> { 
+        Arrays.asList(2022, 2023, 2024,2025).forEach(year -> { 
             yearDropdown.addItem(new ComboItem(year,String.valueOf(year)));
 
         });
@@ -2691,7 +2735,7 @@ public class HRDashboard extends javax.swing.JFrame {
 
 
             if(monthValue != null & year != null){
-                List<EmployeeHours> empHours = getEmployeeHours(monthValue,year,empId);
+                List<Employee> empHours = getEmployeeHours(monthValue,year,empId);
                 populateAttendanceTable(empHours);
                 updatePayrollLabels(empHours);
             }
@@ -2705,7 +2749,7 @@ public class HRDashboard extends javax.swing.JFrame {
             Integer empId = employeeSearchID != null ? employeeSearchID : empAccount.getEmpID();
 
             if(monthValue != null & year != null){
-                List<EmployeeHours> empHours = getEmployeeHours(monthValue,year,empId);
+                List<Employee> empHours = getEmployeeHours(monthValue,year,empId);
                 populateAttendanceTable(empHours);
                 updatePayrollLabels(empHours);
             }
@@ -2713,7 +2757,7 @@ public class HRDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_yearDropdownActionPerformed
     
     
-    private List<EmployeeHours> getEmployeeHours(int month, int year, int empID){
+    private List<Employee> getEmployeeHours(int month, int year, int empID){
        Calendar dateFrom = Calendar.getInstance();
        dateFrom.set(Calendar.MONTH,month);
        dateFrom.set(Calendar.YEAR, year);

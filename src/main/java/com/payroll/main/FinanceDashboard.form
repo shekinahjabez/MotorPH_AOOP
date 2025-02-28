@@ -56,7 +56,7 @@
         <Container class="javax.swing.JPanel" name="header">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="99" green="0" red="0" type="rgb"/>
+              <Color blue="66" green="0" red="0" type="rgb"/>
             </Property>
           </Properties>
 
@@ -145,7 +145,6 @@
                       <Component id="profileButton" alignment="0" max="32767" attributes="0"/>
                       <Component id="payrollButton" alignment="0" max="32767" attributes="0"/>
                       <Component id="empManagementButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="leaveManagementButton" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                           <Component id="profilePictureLabel" min="-2" pref="66" max="-2" attributes="0"/>
@@ -182,9 +181,7 @@
                           <Component id="payrollButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="empManagementButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="leaveManagementButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="597" max="32767" attributes="0"/>
+                          <EmptySpace pref="629" max="32767" attributes="0"/>
                           <Component id="jButton1" min="-2" pref="34" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -194,7 +191,7 @@
                 <Component class="javax.swing.JButton" name="jButton1">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="99" green="0" red="0" type="rgb"/>
+                      <Color blue="66" green="0" red="0" type="rgb"/>
                     </Property>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Century Gothic" size="14" style="1"/>
@@ -278,9 +275,9 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/icons/employees.png"/>
+                      <Image iconType="3" name="/icons/money-bag-16.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value=" Employees Section"/>
+                    <Property name="text" type="java.lang.String" value="Payroll Management"/>
                     <Property name="contentAreaFilled" type="boolean" value="false"/>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                   </Properties>
@@ -299,31 +296,12 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/icons/wallet-16.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value=" Payroll"/>
+                    <Property name="text" type="java.lang.String" value="Payroll Details"/>
                     <Property name="contentAreaFilled" type="boolean" value="false"/>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="payrollButtonActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="leaveManagementButton">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Century Gothic" size="14" style="1"/>
-                    </Property>
-                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                    </Property>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/icons/text-file-4-16.png"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value=" Leave Management"/>
-                    <Property name="contentAreaFilled" type="boolean" value="false"/>
-                    <Property name="horizontalAlignment" type="int" value="2"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="leaveManagementButtonActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="profileButton">
@@ -989,7 +967,7 @@
                         <Component class="javax.swing.JButton" name="changePasswordButton">
                           <Properties>
                             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                              <Color blue="0" green="0" red="0" type="rgb"/>
+                              <Color blue="66" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Century Gothic" size="14" style="1"/>
@@ -1017,186 +995,6 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="existingPasswordTFieldActionPerformed"/>
                           </Events>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                  </SubComponents>
-                </Container>
-                <Container class="javax.swing.JPanel" name="attendance">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="e5" green="e5" red="e5" type="rgb"/>
-                    </Property>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                      <CardConstraints cardName="card2"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-                                      <Component id="attendanceLabel1" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                                      <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                              <Component id="attendanceLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="javax.swing.JLabel" name="attendanceLabel1">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Century Gothic" size="36" style="1"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Attendance Tracker"/>
-                      </Properties>
-                    </Component>
-                    <Container class="javax.swing.JPanel" name="jPanel3">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="jComboBox2" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="jScrollPane1" min="-2" pref="742" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace pref="150" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace pref="27" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane1" min="-2" pref="399" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JComboBox" name="jComboBox2">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="5">
-                                <StringItem index="0" value="--Select Month---"/>
-                                <StringItem index="1" value="August"/>
-                                <StringItem index="2" value="September"/>
-                                <StringItem index="3" value="October"/>
-                                <StringItem index="4" value="November"/>
-                              </StringArray>
-                            </Property>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                          </AuxValues>
-                        </Component>
-                        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-                          <AuxValues>
-                            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                          </AuxValues>
-
-                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                          <SubComponents>
-                            <Component class="javax.swing.JTable" name="jTable1">
-                              <Properties>
-                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                  <Table columnCount="5" rowCount="4">
-                                    <Column editable="true" title="Date" type="java.lang.Object"/>
-                                    <Column editable="true" title="Day" type="java.lang.Object"/>
-                                    <Column editable="true" title="Time-in" type="java.lang.Object"/>
-                                    <Column editable="true" title="Time-out" type="java.lang.Object"/>
-                                    <Column editable="true" title="Time Worked" type="java.lang.Object"/>
-                                  </Table>
-                                </Property>
-                                <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                                  <TableColumnModel selectionModel="0">
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                  </TableColumnModel>
-                                </Property>
-                                <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                                  <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
-                                </Property>
-                              </Properties>
-                            </Component>
-                          </SubComponents>
-                        </Container>
-                        <Component class="javax.swing.JComboBox" name="jComboBox1">
-                          <Properties>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="--Select Year--"/>
-                                <StringItem index="1" value="2023"/>
-                                <StringItem index="2" value="2024"/>
-                                <StringItem index="3" value="2025"/>
-                              </StringArray>
-                            </Property>
-                          </Properties>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                          </AuxValues>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -2031,7 +1829,7 @@
                     <Component class="javax.swing.JButton" name="searchButton1">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="99" green="0" red="0" type="rgb"/>
+                          <Color blue="66" green="0" red="0" type="rgb"/>
                         </Property>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Century Gothic" size="14" style="1"/>
@@ -2100,7 +1898,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Century Gothic" size="36" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Employees Section"/>
+                        <Property name="text" type="java.lang.String" value="Payroll Management"/>
                       </Properties>
                     </Component>
                     <Container class="javax.swing.JPanel" name="jPanel10">
@@ -2116,136 +1914,95 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="empSalaryLabel" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="salaryTField" min="-2" pref="110" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="empHourlyLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="empBiMonthLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="hourlyTField" max="32767" attributes="0"/>
-                                                      <Component id="biMonthlyTField" max="32767" attributes="0"/>
-                                                  </Group>
-                                              </Group>
-                                              <Component id="addButton" alignment="1" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="empPhoneAllowLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="empRiceLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Component id="phoneAllowTField" min="-2" pref="99" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Group type="103" groupAlignment="1" attributes="0">
-                                                      <Component id="updateButton" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="empClothAllowLabel" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="clothingTField" max="32767" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" alignment="1" attributes="0">
-                                                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                                                          <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                  </Group>
-                                                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                                              </Group>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="empHourlyLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="empBiMonthLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace min="0" pref="321" max="32767" attributes="0"/>
+                                              <Component id="updateButton" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <Component id="govIdsLabel" min="-2" max="-2" attributes="0"/>
-                                      <Component id="salaryDetailsLabel" min="-2" max="-2" attributes="0"/>
-                                      <Component id="empDetailsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="empLastNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empAddressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empBirthdayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                                  <Component id="empPositionLabel" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="empPhoneLabel" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empSupervisorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="birthdayTField" pref="99" max="32767" attributes="0"/>
-                                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                      <Component id="empStatusLabel" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                      <Component id="statusDropdown" min="-2" pref="124" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Component id="phoneTField" max="32767" attributes="0"/>
-                                              </Group>
-                                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                                  <Component id="addressTField" alignment="0" max="32767" attributes="0"/>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                          <Component id="lastNameTField" pref="109" max="32767" attributes="0"/>
-                                                          <Component id="usernameTField" max="32767" attributes="0"/>
-                                                      </Group>
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="empFirstNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                          <Component id="firstNameTField" pref="99" max="32767" attributes="0"/>
-                                                          <Component id="passwordTField" max="32767" attributes="0"/>
-                                                      </Group>
-                                                  </Group>
-                                                  <Component id="clearButton" alignment="1" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Component id="supervisorDropdown" min="-2" pref="297" max="-2" attributes="0"/>
-                                              <Component id="employeeIDTField" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="positionDropdown" min="-2" pref="295" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                          <Component id="riceTField" alignment="1" min="-2" pref="99" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="empPagibigLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="empTinLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="empPhilhealthLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="empTinLabel" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="empSssLabel" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="tinTField" min="-2" pref="301" max="-2" attributes="0"/>
+                                                  <Component id="sssTField" min="-2" pref="299" max="-2" attributes="0"/>
+                                                  <Component id="pagibigTField" alignment="1" min="-2" pref="301" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Component id="govIdsLabel" min="-2" max="-2" attributes="0"/>
+                                          <Component id="empDetailsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="empLastNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                  <Component id="employeeIDTField" max="32767" attributes="0"/>
+                                                  <Component id="lastNameTField" pref="109" max="32767" attributes="0"/>
+                                              </Group>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                      <Component id="empFirstNameLabel" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="firstNameTField" min="-2" pref="99" max="-2" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="empSssLabel" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                                                      <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
+                                                      <Component id="clearButton" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
-                                              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="sssTField" min="-2" pref="299" max="-2" attributes="0"/>
-                                                      <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="salaryDetailsLabel1" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Component id="empPagibigLabel" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="empPhilhealthLabel" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                          <Component id="philhealthTField" min="-2" pref="301" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Component id="salaryDetailsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="empClothAllowLabel" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="clothingTField" pref="294" max="32767" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Group type="103" groupAlignment="0" attributes="0">
+                                                              <Component id="empRiceLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="empPhoneAllowLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="0" attributes="0">
+                                                              <Component id="phoneAllowTField" max="32767" attributes="0"/>
+                                                              <Component id="riceTField" max="32767" attributes="0"/>
+                                                          </Group>
+                                                      </Group>
                                                   </Group>
-                                                  <Component id="tinTField" alignment="1" max="32767" attributes="0"/>
-                                                  <Component id="pagibigTField" alignment="1" max="32767" attributes="0"/>
-                                                  <Component id="philhealthTField" alignment="0" max="32767" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Component id="empSalaryLabel" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="biMonthlyTField" pref="297" max="32767" attributes="0"/>
+                                                  <Component id="hourlyTField" max="32767" attributes="0"/>
+                                                  <Component id="salaryTField" max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="26" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
                                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
@@ -2265,114 +2022,118 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                   <Component id="empDetailsLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="employeeIDTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="clearButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="usernameTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="passwordTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="viewAllButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                                  <Component id="viewAllButton" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Component id="clearButton" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Component id="employeeIDTField" min="-2" pref="19" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jScrollPane2" min="-2" pref="561" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="empLastNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="lastNameTField" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="empFirstNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="firstNameTField" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="empAddressLabel" min="-2" max="-2" attributes="0"/>
-                                              <Component id="addressTField" max="32767" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="empBirthdayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="birthdayTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empStatusLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="statusDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="phoneTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empPhoneLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="positionDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empPositionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="empSupervisorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="supervisorDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                           <Component id="govIdsLabel" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="empPagibigLabel" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="empSssLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="sssTField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="empTinLabel" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="empPagibigLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="pagibigTField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                              <Component id="tinTField" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="empPhilhealthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="philhealthTField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="salaryDetailsLabel" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" attributes="0">
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="sssTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="empSssLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="empRiceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="riceTField" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="tinTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="empTinLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="empPhoneAllowLabel" min="-2" pref="19" max="-2" attributes="0"/>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                          <Component id="empClothAllowLabel" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                                          <Component id="salaryDetailsLabel1" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="32767" attributes="0"/>
+                                                          <Group type="103" groupAlignment="3" attributes="0">
+                                                              <Component id="salaryTField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="empSalaryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="3" attributes="0">
+                                                              <Component id="hourlyTField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="empHourlyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="3" attributes="0">
+                                                              <Component id="empBiMonthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="biMonthlyTField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="phoneAllowTField" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                          <Component id="clothingTField" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="32767" attributes="0"/>
+                                                      </Group>
                                                   </Group>
-                                                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="pagibigTField" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <Component id="updateButton" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="philhealthTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empPhilhealthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Component id="salaryDetailsLabel" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="empSalaryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="salaryTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empRiceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="riceTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="empPhoneAllowLabel" alignment="3" min="-2" pref="19" max="-2" attributes="0"/>
-                                              <Component id="hourlyTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="phoneAllowTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empHourlyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="empBiMonthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empClothAllowLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="clothingTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="biMonthlyTField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="updateButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="addButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" attributes="0">
-                                          <Component id="jScrollPane2" min="-2" pref="561" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -2380,17 +2141,6 @@
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Component class="javax.swing.JButton" name="addButton">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Add"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addButtonActionPerformed"/>
-                          </Events>
-                        </Component>
                         <Component class="javax.swing.JButton" name="updateButton">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -2400,23 +2150,6 @@
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateButtonActionPerformed"/>
-                          </Events>
-                        </Component>
-                        <Component class="javax.swing.JButton" name="deleteButton">
-                          <Properties>
-                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                              <Color blue="33" green="33" red="ff" type="rgb"/>
-                            </Property>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Delete"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="empFirstNameLabel">
@@ -2435,38 +2168,9 @@
                             <Property name="text" type="java.lang.String" value="Last Name"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="empPositionLabel">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Position"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="empAddressLabel">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Address"/>
-                          </Properties>
-                        </Component>
                         <Component class="javax.swing.JTextField" name="lastNameTField">
                         </Component>
                         <Component class="javax.swing.JTextField" name="firstNameTField">
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="addressTField">
-                          <Properties>
-                            <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="toolTipText" type="java.lang.String" value=""/>
-                            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                              <Color id="Text Cursor"/>
-                            </Property>
-                            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[64, 22]"/>
-                            </Property>
-                            <Property name="name" type="java.lang.String" value="" noResource="true"/>
-                          </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="empDetailsLabel">
                           <Properties>
@@ -2486,26 +2190,6 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearButtonActionPerformed"/>
                           </Events>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="empBirthdayLabel">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Birthday"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="birthdayTField">
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="empPhoneLabel">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Phone #"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="phoneTField">
                         </Component>
                         <Component class="javax.swing.JLabel" name="empSalaryLabel">
                           <Properties>
@@ -2576,6 +2260,9 @@
                           </Events>
                         </Component>
                         <Component class="javax.swing.JTextField" name="pagibigTField">
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pagibigTFieldActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JTextField" name="tinTField">
                         </Component>
@@ -2586,7 +2273,7 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Century Gothic" size="12" style="2"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="Salary Details"/>
+                            <Property name="text" type="java.lang.String" value="Allowances"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="empBiMonthLabel">
@@ -2621,22 +2308,6 @@
                             <Property name="text" type="java.lang.String" value="Clothing Allow."/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="empStatusLabel">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Status"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="empSupervisorLabel">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Supervisor"/>
-                          </Properties>
-                        </Component>
                         <Component class="javax.swing.JTextField" name="hourlyTField">
                         </Component>
                         <Component class="javax.swing.JTextField" name="phoneAllowTField">
@@ -2647,27 +2318,6 @@
                           </Events>
                         </Component>
                         <Component class="javax.swing.JTextField" name="biMonthlyTField">
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="supervisorDropdown">
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ComboItem&gt;"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="positionDropdown">
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="positionDropdownActionPerformed"/>
-                          </Events>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ComboItem&gt;"/>
-                          </AuxValues>
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="statusDropdown">
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="statusDropdownActionPerformed"/>
-                          </Events>
-                          <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ComboItem&gt;"/>
-                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel3">
                           <Properties>
@@ -2683,29 +2333,6 @@
                               <Font name="Century Gothic" size="14" style="1"/>
                             </Property>
                           </Properties>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel5">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Username"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel7">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="14" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Password"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="usernameTField">
-                        </Component>
-                        <Component class="javax.swing.JPasswordField" name="passwordTField">
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="passwordTFieldActionPerformed"/>
-                          </Events>
                         </Component>
                         <Container class="javax.swing.JScrollPane" name="jScrollPane2">
                           <AuxValues>
@@ -2794,6 +2421,14 @@
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewAllButtonActionPerformed"/>
                           </Events>
                         </Component>
+                        <Component class="javax.swing.JLabel" name="salaryDetailsLabel1">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Century Gothic" size="12" style="2"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Salary Details"/>
+                          </Properties>
+                        </Component>
                       </SubComponents>
                     </Container>
                     <Component class="javax.swing.JButton" name="searchButton">
@@ -2828,251 +2463,6 @@
                         <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="searchTextFieldFocusLost"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchTextFieldActionPerformed"/>
                       </Events>
-                    </Component>
-                  </SubComponents>
-                </Container>
-                <Container class="javax.swing.JPanel" name="leaveManagement">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="e5" green="e5" red="e5" type="rgb"/>
-                    </Property>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                      <CardConstraints cardName="card6"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                              <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="270" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                              <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Container class="javax.swing.JPanel" name="jPanel11">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                                  <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="47" pref="679" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                                  <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="529" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Component class="javax.swing.JLabel" name="jLabel28">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="36" style="1"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Leave request"/>
-                          </Properties>
-                        </Component>
-                      </SubComponents>
-                    </Container>
-                  </SubComponents>
-                </Container>
-                <Container class="javax.swing.JPanel" name="leaveRequest">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="e5" green="e5" red="e5" type="rgb"/>
-                    </Property>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                      <CardConstraints cardName="card6"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace pref="58" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                              <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="177" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Container class="javax.swing.JPanel" name="jPanel12">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                      </Properties>
-
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane4" min="-2" pref="1081" max="-2" attributes="0"/>
-                                  <EmptySpace pref="55" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane4" min="-2" pref="437" max="-2" attributes="0"/>
-                                  <EmptySpace pref="153" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
-                      <SubComponents>
-                        <Container class="javax.swing.JScrollPane" name="jScrollPane4">
-                          <AuxValues>
-                            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                          </AuxValues>
-
-                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                          <SubComponents>
-                            <Component class="javax.swing.JTable" name="leaveManagementTable">
-                              <Properties>
-                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                  <Table columnCount="11" rowCount="4">
-                                    <Column editable="false" title="Code" type="java.lang.Object"/>
-                                    <Column editable="false" title="Emp ID" type="java.lang.Object"/>
-                                    <Column editable="false" title="Name" type="java.lang.Object"/>
-                                    <Column editable="true" title="Subject" type="java.lang.Object"/>
-                                    <Column editable="false" title="Leave Type" type="java.lang.Object"/>
-                                    <Column editable="false" title="Date From" type="java.lang.Object"/>
-                                    <Column editable="false" title="Date To" type="java.lang.Object"/>
-                                    <Column editable="false" title="Total Days" type="java.lang.Object"/>
-                                    <Column editable="false" title="Reason" type="java.lang.Object"/>
-                                    <Column editable="false" title="Status" type="java.lang.Object"/>
-                                    <Column editable="true" title="Action" type="java.lang.Object"/>
-                                  </Table>
-                                </Property>
-                                <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                                  <TableColumnModel selectionModel="0">
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-                                      <Title/>
-                                      <Editor/>
-                                      <Renderer/>
-                                    </Column>
-                                  </TableColumnModel>
-                                </Property>
-                                <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                                </Property>
-                                <Property name="rowHeight" type="int" value="30"/>
-                                <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                                  <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
-                                </Property>
-                              </Properties>
-                            </Component>
-                          </SubComponents>
-                        </Container>
-                      </SubComponents>
-                    </Container>
-                    <Component class="javax.swing.JLabel" name="jLabel29">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Century Gothic" size="36" style="1"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Leave Management"/>
-                      </Properties>
                     </Component>
                   </SubComponents>
                 </Container>

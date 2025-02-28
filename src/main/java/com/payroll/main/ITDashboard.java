@@ -4,26 +4,26 @@
  */
 package com.payroll.main;
 
-import com.payroll.domain.ComboItem;
-import com.payroll.domain.EmployeeAccount;
-import com.payroll.domain.EmployeeDetails;
-import com.payroll.domain.EmployeeHours;
-import com.payroll.domain.EmployeePosition;
-import com.payroll.domain.EmployeeStatus;
+import com.payroll.subdomain.ComboItem;
+import com.payroll.domain.IT;
+import com.payroll.domain.Person;
+import com.payroll.domain.Employee;
+import com.payroll.subdomain.EmployeePosition;
+import com.payroll.subdomain.EmployeeStatus;
+import com.payroll.domain.Finance;
 import com.payroll.domain.LeaveBalance;
-import com.payroll.domain.LeaveDetails;
-import com.payroll.domain.UserRole;
-import com.payroll.services.EmployeeDetailsService;
-import com.payroll.services.EmployeeAccountService;
-import com.payroll.services.EmployeeRolesService;
-import com.payroll.services.LeaveDetailsService;
-import com.payroll.services.PayrollService;
+import com.payroll.domain.HR;
+import com.payroll.subdomain.UserRole;
+import com.payroll.services.HRService;
+import com.payroll.services.ITService;
+import com.payroll.services.EmployeeService;
+import com.payroll.services.FinanceService;
 import com.payroll.table.TableActionCellEditor;
 import com.payroll.table.TableActionCellRender;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.table.TableActionCellRender;
 import com.payroll.table.TableActionEvent;
-import com.payroll.util.PayrollUtils;
+import com.payroll.domain.SalaryCalculation;
 import static japgolly.scalajs.react.vdom.all.table;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -51,87 +51,102 @@ import org.apache.commons.lang3.StringUtils;
 public class ITDashboard extends javax.swing.JFrame {
     private DatabaseConnection dbConnection;
     private CardLayout cardLayout;
-    private EmployeeAccount empAccount;
-    private EmployeeAccountService empAccountService;
-    private EmployeeDetailsService empDetailsService;
-    private EmployeeRolesService empRoleService;
+    private IT empAccount;
+    private ITService itService;
+    private HRService hrService;
     private UserRole userRole;
     private Integer employeeSearchID;
     
-    public ITDashboard(EmployeeAccount empAccount) {
+    public ITDashboard(IT empAccount) {
         initComponents();
         cardLayout = (CardLayout)(mphCards.getLayout());
         this.empAccount=empAccount;
         this.dbConnection = new DatabaseConnection();
         updateUserLabels(empAccount);
-        this.empAccountService = new EmployeeAccountService(this.dbConnection);
-        this.empDetailsService = new EmployeeDetailsService(this.dbConnection);  
-        this.empRoleService = new EmployeeRolesService(this.dbConnection);
+        this.itService = new ITService(this.dbConnection);
+        this.hrService = new HRService(this.dbConnection);  
         loadAllRoles();
         
     }
     public ITDashboard(){
         
     }
-    public EmployeeAccount getEmpAccount() {
+    public IT getEmpAccount() {
         return empAccount;
     }
     
-     public EmployeeAccount getUsername() {
+     public IT getUsername() {
         return empAccount;
     }
 
-    public void setEmpAccount(EmployeeAccount empAccount) {
+    public void setEmpAccount(IT empAccount) {
         this.empAccount = empAccount;
     }
     
+    private void updateUserLabels(IT empAccount) {
+        if (empAccount == null) {
+            System.err.println("Error: empAccount is null");
+            return;
+        }
 
-    
-    private void updateUserLabels(EmployeeAccount empAccount) {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String tin = empAccount.getEmpDetails().getEmpTIN() != null ? empAccount.getEmpDetails().getEmpTIN() : "";
-        String phone = empAccount.getEmpDetails().getEmpPhoneNumber() != null ? empAccount.getEmpDetails().getEmpPhoneNumber(): "" ;
-        String pagIbig = empAccount.getEmpDetails().getEmpPagibig() != 0 ? String.valueOf(empAccount.getEmpDetails().getEmpPagibig()) : "";
-        String philhealth = empAccount.getEmpDetails().getEmpPhilHealth() != 0 ? String.valueOf(empAccount.getEmpDetails().getEmpPhilHealth()) : "";
-        String sss = empAccount.getEmpDetails().getEmpSSS() !=null ? empAccount.getEmpDetails().getEmpSSS() : "";
-      
-        
-        usernameLabel.setText("@"+ empAccount.getEmpUserName()); 
-        fullNameValue.setText(empAccount.getEmpDetails().getFormattedName());
-        fullNameValue2.setText(empAccount.getEmpDetails().getFormattedName());
-        empNumValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpID()));
-        empIDLabelValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpID()));
-        addressLabelValue.setText(empAccount.getEmpDetails().getEmpAddress());
-        phoneLabelValue.setText(phone);
-        basicSalaryLabelValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpBasicSalary()));
-        riceLabelValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpRice()));
-        phoneAllowanceValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpPhone()));
-        clothingLabelValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpClothing()));
-        hourlyrateLabelValue.setText("PHP " + String.valueOf(empAccount.getEmpDetails().getEmpHourlyRate()));
-        tinLabelValue.setText(tin);
-        pagibigLabelValue.setText(pagIbig);
-        sssLabelValue.setText(sss);
-        philhealthLabelValue.setText(philhealth);
-        
-        if(empAccount.getEmpDetails().getEmpBirthday() != null){
-             bdayLabelValue.setText(formatter.format(empAccount.getEmpDetails().getEmpBirthday()));
-        }
 
-        if(empAccount.getEmpDetails().getEmpImmediateSupervisor() != null){
-            supervisorLabelValue.setText(empAccount.getEmpDetails().getEmpImmediateSupervisor().getFormattedName());
+        // ✅ Check if EmpDetails is null before accessing its properties
+        if (empAccount.getEmpDetails() != null) {
+            Person empDetails = empAccount.getEmpDetails();
+
+            String tin = empDetails.getEmpTIN() != null ? empDetails.getEmpTIN() : "";
+            String phone = empDetails.getEmpPhoneNumber() != null ? empDetails.getEmpPhoneNumber() : "";
+            String pagIbig = empDetails.getEmpPagibig() != 0 ? String.valueOf(empDetails.getEmpPagibig()) : "";
+            String philhealth = empDetails.getEmpPhilHealth() != 0 ? String.valueOf(empDetails.getEmpPhilHealth()) : "";
+            String sss = empDetails.getEmpSSS() != null ? empDetails.getEmpSSS() : "";
+
+            usernameLabel.setText("@" + empAccount.getEmpUserName());
+            fullNameValue.setText(empDetails.getFormattedName());
+            fullNameValue2.setText(empDetails.getFormattedName());
+            empNumValue.setText(String.valueOf(empDetails.getEmpID()));
+            addressLabelValue.setText(empDetails.getEmpAddress() != null ? empDetails.getEmpAddress() : "");
+            phoneLabelValue.setText(phone);
+            tinLabelValue.setText(tin);
+            pagibigLabelValue.setText(pagIbig);
+            sssLabelValue.setText(sss);
+            philhealthLabelValue.setText(philhealth);
+
+            // ✅ Fixed incorrect method calls and ensured salary values are properly formatted
+            basicSalaryLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpBasicSalary()));
+            riceLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpRice()));
+            phoneAllowanceValue.setText("PHP " + String.format("%.2f", empDetails.getEmpPhone()));
+            clothingLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpClothing()));
+            hourlyrateLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpHourlyRate()));
+
+           
+
+            // ✅ Check for supervisor existence before accessing
+            if (empDetails.getEmpImmediateSupervisor() != null) {
+                supervisorLabelValue.setText(empDetails.getEmpImmediateSupervisor().getFormattedName());
+            } else {
+                supervisorLabelValue.setText("N/A");
+            }
+
+            // ✅ Check for job position existence before accessing
+            if (empDetails.getEmpPosition() != null) {
+                positionLabelValue.setText(empDetails.getEmpPosition().getPosition());
+            } else {
+                positionLabelValue.setText("N/A");
+            }
+
+            // ✅ Check for employment status existence before accessing
+            if (empDetails.getEmpStatus() != null) {
+                statusLabelValue.setText(empDetails.getEmpStatus().getStatus());
+            } else {
+                statusLabelValue.setText("N/A");
+            }
+ 
         }
-        if(empAccount.getEmpDetails().getEmpPosition() != null){
-            positionLabelValue.setText(empAccount.getEmpDetails().getEmpPosition().getPosition());
-        }
-        if(empAccount.getEmpDetails().getEmpStatus() != null){
-            statusLabelValue.setText(empAccount.getEmpDetails().getEmpStatus().getStatus());
-        }
-        
-    }   
-    
+    }
     
     private void loadAllRoles(){
-        List<UserRole> userRoles = empAccountService.getAllUserRole();
+        List<UserRole> userRoles = itService.getAllUserRole();
         roleDropdown.addItem(new ComboItem(null,"Select Role"));
         for(UserRole userRole : userRoles){
             roleDropdown.addItem(new ComboItem(userRole.getId(),userRole.getRole()));
@@ -324,7 +339,7 @@ public class ITDashboard extends javax.swing.JFrame {
 
         roleManagementButton.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         roleManagementButton.setForeground(new java.awt.Color(255, 255, 255));
-        roleManagementButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/employees.png"))); // NOI18N
+        roleManagementButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/settings-4-16.png"))); // NOI18N
         roleManagementButton.setText(" Role Management");
         roleManagementButton.setContentAreaFilled(false);
         roleManagementButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1049,13 +1064,13 @@ public class ITDashboard extends javax.swing.JFrame {
     }
     
     private void loadEmployeeValues(int empID){
-        EmployeeDetails empDetails = empDetailsService.getByEmpID(empID);
+        Person empDetails = hrService.getByEmpID(empID);
         employeeIDTField.setText(String.valueOf(empDetails.getEmpID()));
         lastNameTField.setText(empDetails.getLastName());
         firstNameTField.setText(empDetails.getFirstName());
   
         
-        EmployeeAccount empAccount = empAccountService.getByEmpID(empID);
+        IT empAccount = itService.getByEmpID(empID);
         usernameTField.setText(empAccount.getEmpUserName());
         passwordTField.setText(empAccount.getEmpPassword());
         roleDropdown.setSelectedIndex(0);
@@ -1064,7 +1079,7 @@ public class ITDashboard extends javax.swing.JFrame {
         }
     }
     
-    private void validateRequiredFields(EmployeeDetails empDetails){
+    private void validateRequiredFields(Person empDetails){
         List<String> errors = new ArrayList();
         
         if(StringUtils.isEmpty(empDetails.getFirstName())){
@@ -1101,15 +1116,15 @@ public class ITDashboard extends javax.swing.JFrame {
         
         return empDetails;
     }*/
-    private EmployeeAccount updateEmpAccountValues(){
-        EmployeeAccount empAccount = new EmployeeAccount();
+    private IT updateEmpAccountValues(){
+        IT empAccount = new IT();
         empAccount.setEmpUserName(usernameTField.getText());
         empAccount.setEmpPassword(passwordTField.getText());
         
         ComboItem roleValue = (ComboItem) roleDropdown.getSelectedItem();
 
         if (roleValue.getKey() != null) {
-            empAccount.setUserRole(empAccountService.getByRolesId(roleValue.getKey())); // Assuming EmployeeAccount has a setUser Role method
+            empAccount.setUserRole(itService.getByRolesId(roleValue.getKey())); // Assuming IT has a setUser Role method
         }
         
         /*if(positionValue.getKey() != null){
@@ -1192,7 +1207,7 @@ public class ITDashboard extends javax.swing.JFrame {
             // Check if the new password and confirmation match
             if (newPassword.equals(confirm)) {
                 empAccount.setEmpPassword(newPassword); // Update the account object with the new password
-                empAccountService.changePassword(empAccount); // Update the password in the database
+                itService.changePassword(empAccount); // Update the password in the database
                 JOptionPane.showMessageDialog(null, "Password changed successfully!");
                 existingPasswordTField.setText("");
                 newPasswordTField.setText("");
@@ -1204,20 +1219,20 @@ public class ITDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_changePasswordButtonActionPerformed
 
     private void viewAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAllButtonActionPerformed
-        List<EmployeeDetails> allEmployee = empDetailsService.getAllEmployee();
-        List<EmployeeAccount> allAccount = empAccountService.getAllUserAccount();
+        List<Person> allEmployee = hrService.getAllEmployee();
+        List<IT> allAccount = itService.getAllUserAccount();
         DefaultTableModel model = (DefaultTableModel) RoleTable.getModel();
         model.setRowCount(0);
 
-        // Store EmployeeAccount objects in a HashMap for quick lookup
-        Map<Integer, EmployeeAccount> accountMap = new HashMap<>();
-        for (EmployeeAccount empAccount : allAccount) {
+        // Store IT objects in a HashMap for quick lookup
+        Map<Integer, IT> accountMap = new HashMap<>();
+        for (IT empAccount : allAccount) {
             accountMap.put(empAccount.getEmpID(), empAccount);
         }
 
-        // Iterate through EmployeeDetails and find matching EmployeeAccount in HashMap
-        for (EmployeeDetails empDetails : allEmployee) {
-            EmployeeAccount empAccount = accountMap.get(empDetails.getEmpID()); // O(1) lookup time
+        // Iterate through EmployeeDetails and find matching IT in HashMap
+        for (Person empDetails : allEmployee) {
+            IT empAccount = accountMap.get(empDetails.getEmpID()); // O(1) lookup time
 
             Vector<Object> rowData = new Vector<>();
             rowData.add(empDetails.getEmpID());
@@ -1264,11 +1279,11 @@ public class ITDashboard extends javax.swing.JFrame {
             int empID = Integer.parseInt(employeeIDTField.getText().trim());
 
             // Get updated employee details
-            EmployeeAccount empAccount = updateEmpAccountValues();
+            IT empAccount = updateEmpAccountValues();
             empAccount.setEmpID(empID);  // Set the employee ID for updating
 
             // Perform update operation
-            empAccountService.updateEmployeeAccountIT(empAccount);
+            itService.updateEmployeeAccountIT(empAccount);
 
             // Refresh table and clear fields after successful update
             refreshTable();

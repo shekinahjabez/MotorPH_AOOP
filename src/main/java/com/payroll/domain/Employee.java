@@ -4,22 +4,100 @@
  */
 package com.payroll.domain;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Date;
+import com.payroll.subdomain.EmployeePosition;
+import com.payroll.subdomain.EmployeeStatus;
 
 /**
  *
- * @author leniejoice
+ * @author leniejoice 
  */
-public class Employee extends Person {
+public class Employee extends Person{
+
+
+    private Date date;
+    private LocalTime timeIn;
+    private LocalTime timeOut;
+    private int attendanceId;
     
-    // Constructor that initializes Employee attributes using superclass constructor
+    
+    public Employee() {
+        super(0, "", "", "", null, "", "", "", 0, 0, null, null, null,0,0,0,0,0,0); 
+        // Initialize `Person` fields with default values
+    }
+    
     public Employee(int empID, String lastName, String firstName, String empAddress, Date empBirthday,
                     String empPhoneNumber, String empSSS, String empTIN, long empPhilHealth,
-                    long empPagibig, EmployeeDetails empImmediateSupervisor, EmployeeStatus empStatus,
-                    EmployeePosition empPosition, double empBasicSalary, double empRice,
-                    double empPhone, double empClothing, double empMonthlyRate, double empHourlyRate) {
-        super(empID, lastName, firstName, empAddress, empBirthday, empPhoneNumber, empSSS, empTIN, empPhilHealth,
-              empPagibig, empImmediateSupervisor, empStatus, empPosition, empBasicSalary, empRice,
-              empPhone, empClothing, empMonthlyRate, empHourlyRate);
-    }  
+                    long empPagibig, Person empImmediateSupervisor, EmployeeStatus empStatus,
+                    EmployeePosition empPosition,double empBasicSalary, double empRice,
+                   double empPhone, double empClothing, double empMonthlyRate, double empHourlyRate, Date date, LocalTime timeIn, LocalTime timeOut, int attendanceId) {
+        // Call parent constructor (Person)
+        super(empID, lastName, firstName, empAddress, empBirthday, empPhoneNumber, empSSS, 
+              empTIN, empPhilHealth, empPagibig, empImmediateSupervisor, empStatus, empPosition,
+              empBasicSalary,empRice,empPhone,empClothing, empMonthlyRate,empHourlyRate);
+        
+        // Initialize Employee-specific fields
+        this.date = date;
+        this.timeIn = timeIn;
+        this.timeOut = timeOut;
+        this.attendanceId = attendanceId;
+    }
+    
+
+    @Override
+    public int getEmpID() {
+        return empID;
+    }
+
+    @Override
+    public void setEmpID(int empID) {
+        this.empID = empID;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public LocalTime getTimeIn() {
+        return timeIn;
+    }
+
+    public void setTimeIn(LocalTime timeIn) {
+        this.timeIn = timeIn;
+    }
+
+    public LocalTime getTimeOut() {
+        return timeOut;
+    }
+
+    public void setTimeOut(LocalTime timeOut) {
+        this.timeOut = timeOut;
+    }
+
+
+    public int getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(int attendanceId) {
+        this.attendanceId = attendanceId;
+    }
+    
+    public String getFormattedHoursWorked(){
+        long secondsDuration = getHoursWorked();
+        return String.format("%d:%02d", secondsDuration / 3600, (secondsDuration % 3600) / 60);
+    }
+    
+    public long getHoursWorked(){
+        return (Duration.between(timeIn, timeOut).minus(timeIn.equals(LocalTime.MIDNIGHT) ? Duration.ZERO: Duration.ofHours(1))).toSeconds();
+    }
+
+    
 }
+

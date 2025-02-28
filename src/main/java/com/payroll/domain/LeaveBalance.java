@@ -4,7 +4,7 @@
  */
 package com.payroll.domain;
 
-import com.payroll.domain.LeaveDetails.LeaveStatus;
+import com.payroll.domain.HR.LeaveStatus;
 import java.util.List;
 
 /**
@@ -50,9 +50,9 @@ public class LeaveBalance {
         this.taken = taken;
     }
     
-    public void updateLeaveBalance(List<LeaveDetails> leaveDetails){
+    public void updateLeaveBalance(List<HR> leaveDetails){
         int totalDays = 0;
-        for(LeaveDetails l: leaveDetails){
+        for(HR l: leaveDetails){
             if(!l.getStatus().equals(LeaveStatus.DECLINED.name())){
                 totalDays += l.getTotalDays();
             }

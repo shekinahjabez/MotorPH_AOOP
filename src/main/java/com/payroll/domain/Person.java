@@ -4,6 +4,10 @@
  */
 package com.payroll.domain;
 
+import com.payroll.subdomain.EmployeePosition;
+import com.payroll.subdomain.EmployeeStatus;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -11,7 +15,7 @@ import java.util.Date;
  * @author leniejoice
  */
 public abstract class Person {
-    private int empID;
+    int empID;
     private String lastName; 
     private String firstName;
     private Date empBirthday;
@@ -19,7 +23,7 @@ public abstract class Person {
     private String empPhoneNumber;
     private EmployeeStatus empStatus;
     private EmployeePosition empPosition;
-    private EmployeeDetails empImmediateSupervisor;
+    private Person empImmediateSupervisor;
     private String empSSS;
     private String empTIN;
     private long empPhilHealth;
@@ -30,11 +34,14 @@ public abstract class Person {
     private double empClothing;
     private double empMonthlyRate;
     private double empHourlyRate;
+   
+    
+ 
     
     // Constructor
     public Person(int empID, String lastName, String firstName, String empAddress, Date empBirthday,
                   String empPhoneNumber, String empSSS, String empTIN, long empPhilHealth,
-                  long empPagibig, EmployeeDetails empImmediateSupervisor, EmployeeStatus empStatus,
+                  long empPagibig, Person empImmediateSupervisor, EmployeeStatus empStatus,
                   EmployeePosition empPosition, double empBasicSalary, double empRice,
                   double empPhone, double empClothing, double empMonthlyRate, double empHourlyRate) { 
         
@@ -58,6 +65,7 @@ public abstract class Person {
         this.empMonthlyRate = empMonthlyRate;
         this.empHourlyRate = empHourlyRate;
     }
+    
     
 
     // Getters
@@ -101,7 +109,7 @@ public abstract class Person {
         return empPagibig;
     }
 
-    public EmployeeDetails getEmpImmediateSupervisor() {
+    public Person getEmpImmediateSupervisor() {
         return empImmediateSupervisor;
     }
 
@@ -111,30 +119,6 @@ public abstract class Person {
     
         public EmployeePosition getEmpPosition() {
         return empPosition;
-    }
-
-    public double getEmpBasicSalary() {
-        return empBasicSalary;
-    }
-
-    public double getEmpRice() {
-        return empRice;
-    }
-
-    public double getEmpPhone() {
-        return empPhone;
-    }
-
-    public double getEmpClothing() {
-        return empClothing;
-    }
-
-    public double getEmpMonthlyRate() {
-        return empMonthlyRate;
-    }
-
-    public double getEmpHourlyRate() {
-        return empHourlyRate;
     }
 
     // Setters
@@ -178,7 +162,7 @@ public abstract class Person {
         this.empPagibig = empPagibig;
     }
 
-    public void setEmpImmediateSupervisor(EmployeeDetails empImmediateSupervisor) {
+    public void setEmpImmediateSupervisor(Person empImmediateSupervisor) {
         this.empImmediateSupervisor = empImmediateSupervisor;
     }
 
@@ -189,7 +173,31 @@ public abstract class Person {
         public void setEmpPosition(EmployeePosition empPosition) {
         this.empPosition = empPosition;
     }
+        
+     public double getEmpBasicSalary() {
+        return empBasicSalary;
+    }
 
+    public double getEmpRice() {
+        return empRice;
+    }
+
+    public double getEmpPhone() {
+        return empPhone;
+    }
+
+    public double getEmpClothing() {
+        return empClothing;
+    }
+
+    public double getEmpMonthlyRate() {
+        return empMonthlyRate;
+    }
+
+    public double getEmpHourlyRate() {
+        return empHourlyRate;
+    }
+    
     public void setEmpBasicSalary(double empBasicSalary) {
         this.empBasicSalary = empBasicSalary;
     }
@@ -212,5 +220,14 @@ public abstract class Person {
 
     public void setEmpHourlyRate(double empHourlyRate) {
         this.empHourlyRate = empHourlyRate;
+    }
+
+    public String getFormattedName(){
+        return (firstName+" "+lastName).trim();
+    }
+    
+    public String getFormattedBirthday(){
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return this.empBirthday != null ? formatter.format(this.empBirthday) : null;
     }
 }

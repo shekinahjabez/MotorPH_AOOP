@@ -4,6 +4,7 @@
  */
 package com.payroll.table;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,6 +19,9 @@ public class PanelAction extends javax.swing.JPanel {
      */
     public PanelAction() {
         initComponents();
+        setBorder(javax.swing.BorderFactory.createEmptyBorder());  // Removes outer border
+        setOpaque(true);  // Ensure it can have a background color
+        setBackground(Color.WHITE);  // Make background match the table's background (optional)
     }
     
     public void initEvent(TableActionEvent event, int id){
@@ -51,8 +55,10 @@ public class PanelAction extends javax.swing.JPanel {
 
         actionButton1.setText("actionButton1");
 
+        approveButton.setForeground(new java.awt.Color(255, 255, 255));
         approveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/accept.png"))); // NOI18N
 
+        declineButton.setForeground(new java.awt.Color(255, 255, 255));
         declineButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/delete.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

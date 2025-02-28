@@ -4,12 +4,14 @@
  */
 package com.payroll.main;
 
-import com.payroll.domain.EmployeeAccount;
-import com.payroll.domain.EmployeeDetails;
+import com.payroll.domain.Employee;
+import com.payroll.domain.IT;
+import com.payroll.domain.Person;
 import com.payroll.domain.LeaveBalance;
-import com.payroll.services.EmployeeAccountService;
-import com.payroll.services.EmployeeDetailsService;
-import com.payroll.services.LeaveDetailsService;
+import com.payroll.domain.Person;
+import com.payroll.services.ITService;
+import com.payroll.services.HRService;
+import com.payroll.services.EmployeeService;
 import com.payroll.util.DatabaseConnection;
 import javax.swing.JOptionPane;
 import java.awt.event.WindowEvent;
@@ -29,17 +31,17 @@ public class SignUp extends javax.swing.JFrame {
      * Creates new form LogIn
      */
   
-    private EmployeeAccountService empAccountService;
-    private EmployeeDetailsService empDetailsService;
-    private LeaveDetailsService leaveDetailsService;
+    private ITService empAccountService;
+    private HRService hrService;
+    private EmployeeService leaveDetailsService;
     
     public SignUp() {
        initComponents();
        DatabaseConnection dbConnection = new DatabaseConnection();
        dbConnection.connect();
-       this.empAccountService = new EmployeeAccountService(dbConnection);
-       this.empDetailsService = new EmployeeDetailsService(dbConnection);
-       this.leaveDetailsService = new LeaveDetailsService(dbConnection);
+       this.empAccountService = new ITService(dbConnection);
+       this.hrService = new HRService(dbConnection);
+       this.leaveDetailsService = new EmployeeService(dbConnection);
     }
      
     /**
@@ -271,18 +273,24 @@ public class SignUp extends javax.swing.JFrame {
         }
 
         System.out.println("Attempting to create user account...");
-        EmployeeDetails empDetails = new EmployeeDetails ();
-        empDetails.setFirstName(firstName);
-        empDetails.setLastName(lastName);
-        empDetailsService.saveEmployeeDetails(empDetails);
+        Employee person = new Employee();
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+        hrService.saveEmployeeDetails(person);
+        
+        int empID = person.getEmpID();
+        if(empID==0){
+            JOptionPane.showMessageDialog(null, "Error: Employee ID not generated.");
+            return;
+        }
 
-        EmployeeAccount empAccount = new EmployeeAccount();
+        IT empAccount = new IT();
         empAccount.setEmpUserName(username);
         empAccount.setEmpPassword(password);
-        empAccountService.saveUserAccount(empAccount,empDetails);
+        empAccountService.saveUserAccount(empAccount,person);
         
         LeaveBalance  leaveBalance = new LeaveBalance();
-        leaveBalance.setEmpID(empDetails.getEmpID());
+        leaveBalance.setEmpID(person.getEmpID());
         leaveDetailsService.saveLeaveBalance(leaveBalance);
         
         
