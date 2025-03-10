@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author leniejoice
  */
-public abstract class SalaryCalculation {
+public class SalaryCalculation {
     private Connection connection;
     public SalaryCalculation(DatabaseConnection dbConnection){
         this.connection = dbConnection.getConnection();  

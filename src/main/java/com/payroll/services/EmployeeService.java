@@ -157,42 +157,6 @@ public class EmployeeService {
         
     }
     
-
-    /*public Employee timeIn(Employee attendanceDetails) {
-        if (connection != null) {
-            String query = "INSERT INTO public.employee_hours (employee_id, date, time_in) VALUES (?, ?, ?)";
-
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-
-                // Get today's date
-                java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-
-                // Get the current local time (from the computer's clock)
-                LocalTime localTime = LocalTime.now();
-                java.sql.Time timeIn = java.sql.Time.valueOf(localTime);
-
-                preparedStatement.setInt(1, attendanceDetails.getEmpID());
-                preparedStatement.setDate(2, date);
-                preparedStatement.setTime(3, timeIn);
-
-                int affectedRows = preparedStatement.executeUpdate();
-
-                if (affectedRows > 0) {
-                    try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            attendanceDetails.setAttendanceId(generatedKeys.getInt(1));
-                        } else {
-                            throw new SQLException("Time-in failed, no ID obtained.");
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return attendanceDetails;
-    }
-    */
     
     public Employee timeIn(Employee attendanceDetails) throws SQLException {
         if (connection == null) {
@@ -203,22 +167,21 @@ public class EmployeeService {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            // Use current date and time
-            LocalDate currentDate = LocalDate.now();                     // For the DATE column
-            LocalTime currentTime = LocalTime.now();                      // For the TIME column
+            LocalDate currentDate = LocalDate.now();                 
+            LocalTime currentTime = LocalTime.now();                
 
-            java.sql.Date sqlDate = java.sql.Date.valueOf(currentDate);   // Convert to java.sql.Date
-            java.sql.Time sqlTimeIn = java.sql.Time.valueOf(currentTime); // Convert to java.sql.Time
+            java.sql.Date sqlDate = java.sql.Date.valueOf(currentDate);   
+            java.sql.Time sqlTimeIn = java.sql.Time.valueOf(currentTime); 
 
-            preparedStatement.setInt(1, attendanceDetails.getEmpID());    // employee_id (INTEGER)
-            preparedStatement.setDate(2, sqlDate);                        // date (DATE)
-            preparedStatement.setTime(3, sqlTimeIn);                      // time_in (TIME WITHOUT TIME ZONE)
+            preparedStatement.setInt(1, attendanceDetails.getEmpID());    
+            preparedStatement.setDate(2, sqlDate);                        
+            preparedStatement.setTime(3, sqlTimeIn);                      
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        attendanceDetails.setAttendanceId(generatedKeys.getInt(1)); // id (SERIAL)
+                        attendanceDetails.setAttendanceId(generatedKeys.getInt(1));
                     } else {
                         throw new SQLException("Time-in failed, no ID obtained.");
                     }
@@ -227,8 +190,8 @@ public class EmployeeService {
                 throw new SQLException("Time-in failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();  // You could replace this with proper logging in a real application
-            throw e;               // Let the caller handle the exception
+            e.printStackTrace();  
+            throw e;              
         }
 
         return attendanceDetails;
@@ -276,17 +239,15 @@ public class EmployeeService {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            // Use current time
             LocalTime currentTime = LocalTime.now();
-            java.sql.Time sqlTimeOut = java.sql.Time.valueOf(currentTime);  // Convert to java.sql.Time
+            java.sql.Time sqlTimeOut = java.sql.Time.valueOf(currentTime);  
 
-            // Use current date (so we update today's record)
             LocalDate currentDate = LocalDate.now();
             java.sql.Date sqlDate = java.sql.Date.valueOf(currentDate);
 
-            preparedStatement.setTime(1, sqlTimeOut);                       // time_out (TIME WITHOUT TIME ZONE)
-            preparedStatement.setInt(2, attendanceDetails.getEmpID());      // employee_id (INTEGER)
-            preparedStatement.setDate(3, sqlDate);                          // date (DATE)
+            preparedStatement.setTime(1, sqlTimeOut);                       
+            preparedStatement.setInt(2, attendanceDetails.getEmpID());      
+            preparedStatement.setDate(3, sqlDate);                         
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -299,14 +260,14 @@ public class EmployeeService {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();  // Replace with proper logging if necessary
+            e.printStackTrace(); 
         }
 
         return attendanceDetails; 
     }
     
     
-    public HR saveLeave(HR leaveDetails){
+    public HR addLeaveRequest(HR leaveDetails){
         //java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
         java.sql.Date dateFrom = leaveDetails.getDateFrom()!=null? new java.sql.Date(leaveDetails.getDateFrom().getTime()):null;
         java.sql.Date dateTo = leaveDetails.getDateTo()!=null? new java.sql.Date(leaveDetails.getDateTo().getTime()):null;

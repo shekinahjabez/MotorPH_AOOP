@@ -276,7 +276,7 @@ public class SignUp extends javax.swing.JFrame {
         Employee person = new Employee();
         person.setFirstName(firstName);
         person.setLastName(lastName);
-        hrService.saveEmployeeDetails(person);
+        hrService.addEmployeeDetails(person);
         
         int empID = person.getEmpID();
         if(empID==0){

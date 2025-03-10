@@ -23,14 +23,11 @@ public class IT extends Person{
     private UserRole userRole;
     private HR leaveDetail;
 
-    // ✅ No-Args Constructor (Fixes NullPointerException for payrollDetails)
     public IT() {
         super(0, "", "", "", null, "", "", "", 0, 0, null, null, null,0,0,0,0,0,0);
-        //this.payrollDetails = new Finance();
- 
+        
     }
 
-    // ✅ Full Constructor
     public IT(int empID, String lastName, String firstName, String empAddress, Date empBirthday,
               String empPhoneNumber, String empSSS, String empTIN, long empPhilHealth,
               long empPagibig, Person empImmediateSupervisor, EmployeeStatus empStatus,
@@ -47,12 +44,9 @@ public class IT extends Person{
         this.empPassword = empPassword;
         this.empDetails = empDetails;
         this.userRole = userRole;
-        this.leaveDetail = leaveDetail; // ✅ Prevent null issues
+        this.leaveDetail = leaveDetail; 
     }
 
-    
-
-    // ✅ Other Getters & Setters
     public int getAccountID() { 
         return accountID; }
     

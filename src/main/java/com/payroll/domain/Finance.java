@@ -30,8 +30,6 @@ public class Finance extends Person {
         super(empID, lastName, firstName, empAddress, empBirthday, empPhoneNumber, empSSS, 
               empTIN, empPhilHealth, empPagibig, empImmediateSupervisor, empStatus, empPosition,
               empBasicSalary,empRice,empPhone,empClothing, empMonthlyRate,empHourlyRate);
-        
-        // Initialize Finance-specific payroll details
 
     }
     

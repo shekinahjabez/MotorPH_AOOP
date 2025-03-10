@@ -62,6 +62,4 @@ public class LeaveBalance {
         setAvailable(available);
     }
    
-            
-    
 }

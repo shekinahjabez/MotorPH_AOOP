@@ -5,6 +5,7 @@
 package com.payroll.services;
 import com.payroll.domain.Person;
 import com.payroll.domain.Employee;
+import com.payroll.domain.IT;
 import com.payroll.subdomain.EmployeePosition;
 import com.payroll.subdomain.EmployeeStatus;
 import com.payroll.util.DatabaseConnection;
@@ -61,7 +62,7 @@ public class HRService {
             }   
         }                          
         return employeeDetails;
-    } 
+    }
     
     public EmployeePosition getPositionById(int id){
         EmployeePosition empPosition = null ;
@@ -83,6 +84,25 @@ public class HRService {
             }        
         }                          
         return empPosition;
+    }
+    
+    public void updateEmployeeCredentials(IT empAccount){
+        if(connection !=null){
+            String Query = "UPDATE public.employee_account SET username = ?, password = ? WHERE employee_id = ?";
+        
+            try{
+                PreparedStatement preparedStatement = connection.prepareStatement(Query);
+                preparedStatement.setString(1,empAccount.getEmpUserName());
+                preparedStatement.setString(2,empAccount.getEmpPassword());
+                preparedStatement.setInt(3,empAccount.getEmpID());
+                
+
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }                                   
+        }
     }
     
     public EmployeeStatus getStatusById(int id){
@@ -108,18 +128,16 @@ public class HRService {
     }
     
     public EmployeePosition loadPositionData(JComboBox<String> positionComboBox){
-     
         return null;
      
     }
     
     public Person updateEmployeeDetails(Person empDetails){
-         java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
-         Integer superVisorId = empDetails.getEmpImmediateSupervisor() != null ? empDetails.getEmpImmediateSupervisor().getEmpID() : null;
-         Integer positionId = empDetails.getEmpPosition() != null ? empDetails.getEmpPosition().getId() : null;
-         Integer statusId = empDetails.getEmpStatus() != null ? empDetails.getEmpStatus().getId() : null;
-         
-         
+        java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
+        Integer superVisorId = empDetails.getEmpImmediateSupervisor() != null ? empDetails.getEmpImmediateSupervisor().getEmpID() : null;
+        Integer positionId = empDetails.getEmpPosition() != null ? empDetails.getEmpPosition().getId() : null;
+        Integer statusId = empDetails.getEmpStatus() != null ? empDetails.getEmpStatus().getId() : null;
+
             if (connection != null) {
             String Query = "UPDATE public.employee \n"
                     + "SET \n"
@@ -134,7 +152,7 @@ public class HRService {
                     + "    pag_ibig = ?,\n"
                     + "    status = ?,\n"
                     + "    position = ?,\n"
-                    + "    immediate_supervisor = ? \n "
+                    + "    immediate_supervisor = ?,\n"
                     + "    basic_salary = ?,\n"
                     + "    rice_subsidy = ?,\n"
                     + "    phone_allowance = ?,\n"
@@ -174,7 +192,7 @@ public class HRService {
         return empDetails;
     }
     
-    public Person saveEmployeeDetails(Person empDetails){
+    public Person addEmployeeDetails(Person empDetails){
          java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
          Integer superVisorId = empDetails.getEmpImmediateSupervisor() != null ? empDetails.getEmpImmediateSupervisor().getEmpID() : null;
          Integer positionId = empDetails.getEmpPosition() != null ? empDetails.getEmpPosition().getId() : null;
@@ -225,7 +243,7 @@ public class HRService {
         return empDetails;
     }
     
-    public boolean deleteEmpDetails(int empID) {
+    public boolean deleteEmployeeDetails(int empID) {
         boolean isDeleted = false;
 
         if (connection != null) {
@@ -323,13 +341,12 @@ public class HRService {
 
         String query = "SELECT * FROM employee_hours WHERE employee_id = ?";
 
-        // ✅ Use try-with-resources to prevent resource leaks
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    Employee e = new Employee(); // ✅ Now works due to default constructor
+                    Employee e = new Employee(); 
                     e.setEmpID(resultSet.getInt("employee_id"));
                     e.setDate(resultSet.getDate("date"));
                     e.setAttendanceId(resultSet.getInt("id"));

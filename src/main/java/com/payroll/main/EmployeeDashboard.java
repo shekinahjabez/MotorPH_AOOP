@@ -7,26 +7,23 @@ package com.payroll.main;
 import com.payroll.subdomain.ComboItem;
 import com.payroll.domain.IT;
 import com.payroll.domain.Employee;
-import com.payroll.subdomain.EmployeePosition;
-import com.payroll.subdomain.EmployeeStatus;
-import com.payroll.domain.Finance;
 import com.payroll.domain.LeaveBalance;
 import com.payroll.domain.HR;
 import com.payroll.domain.HR.LeaveStatus;
 import com.payroll.subdomain.LeaveType;
-import com.payroll.domain.Person;
 import com.payroll.services.ITService;
 import com.payroll.services.EmployeeService;
 import com.payroll.services.FinanceService;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.domain.SalaryCalculation;
 import java.awt.CardLayout;
-import java.sql.PreparedStatement;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -34,6 +31,7 @@ import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -45,10 +43,10 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     private DatabaseConnection dbConnection;
     private CardLayout cardLayout;
     private IT empAccount;
+    private HR leaveDetails;
     private ITService empAccountService;
     private FinanceService payrollService;
     private EmployeeService empService;
-    private HR leaveDetails;
     private int currentEmployeeId;
     
     
@@ -697,23 +695,23 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                             .addComponent(riceSubsidyLabel)
                             .addComponent(pagibigLabel))))
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(tinLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addComponent(basicSalaryLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGap(421, 421, 421))
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(clothingLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(phoneAllowanceValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel6Layout.createSequentialGroup()
-                                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(hourlyrateLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(riceLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(0, 0, Short.MAX_VALUE)))
-                            .addGap(315, 315, 315)
-                            .addComponent(jLabel31)
-                            .addGap(63, 63, 63))
+                    .addComponent(tinLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(basicSalaryLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(421, 421, 421))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(clothingLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(phoneAllowanceValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(hourlyrateLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(riceLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(315, 315, 315)
+                        .addComponent(jLabel31)
+                        .addGap(63, 63, 63))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(addressLabelValue)
                             .addComponent(fullNameValue)
@@ -724,10 +722,10 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                             .addComponent(bdayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(philhealthLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(sssLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pagibigLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(supervisorLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pagibigLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(supervisorLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel6Layout.setVerticalGroup(
@@ -799,8 +797,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                         .addGap(21, 21, 21)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(riceSubsidyLabel)
-                            .addComponent(riceLabelValue))
-                        .addGap(0, 0, 0))
+                            .addComponent(riceLabelValue)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel31)
@@ -1341,7 +1338,13 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         leaveSubjectLabel.setText("Leave Subject");
 
         leaveDatesLabel.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        leaveDatesLabel.setText("Leave Dates (YYYY/MM/DD)");
+        leaveDatesLabel.setText("Leave Dates (YYYY-MM-DD)");
+
+        leaveDateFromTFieldValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leaveDateFromTFieldValueActionPerformed(evt);
+            }
+        });
 
         leaveDateFromLabel.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         leaveDateFromLabel.setText("Date From");
@@ -1667,31 +1670,36 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             }
         } 
     }//GEN-LAST:event_changePasswordActionPerformed
-
+    private void validateAttendanceData(List<Employee> empHours) {
+        if (empHours.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No attendance records found for the selected month and year.", "No Attendance", JOptionPane.ERROR_MESSAGE);
+        } else {
+            populateAttendanceTable(empHours);
+            updatePayrollLabels(empHours);
+        }
+    }
     private void monthDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthDropdownActionPerformed
-        if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
-            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-            Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
+        if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
+          Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+          Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
 
-            if(monthValue != null & year != null){
-                List<Employee> empHours = getEmployeeHours(monthValue,year);
-                populateAttendanceTable(empHours);
-                updatePayrollLabels(empHours);
-            }
-        }    
+          if (monthValue != null && year != null) {
+              List<Employee> empHours = getEmployeeHours(monthValue, year);
+              validateAttendanceData(empHours);
+          }
+      }
     }//GEN-LAST:event_monthDropdownActionPerformed
 
     private void yearDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearDropdownActionPerformed
-        if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
-            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-            Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
+        if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
+                Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+                Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
 
-            if(monthValue != null & year != null){
-                List<Employee> empHours = getEmployeeHours(monthValue,year);
-                populateAttendanceTable(empHours);
-                updatePayrollLabels(empHours);
-            }
-        }    
+                if (monthValue != null && year != null) {
+                    List<Employee> empHours = getEmployeeHours(monthValue, year);
+                    validateAttendanceData(empHours);
+                }
+            } 
     }//GEN-LAST:event_yearDropdownActionPerformed
 
     private void populateAttendanceTable(List<Employee> empHours){
@@ -1703,7 +1711,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             rowData.add(employeeHours.getDate());
             rowData.add(employeeHours.getTimeIn());
             rowData.add(employeeHours.getTimeOut());
-            rowData.add(employeeHours.getFormattedHoursWorked());
+            rowData.add((employeeHours.getTimeOut() != null) ? employeeHours.getTimeOut() : "Still Active");
             model.addRow(rowData);
         }
     }
@@ -1741,7 +1749,6 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         }
     }     
                                         
-    
     
     private List<Employee> getEmployeeHours(int month, int year){
        Calendar dateFrom = Calendar.getInstance();
@@ -1791,15 +1798,22 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     }
     
     private void applyLeaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyLeaveButtonActionPerformed
-        HR leaveDet = updateLeaveDetailValues();
-        empService.saveLeave(leaveDet);
-        JOptionPane.showMessageDialog(null, "Leave request sent!");
-        
-        
-        clearLeaveTextFields();
-        refreshLeaveHistoryTable();
-        updateLeaveBalance();
-        refreshLeaveBalance();
+        HR leaveDet = updateLeaveDetailValues(); 
+        try {
+            validateLeaveRequiredFields(leaveDet); 
+            empService.addLeaveRequest(leaveDet); 
+
+            JOptionPane.showMessageDialog(null, "Leave request sent!");
+
+            clearLeaveTextFields();
+            refreshLeaveHistoryTable();
+            updateLeaveBalance();
+            refreshLeaveBalance();
+
+        } catch (RuntimeException e) {
+            // Validation error messages are already shown in JOptionPane inside the method
+            System.err.println("Leave request validation failed: " + e.getMessage());
+        }
         
     }//GEN-LAST:event_applyLeaveButtonActionPerformed
     
@@ -1810,6 +1824,59 @@ public class EmployeeDashboard extends javax.swing.JFrame {
        totalLeaveBalLabelValue.setText(String.valueOf(leaveBalance.getAvailable()));
         
     }
+    
+    private void validateLeaveRequiredFields(HR leaveDetails){
+        List<String> errors = new ArrayList();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+
+        if(leaveDetails.getLeaveType() == null ){
+           errors.add("Leave Type");
+        }
+        if(StringUtils.isEmpty(leaveDetails.getSubject())){
+           errors.add("Leave Subject");
+        }
+        if(leaveDetails.getDateFrom()== null ){
+           errors.add("Date From");
+        }
+        if(leaveDetails.getDateTo()== null ){
+           errors.add("Date To");
+        }
+        if(StringUtils.isEmpty(leaveDetails.getReason())){
+           errors.add("Reason");
+        }
+        if(!errors.isEmpty()){
+            String errorMessage = "These fields are required: \n";
+            for(String s: errors){
+                errorMessage += s+"\n";
+            }
+            JOptionPane.showMessageDialog(this, errorMessage);
+            throw new RuntimeException();
+        }
+        
+        try {
+        dateFormat.parse(leaveDetails.getDateFrom().toString()); // Validates Date From format
+        dateFormat.parse(leaveDetails.getDateTo().toString());   // Validates Date To format
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "Date From and Date To must be in YYYY-MM-DD format.", 
+                    "Date Format Error", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException();
+        }
+        
+        Date today = new Date(System.currentTimeMillis());
+
+        if (leaveDetails.getDateFrom().before(today)) {
+            JOptionPane.showMessageDialog(this, "Leave Date From cannot be in the past.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException();
+        }
+
+
+        if (leaveDetails.getDateFrom().after(leaveDetails.getDateTo())) {
+            JOptionPane.showMessageDialog(this, "Leave Date To cannot be earlier than Leave Date From.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException();
+        }
+    }
+   
     
     private void withdrawLeaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_withdrawLeaveButtonActionPerformed
         DefaultTableModel model = (DefaultTableModel) leaveTable.getModel();
@@ -1839,16 +1906,13 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
             if (alreadyTimedIn) {
                 if (alreadyTimedOut) {
-                    // Already timed in and out - nothing to do
                     timeIn.setEnabled(false);
                     timeOut.setEnabled(false);
                 } else {
-                    // Timed in but not yet out - enable Time Out
                     timeIn.setEnabled(false);
                     timeOut.setEnabled(true);
                 }
             } else {
-                // No record yet - allow Time In
                 timeIn.setEnabled(true);
                 timeOut.setEnabled(false);
             }
@@ -1859,44 +1923,60 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                 "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
 
+    private boolean isWithinAllowedTime(Time startTime, Time endTime) {
+        Calendar now = Calendar.getInstance();
+        Time currentTime = new Time(now.getTimeInMillis()); // Get current system time
+
+        return !currentTime.before(startTime) && !currentTime.after(endTime);
+    }
     
     private void timeInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeInActionPerformed
-        try {
-            Employee attendanceDetails = new Employee();
-            attendanceDetails.setEmpID(currentEmployeeId);  // Use the stored empID from empAccount
+        if (!isWithinAllowedTime(Time.valueOf("08:00:00"), Time.valueOf("16:00:00"))) {
+               JOptionPane.showMessageDialog(this, 
+                   "Time-in must be between 8:00 AM and 4:00 PM.", 
+                   "Time Restriction", JOptionPane.WARNING_MESSAGE);
+               return;
+           }
 
-            Employee result = empService.timeIn(attendanceDetails);
+           try {
+               Employee attendanceDetails = new Employee();
+               attendanceDetails.setEmpID(currentEmployeeId);
 
-            if (result.getAttendanceId() > 0) {
-                JOptionPane.showMessageDialog(this, 
-                    "Time-in successful for Employee ID: " + result.getEmpID(), 
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
-                   
-                
-            timeIn.setEnabled(false);
-            timeOut.setEnabled(true);
-                
-            } else {
-                JOptionPane.showMessageDialog(this, 
-                    "Time-in failed!", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            }
+               Employee result = empService.timeIn(attendanceDetails);
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, 
-                "Database error occurred while timing in: " + ex.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
-        }
+               if (result.getAttendanceId() > 0) {
+                   JOptionPane.showMessageDialog(this, 
+                       "Time-in successful for Employee ID: " + result.getEmpID(), 
+                       "Success", JOptionPane.INFORMATION_MESSAGE);
 
+                   timeIn.setEnabled(false);
+                   timeOut.setEnabled(true);
+               } else {
+                   JOptionPane.showMessageDialog(this, 
+                       "Time-in failed!", 
+                       "Error", JOptionPane.ERROR_MESSAGE);
+               }
+
+           } catch (Exception ex) {
+               ex.printStackTrace();
+               JOptionPane.showMessageDialog(this, 
+                   "Database error occurred while timing in: " + ex.getMessage(), 
+                   "Error", JOptionPane.ERROR_MESSAGE);
+           }
     }//GEN-LAST:event_timeInActionPerformed
 
     private void timeOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeOutActionPerformed
+       if (!isWithinAllowedTime(Time.valueOf("09:00:00"), Time.valueOf("17:00:00"))) {
+        JOptionPane.showMessageDialog(this, 
+            "Time-out must be between 9:00 AM and 5:00 PM.", 
+            "Time Restriction", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         try {
             Employee attendanceDetails = new Employee();
-            attendanceDetails.setEmpID(currentEmployeeId);  // Use the logged-in empID from your class field
+            attendanceDetails.setEmpID(currentEmployeeId);
 
             empService.timeOut(attendanceDetails);
 
@@ -1906,7 +1986,6 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
             timeOut.setEnabled(false);
             timeIn.setEnabled(true);
-            //populateAttendanceTable();  // If you have a table display, uncomment this
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1916,8 +1995,10 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_timeOutActionPerformed
 
-    
-     
+    private void leaveDateFromTFieldValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaveDateFromTFieldValueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_leaveDateFromTFieldValueActionPerformed
+
     private void updateLeaveBalance(){
         List<HR> leaveDetails =  empService.getLeavesByEmployee(empAccount.getEmpID());
         LeaveBalance balance = new LeaveBalance();

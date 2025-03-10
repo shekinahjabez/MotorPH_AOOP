@@ -4,18 +4,13 @@
  */
 package com.payroll.services;
 import com.payroll.domain.Employee;
-import com.payroll.subdomain.EmployeePosition;
-import com.payroll.subdomain.EmployeeStatus;
-import com.payroll.domain.Finance;
 import com.payroll.domain.Person;
 import com.payroll.util.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -35,6 +30,21 @@ public class FinanceService {
     
     public FinanceService(DatabaseConnection dbConnection){
         this.connection = dbConnection.connect();    
+    }
+    
+    public Person getByEmpID(int empID) throws SQLException {
+        String query = "SELECT * FROM employee WHERE employee_id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, empID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return toPayrollDetails(resultSet); // ✅ Directly return the object if found
+                }
+            }
+        }
+        return null; // ✅ Return null if no employee found
     }
    
     
@@ -93,6 +103,63 @@ public class FinanceService {
             throw new RuntimeException(e);
         }
         return contribution;
+    }
+    
+    public Person updatePayrollDetails(Person empDetails){
+            if (connection != null) {
+            String Query = "UPDATE public.employee \n"
+                    + "SET \n"
+                    + "    sss = ?,\n"
+                    + "    philhealth = ?,\n"
+                    + "    tin = ?,\n"
+                    + "    pag_ibig = ?,\n"
+                    + "    basic_salary = ?,\n"
+                    + "    rice_subsidy = ?,\n"
+                    + "    phone_allowance = ?,\n"
+                    + "    clothing_allowance = ?,\n"
+                    + "    gross_semi_monthly_rate = ?,\n"
+                    + "    hourly_rate = ?\n"
+                    + "WHERE employee_id = ?";
+            
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(Query);
+                preparedStatement.setString(1,empDetails.getEmpSSS());
+                preparedStatement.setLong(2,empDetails.getEmpPhilHealth());
+                preparedStatement.setString(3,empDetails.getEmpTIN());
+                preparedStatement.setLong(4,empDetails.getEmpPagibig());
+                preparedStatement.setDouble(5,empDetails.getEmpBasicSalary());
+                preparedStatement.setDouble(6,empDetails.getEmpRice());
+                preparedStatement.setDouble(7,empDetails.getEmpPhone());
+                preparedStatement.setDouble(8,empDetails.getEmpClothing());
+                preparedStatement.setDouble(9,empDetails.getEmpMonthlyRate());
+                preparedStatement.setDouble(10,empDetails.getEmpHourlyRate());
+                preparedStatement.setInt(11, empDetails.getEmpID());
+                
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }         
+        }                          
+        return empDetails;
+    }    
+    
+    private Person toPayrollDetails(ResultSet resultSet) 
+        throws SQLException {
+        Person payrollDetails = new Employee();
+            payrollDetails.setEmpID(resultSet.getInt("employee_id"));
+            payrollDetails.setEmpSSS(resultSet.getString("sss"));
+            payrollDetails.setEmpPhilHealth(resultSet.getLong("philhealth"));
+            payrollDetails.setEmpTIN(resultSet.getString("tin"));
+            payrollDetails.setEmpPagibig(resultSet.getLong("pag_ibig"));
+            payrollDetails.setEmpBasicSalary(resultSet.getDouble("basic_salary"));
+            payrollDetails.setEmpRice(resultSet.getDouble("rice_subsidy"));
+            payrollDetails.setEmpPhone(resultSet.getDouble("phone_allowance"));
+            payrollDetails.setEmpClothing(resultSet.getDouble("clothing_allowance"));
+            payrollDetails.setEmpMonthlyRate(resultSet.getDouble("gross_semi_monthly_rate"));
+            payrollDetails.setEmpHourlyRate(resultSet.getDouble("hourly_rate"));
+            
+        return payrollDetails;
     }
      
 }

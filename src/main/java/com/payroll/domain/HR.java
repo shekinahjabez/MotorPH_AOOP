@@ -33,7 +33,6 @@ public class HR extends Person {
     
     public HR() {
         super(0, "", "", "", null, "", "", "", 0, 0, null, null, null,0,0,0,0,0,0); 
-        // Initialize `Person` fields with default values
     }
     
      public HR(int empID, String lastName, String firstName, String empAddress, Date empBirthday,
@@ -42,12 +41,11 @@ public class HR extends Person {
               EmployeePosition empPosition,double empBasicSalary, double empRice,
                    double empPhone, double empClothing, double empMonthlyRate, double empHourlyRate, int leaveId, String subject, LeaveType leaveType,
               Date dateFrom, Date dateTo, int totalDays, String reason, LeaveStatus status) {
-        // Call Parent Constructor (Person)
+
         super(empID, lastName, firstName, empAddress, empBirthday, empPhoneNumber, empSSS, 
               empTIN, empPhilHealth, empPagibig, empImmediateSupervisor, empStatus, empPosition,
               empBasicSalary,empRice,empPhone,empClothing, empMonthlyRate,empHourlyRate);
         
-        // Initialize HR-specific fields
         this.leaveId = leaveId;
         this.subject = subject;
         this.leaveType = leaveType;

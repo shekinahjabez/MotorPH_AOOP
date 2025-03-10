@@ -7,37 +7,19 @@ package com.payroll.main;
 import com.payroll.subdomain.ComboItem;
 import com.payroll.domain.IT;
 import com.payroll.domain.Person;
-import com.payroll.domain.Employee;
-import com.payroll.subdomain.EmployeePosition;
-import com.payroll.subdomain.EmployeeStatus;
-import com.payroll.domain.Finance;
-import com.payroll.domain.LeaveBalance;
-import com.payroll.domain.HR;
 import com.payroll.subdomain.UserRole;
 import com.payroll.services.HRService;
 import com.payroll.services.ITService;
-import com.payroll.services.EmployeeService;
-import com.payroll.services.FinanceService;
-import com.payroll.table.TableActionCellEditor;
-import com.payroll.table.TableActionCellRender;
 import com.payroll.util.DatabaseConnection;
-import com.payroll.table.TableActionCellRender;
-import com.payroll.table.TableActionEvent;
-import com.payroll.domain.SalaryCalculation;
-import static japgolly.scalajs.react.vdom.all.table;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.lang3.StringUtils;
@@ -54,8 +36,6 @@ public class ITDashboard extends javax.swing.JFrame {
     private IT empAccount;
     private ITService itService;
     private HRService hrService;
-    private UserRole userRole;
-    private Integer employeeSearchID;
     
     public ITDashboard(IT empAccount) {
         initComponents();
@@ -88,10 +68,8 @@ public class ITDashboard extends javax.swing.JFrame {
             System.err.println("Error: empAccount is null");
             return;
         }
-
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
-        // ✅ Check if EmpDetails is null before accessing its properties
         if (empAccount.getEmpDetails() != null) {
             Person empDetails = empAccount.getEmpDetails();
 
@@ -112,30 +90,22 @@ public class ITDashboard extends javax.swing.JFrame {
             sssLabelValue.setText(sss);
             philhealthLabelValue.setText(philhealth);
 
-            // ✅ Fixed incorrect method calls and ensured salary values are properly formatted
             basicSalaryLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpBasicSalary()));
             riceLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpRice()));
             phoneAllowanceValue.setText("PHP " + String.format("%.2f", empDetails.getEmpPhone()));
             clothingLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpClothing()));
             hourlyrateLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpHourlyRate()));
 
-           
-
-            // ✅ Check for supervisor existence before accessing
             if (empDetails.getEmpImmediateSupervisor() != null) {
                 supervisorLabelValue.setText(empDetails.getEmpImmediateSupervisor().getFormattedName());
             } else {
                 supervisorLabelValue.setText("N/A");
             }
-
-            // ✅ Check for job position existence before accessing
             if (empDetails.getEmpPosition() != null) {
                 positionLabelValue.setText(empDetails.getEmpPosition().getPosition());
             } else {
                 positionLabelValue.setText("N/A");
             }
-
-            // ✅ Check for employment status existence before accessing
             if (empDetails.getEmpStatus() != null) {
                 statusLabelValue.setText(empDetails.getEmpStatus().getStatus());
             } else {
@@ -238,7 +208,6 @@ public class ITDashboard extends javax.swing.JFrame {
         passwordTField = new javax.swing.JPasswordField();
         jScrollPane2 = new javax.swing.JScrollPane();
         RoleTable = new javax.swing.JTable();
-        viewAllButton = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         roleDropdown = new javax.swing.JComboBox<>();
         firstNameTField = new javax.swing.JLabel();
@@ -855,14 +824,6 @@ public class ITDashboard extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(RoleTable);
 
-        viewAllButton.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        viewAllButton.setText("View All Employees");
-        viewAllButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewAllButtonActionPerformed(evt);
-            }
-        });
-
         jLabel8.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel8.setText("Role");
 
@@ -907,52 +868,47 @@ public class ITDashboard extends javax.swing.JFrame {
                             .addComponent(firstNameTField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lastNameTField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
-                    .addComponent(viewAllButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 689, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(empDetailsLabel)
-                    .addComponent(viewAllButton))
+                .addComponent(empDetailsLabel)
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(employeeIDTField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(empFirstNameLabel)
-                            .addComponent(firstNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(empLastNameLabel)
-                            .addComponent(lastNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(usernameTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(passwordTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(roleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addComponent(updateButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(clearButton)
-                        .addGap(272, 272, 272))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jLabel3)
+                    .addComponent(employeeIDTField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(empFirstNameLabel)
+                    .addComponent(firstNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(empLastNameLabel)
+                    .addComponent(lastNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(usernameTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(passwordTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(roleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(updateButton)
+                .addGap(18, 18, 18)
+                .addComponent(clearButton)
+                .addGap(272, 272, 272))
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         searchButton.setBackground(new java.awt.Color(0, 0, 153));
@@ -1052,15 +1008,15 @@ public class ITDashboard extends javax.swing.JFrame {
 
     private void roleManagementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roleManagementButtonActionPerformed
     cardLayout.show(mphCards, "card5"); 
+    viewAllEmployees();
     }//GEN-LAST:event_roleManagementButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     
+
     }//GEN-LAST:event_jButton1ActionPerformed
  
-    
     private void refreshTable(){
-        viewAllButtonActionPerformed(null);
+        viewAllEmployees();
     }
     
     private void loadEmployeeValues(int empID){
@@ -1077,45 +1033,7 @@ public class ITDashboard extends javax.swing.JFrame {
         if(empAccount.getUserRole().getRole()!= null){
             roleDropdown.setSelectedItem(new ComboItem(empAccount.getUserRole().getId(),empAccount.getUserRole().getRole()));
         }
-    }
-    
-    private void validateRequiredFields(Person empDetails){
-        List<String> errors = new ArrayList();
-        
-        if(StringUtils.isEmpty(empDetails.getFirstName())){
-           errors.add("First Name");
-        }
-        if(StringUtils.isEmpty(empDetails.getLastName())){
-           errors.add("Last Name");
-        }
-        if(!errors.isEmpty()){
-            String errorMessage = "These fields are required: \n";
-            for(String s: errors){
-                errorMessage += s+"\n";
-            }
-            JOptionPane.showMessageDialog(this, errorMessage);
-            throw new RuntimeException();
-        }
-    }
-    
-   /* private EmployeeDetails updateEmpDetailValues(){
-        String lastname = lastNameTField.getText().trim() !=null ? lastNameTField.getText() : "";
-        String firstname= firstNameTField.getText().trim() !=null ?  firstNameTField.getText().trim() : "";
-        //String birthday = birthdayTField.getText().trim()) !=null ? Date(birthdayTField.getText().trim()) : "";
-
-        EmployeeDetails empDetails = new EmployeeDetails();
-        
-        empDetails.setLastName(lastname);
-        empDetails.setFirstName(firstname);
-
-        if(!employeeIDTField.getText().trim().equals("")){
-            empDetails.setEmpID(Integer.parseInt(employeeIDTField.getText().trim()));
-        }
-        
-        //validateRequiredFields(empDetails);
-        
-        return empDetails;
-    }*/
+    } 
     private IT updateEmpAccountValues(){
         IT empAccount = new IT();
         empAccount.setEmpUserName(usernameTField.getText());
@@ -1126,10 +1044,6 @@ public class ITDashboard extends javax.swing.JFrame {
         if (roleValue.getKey() != null) {
             empAccount.setUserRole(itService.getByRolesId(roleValue.getKey())); // Assuming IT has a setUser Role method
         }
-        
-        /*if(positionValue.getKey() != null){
-            empDetails.setEmpPosition(empDetailsService.getPositionById(positionValue.getKey()));
-        }*/
         
         return empAccount;
     }
@@ -1204,7 +1118,6 @@ public class ITDashboard extends javax.swing.JFrame {
         if(!existing.equals(empAccount.getEmpPassword())){
             JOptionPane.showMessageDialog( null,"Password doesn't exist!");
         } else {
-            // Check if the new password and confirmation match
             if (newPassword.equals(confirm)) {
                 empAccount.setEmpPassword(newPassword); // Update the account object with the new password
                 itService.changePassword(empAccount); // Update the password in the database
@@ -1218,19 +1131,17 @@ public class ITDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_changePasswordButtonActionPerformed
 
-    private void viewAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAllButtonActionPerformed
+    private void viewAllEmployees(){
         List<Person> allEmployee = hrService.getAllEmployee();
         List<IT> allAccount = itService.getAllUserAccount();
         DefaultTableModel model = (DefaultTableModel) RoleTable.getModel();
         model.setRowCount(0);
 
-        // Store IT objects in a HashMap for quick lookup
         Map<Integer, IT> accountMap = new HashMap<>();
         for (IT empAccount : allAccount) {
             accountMap.put(empAccount.getEmpID(), empAccount);
         }
 
-        // Iterate through EmployeeDetails and find matching IT in HashMap
         for (Person empDetails : allEmployee) {
             IT empAccount = accountMap.get(empDetails.getEmpID()); // O(1) lookup time
 
@@ -1240,10 +1151,8 @@ public class ITDashboard extends javax.swing.JFrame {
             rowData.add(empDetails.getFirstName());
 
             model.addRow(rowData);
-        }
-          
-    }//GEN-LAST:event_viewAllButtonActionPerformed
-
+        }        
+    }
     private void RoleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RoleTableMouseClicked
 
         DefaultTableModel model  = (DefaultTableModel) RoleTable.getModel();
@@ -1269,34 +1178,22 @@ public class ITDashboard extends javax.swing.JFrame {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
-            // Ensure employee ID field is not empty
             if (employeeIDTField.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please select an employee to update.", "Update Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            // Parse the Employee ID
             int empID = Integer.parseInt(employeeIDTField.getText().trim());
 
-            // Get updated employee details
             IT empAccount = updateEmpAccountValues();
             empAccount.setEmpID(empID);  // Set the employee ID for updating
-
-            // Perform update operation
-            itService.updateEmployeeAccountIT(empAccount);
-
-            // Refresh table and clear fields after successful update
+            itService.updateEmployeeAccountWithRole(empAccount);
             refreshTable();
             clearButtonActionPerformed(evt);
-
-            // Show success message
             JOptionPane.showMessageDialog(null, "Employee has been successfully updated.", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (NumberFormatException e) {
-            // Handle invalid employee ID input
             JOptionPane.showMessageDialog(null, "Invalid Employee ID. Please enter a valid number.", "Update Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            // Handle unexpected errors
             JOptionPane.showMessageDialog(null, "Error updating employee: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_updateButtonActionPerformed
@@ -1305,8 +1202,6 @@ public class ITDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_roleDropdownActionPerformed
 
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -1432,6 +1327,5 @@ public class ITDashboard extends javax.swing.JFrame {
     private javax.swing.JButton updateButton;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTField;
-    private javax.swing.JButton viewAllButton;
     // End of variables declaration//GEN-END:variables
 }

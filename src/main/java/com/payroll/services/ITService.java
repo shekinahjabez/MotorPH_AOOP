@@ -4,11 +4,9 @@
  */
 package com.payroll.services;
 
-import com.payroll.domain.Finance;
 import com.payroll.domain.IT;
 import com.payroll.domain.Person;
 import com.payroll.subdomain.UserRole;
-import com.payroll.subdomain.EmployeePosition;
 import com.payroll.util.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import javax.management.Query;
 
 /**
  *
@@ -97,9 +94,7 @@ public class ITService {
                     employeeAccount.setUserRole(role);
 
                     Person employeeDetails = hrService.getByEmpID(empID);
-                    //Finance payrollDetails = financeService.getByEmpID(empID);
                     employeeAccount.setEmpDetails(employeeDetails);
-                    //employeeAccount.setPayrollDetails(payrollDetails);
                 }
                 
                 resultSet.close();
@@ -109,9 +104,9 @@ public class ITService {
             }        
         }                          
         return employeeAccount;
-    } 
+    }
     
-    public void updateEmployeeAccount(IT empAccount){
+    public void updateEmployeeCredentials(IT empAccount){
         if(connection !=null){
             String Query = "UPDATE public.employee_account SET username = ?, password = ? WHERE employee_id = ?";
         
@@ -130,7 +125,7 @@ public class ITService {
         }
     }
     
-    public void updateEmployeeAccountIT(IT empAccount) {
+    public void updateEmployeeAccountWithRole(IT empAccount) {
         if (connection == null) {
             throw new IllegalStateException("Database connection is not established.");
         }
@@ -142,7 +137,6 @@ public class ITService {
             preparedStatement.setString(1, empAccount.getEmpUserName());
             preparedStatement.setString(2, empAccount.getEmpPassword());
 
-            // Handle roleId safely
             if (roleId != null) {
                 preparedStatement.setInt(3, roleId);
             } else {
@@ -153,7 +147,7 @@ public class ITService {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace(); // Consider logging instead of printing stack trace
+            e.printStackTrace(); 
         }
     }
     

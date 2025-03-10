@@ -497,29 +497,29 @@
                                       </Group>
                                   </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="tinLabelValue" alignment="0" max="32767" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="basicSalaryLabelValue" max="32767" attributes="0"/>
-                                              <EmptySpace min="-2" pref="421" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="clothingLabelValue" alignment="0" max="32767" attributes="0"/>
-                                                  <Component id="phoneAllowanceValue" alignment="0" max="32767" attributes="0"/>
-                                                  <Group type="102" attributes="0">
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="hourlyrateLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
-                                                          <Component id="riceLabelValue" min="-2" pref="146" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="tinLabelValue" alignment="0" max="32767" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="basicSalaryLabelValue" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="421" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="clothingLabelValue" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="phoneAllowanceValue" alignment="0" max="32767" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="hourlyrateLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
+                                                      <Component id="riceLabelValue" min="-2" pref="146" max="-2" attributes="0"/>
                                                   </Group>
+                                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="-2" pref="315" max="-2" attributes="0"/>
-                                              <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                                           </Group>
-                                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="315" max="-2" attributes="0"/>
+                                          <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="addressLabelValue" min="-2" max="-2" attributes="0"/>
                                               <Component id="fullNameValue" min="-2" max="-2" attributes="0"/>
                                               <Component id="positionLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -530,11 +530,11 @@
                                               <Component id="philhealthLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
                                               <Component id="sssLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
                                               <Component id="pagibigLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                                                  <Component id="supervisorLabelValue" min="-2" pref="465" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                                          <Component id="supervisorLabelValue" min="-2" pref="465" max="-2" attributes="0"/>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -627,7 +627,6 @@
                                               <Component id="riceSubsidyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="riceLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace max="32767" attributes="0"/>
@@ -1976,10 +1975,13 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Century Gothic" size="18" style="1"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="Leave Dates (YYYY/MM/DD)"/>
+                            <Property name="text" type="java.lang.String" value="Leave Dates (YYYY-MM-DD)"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="leaveDateFromTFieldValue">
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="leaveDateFromTFieldValueActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="leaveDateFromLabel">
                           <Properties>

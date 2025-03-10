@@ -25,20 +25,18 @@ public class Employee extends Person{
     
     public Employee() {
         super(0, "", "", "", null, "", "", "", 0, 0, null, null, null,0,0,0,0,0,0); 
-        // Initialize `Person` fields with default values
+        
     }
-    
     public Employee(int empID, String lastName, String firstName, String empAddress, Date empBirthday,
                     String empPhoneNumber, String empSSS, String empTIN, long empPhilHealth,
                     long empPagibig, Person empImmediateSupervisor, EmployeeStatus empStatus,
                     EmployeePosition empPosition,double empBasicSalary, double empRice,
                    double empPhone, double empClothing, double empMonthlyRate, double empHourlyRate, Date date, LocalTime timeIn, LocalTime timeOut, int attendanceId) {
-        // Call parent constructor (Person)
+        
         super(empID, lastName, firstName, empAddress, empBirthday, empPhoneNumber, empSSS, 
               empTIN, empPhilHealth, empPagibig, empImmediateSupervisor, empStatus, empPosition,
               empBasicSalary,empRice,empPhone,empClothing, empMonthlyRate,empHourlyRate);
         
-        // Initialize Employee-specific fields
         this.date = date;
         this.timeIn = timeIn;
         this.timeOut = timeOut;
