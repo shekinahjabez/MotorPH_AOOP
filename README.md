@@ -60,7 +60,7 @@ Run the following command to restore the database:
     5. Click **Save**.
 
 ### 🔧 Configure the `DatabaseConnection` Java Class 
-In **Java**, navigate to: 
+In your chosen IDE, navigate to: 
 
 **MotorPH_OOP> Source Packages > com.payroll.util > DatabaseConnection.java**
 
