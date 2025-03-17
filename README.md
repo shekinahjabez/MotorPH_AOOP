@@ -10,6 +10,7 @@ Before running this project, ensure you have installed:
 
 - **Java Development Kit (JDK 23)** → [Download JDK 23](https://www.oracle.com/java/technologies/downloads/#jdk23-windows)
 - **PostgreSQL 16** → [Download PostgreSQL 16](https://www.postgresql.org/download/)
+- **Apache NetBeans (Recommended IDE)** → [Download NetBeans](https://netbeans.apache.org/download/index.html)
 ---
 
 ## 🛠 Database Setup: Restoring `postgres.dump`
@@ -60,7 +61,7 @@ Run the following command to restore the database:
     5. Click **Save**.
 
 ### 🔧 Configure the `DatabaseConnection` Java Class 
-In your chosen IDE, navigate to: 
+In NetBeans, navigate to: 
 
 **MotorPH_OOP> Source Packages > com.payroll.util > DatabaseConnection.java**
 
