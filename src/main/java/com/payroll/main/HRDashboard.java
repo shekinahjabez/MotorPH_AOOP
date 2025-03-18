@@ -1776,63 +1776,81 @@ public class HRDashboard extends javax.swing.JFrame {
         passwordTField.setText(empAccount.getEmpPassword());   
 
     }
-    
-    
-    private void validateRequiredFields(Person empDetails){
-        List<String> errors = new ArrayList();
-        
-        if(StringUtils.isEmpty(empDetails.getFirstName())){
-           errors.add("First Name");
-        }
-        if(StringUtils.isEmpty(empDetails.getLastName())){
-           errors.add("Last Name");
-        }
-        if(StringUtils.isEmpty(empDetails.getEmpAddress())){
-           errors.add("Address");
-        }
-        if(StringUtils.isEmpty(empDetails.getEmpPhoneNumber())){
-           errors.add("Phone Number");
-        }
-        if(StringUtils.isEmpty(empDetails.getEmpSSS())){
-           errors.add("SSS");
-        }
-        if(StringUtils.isEmpty(empDetails.getEmpTIN())){
-           errors.add("TIN");
-        }
-        if(empDetails.getEmpBirthday() == null ){
-           errors.add("Birthday");
-        }else{
-             Calendar dob = Calendar.getInstance();
-             dob.setTime(empDetails.getEmpBirthday());
-             Calendar today = Calendar.getInstance();
-
-             int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-             if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
-                 age--; // Adjust if birthdate hasn't occurred this year yet
-             }
-
-             if (age < 18) {
-                 errors.add("Employee must be at least 18 years old.");
-             }
        
-        }
-        if(empDetails.getEmpPosition() == null ){
-           errors.add("Position");
-        }
-        if(empDetails.getEmpStatus()== null ){
-           errors.add("Status");
-        }
-        if(empDetails.getEmpImmediateSupervisor()== null ){
-           errors.add("Supervisor");
-        }
-        if(!errors.isEmpty()){
-            String errorMessage = "These fields are required: \n";
-            for(String s: errors){
-                errorMessage += s+"\n";
+    private boolean validateRequiredFields(IT empAccount, Person empDetails){
+        List<String> errors = new ArrayList<>();
+        if (empAccount == null) {
+            errors.add("Employee account cannot be null.");
+        } else {
+            if (StringUtils.isEmpty(empAccount.getEmpUserName())) {
+                errors.add("Username");
             }
-            JOptionPane.showMessageDialog(this, errorMessage);
-            throw new RuntimeException();
+            if (StringUtils.isEmpty(empAccount.getEmpPassword())) {
+                errors.add("Password");
+            }
         }
+        
+        if (empDetails == null) {
+            errors.add("Employee details cannot be null.");
+        } else {
+            if (StringUtils.isEmpty(empDetails.getFirstName())) {
+                errors.add("First Name");
+            }
+            if (StringUtils.isEmpty(empDetails.getLastName())) {
+                errors.add("Last Name");
+            }
+            if (StringUtils.isEmpty(empDetails.getEmpAddress())) {
+                errors.add("Address");
+            }
+            if (empDetails.getEmpBirthday() == null) {
+                errors.add("Birthday");
+            }else{
+                 Calendar dob = Calendar.getInstance();
+                 dob.setTime(empDetails.getEmpBirthday());
+                 Calendar today = Calendar.getInstance();
+
+                 int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+                 if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+                     age--; // Adjust if birthdate hasn't occurred this year yet
+                 }
+
+                 if (age < 18) {
+                     errors.add("Employee must be at least 18 years old.");
+                 }
+            }
+
+            if (empDetails.getEmpStatus() == null) {
+                errors.add("Status");
+            }
+            if (StringUtils.isEmpty(empDetails.getEmpPhoneNumber())) {
+                errors.add("Phone Number");
+            }
+            if (empDetails.getEmpPosition() == null) {
+                errors.add("Position");
+            }
+            if (empDetails.getEmpImmediateSupervisor() == null) {
+                errors.add("Supervisor");
+            }
+            if (StringUtils.isEmpty(empDetails.getEmpSSS())) {
+                errors.add("SSS#");
+            }
+            if (StringUtils.isEmpty(empDetails.getEmpTIN())) {
+                errors.add("TIN#");
+            }
+            if (empDetails.getEmpPagibig() <= 0) { 
+                errors.add("PAG-IBIG#");
+            }
+            if (empDetails.getEmpPhilHealth() <= 0) {
+                errors.add("PhilHealth#");
+            }
+        }
+        if (!errors.isEmpty()) {
+              String errorMessage = "These fields are required:\n" + String.join("\n", errors);
+              JOptionPane.showMessageDialog(null, errorMessage, "Validation Error", JOptionPane.ERROR_MESSAGE);
+              return false; // Prevents execution instead of throwing an exception
+        }
+
+         return true; // All fields are valid
     }
     
     private Person updateEmpDetailValues(){
@@ -1898,8 +1916,7 @@ public class HRDashboard extends javax.swing.JFrame {
         if(supervisorValue.getKey() !=null){
             empDetails.setEmpImmediateSupervisor(hrService.getByEmpID(supervisorValue.getKey()));  
         }
-        
-        validateRequiredFields(empDetails);
+
         
         return empDetails;
     }
@@ -1984,10 +2001,6 @@ public class HRDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_positionDropdownActionPerformed
 
-    private void clothingTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clothingTFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_clothingTFieldActionPerformed
-
     private void populateAttendanceTable(List<Employee> empHours){
         DefaultTableModel model = (DefaultTableModel) attendanceTable.getModel();
         model.setRowCount(0);
@@ -2032,10 +2045,6 @@ public class HRDashboard extends javax.swing.JFrame {
     private void sssTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sssTFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_sssTFieldActionPerformed
-
-    private void riceTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riceTFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_riceTFieldActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
 
@@ -2117,9 +2126,11 @@ public class HRDashboard extends javax.swing.JFrame {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         Person empDetails = updateEmpDetailValues();
-        hrService.addEmployeeDetails(empDetails);
-
         IT empAccount = updateEmpAccountValues();
+        if (!validateRequiredFields(empAccount,empDetails)) {
+            return; // Stop execution if validation fails
+        }
+        hrService.addEmployeeDetails(empDetails);
         empAccountService.saveUserAccount(empAccount,empDetails);
         
         LeaveBalance  leaveBalance = new LeaveBalance();
@@ -2259,6 +2270,14 @@ public class HRDashboard extends javax.swing.JFrame {
             }
         }    
     }//GEN-LAST:event_yearDropdownActionPerformed
+
+    private void clothingTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clothingTFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_clothingTFieldActionPerformed
+
+    private void riceTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riceTFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_riceTFieldActionPerformed
     
     
     private List<Employee> getEmployeeHours(int month, int year, int empID){
