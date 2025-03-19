@@ -1803,7 +1803,7 @@ public class HRDashboard extends javax.swing.JFrame {
                 errors.add("Address");
             }
             if (empDetails.getEmpBirthday() == null) {
-                errors.add("Birthday");
+                errors.add("Birthday (Format: YYYY-MM-DD)");
             }else{
                  Calendar dob = Calendar.getInstance();
                  dob.setTime(empDetails.getEmpBirthday());

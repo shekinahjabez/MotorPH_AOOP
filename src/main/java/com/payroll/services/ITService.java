@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -225,34 +226,71 @@ public class ITService {
             }             
         }                          
         return userRole;
-    } 
+    }
+
+    public boolean employeeExistsByName(Person empDetails) {
+        if (connection == null) {
+        }
+        String query = "SELECT COUNT(*) FROM public.employee WHERE firstname = ? AND lastname = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, empDetails.getFirstName());
+            preparedStatement.setString(2, empDetails.getLastName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                return count > 0; // Returns true if an employee exists
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false; // Employee does not exist
+    }
+
    
     
     public Person saveUserAccount(IT empAccount,Person empDetails){
         if (connection != null) {
-            String Query = "INSERT into public.employee_account (employee_id, username, password,role_id) VALUES (?, ?, ?,?)";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setInt(1,empDetails.getEmpID());                
-                preparedStatement.setString(2,empAccount.getEmpUserName());
-                preparedStatement.setString(3,empAccount.getEmpPassword());
-                preparedStatement.setInt(4,2);   
-                int affectedrows = preparedStatement.executeUpdate();
-                if(affectedrows > 0){
-                    try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                             empAccount.setAccountID(generatedKeys.getInt(1));
-                        } else {
-                             throw new SQLException("Creating user failed, no ID obtained.");
-                        }
+            
+        }
+        // Check if an employee account already exists by first name and last name
+        /*if (employeeExistsByName(empDetails)) {
+            JOptionPane.showMessageDialog(null, 
+                "Error: An employee account with the same name already exists.", 
+                "Duplicate Entry", 
+                JOptionPane.WARNING_MESSAGE);
+            return null; // Return null to indicate failure
+        }*/
+
+        String query = "INSERT INTO public.employee_account (employee_id, username, password, role_id) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setInt(1, empDetails.getEmpID());                
+            preparedStatement.setString(2, empAccount.getEmpUserName());
+            preparedStatement.setString(3, empAccount.getEmpPassword());
+            preparedStatement.setInt(4, 2); // Default role_id = 2
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                         empAccount.setAccountID(generatedKeys.getInt(1));
+                    } else {
+                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
-                };
-                preparedStatement.close();
-            } catch (SQLException e) {
-                 e.printStackTrace();
-            }           
-         }                          
-         return empDetails;
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, 
+                "An error occurred while saving the user account.\n" + e.getMessage(), 
+                "Database Error", 
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+        return empDetails;
      }
     
     public void deleteEmpAccount(int empID){
