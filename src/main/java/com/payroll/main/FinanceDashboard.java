@@ -1832,10 +1832,18 @@ public class FinanceDashboard extends javax.swing.JFrame {
     }
     
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        int empID = Integer.parseInt(searchTextField.getText().trim());
+        String input = searchTextField.getText().trim();
+
+        // Check if input contains only digits
+        if (!input.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Employee ID must contain numbers only!");
+            return; // Stop execution if input is invalid
+        }
+
+        int empID = Integer.parseInt(input);
         loadEmployeeValues(empID); 
         refreshTable(); 
-        
+
         DefaultTableModel model = (DefaultTableModel) employeeTable.getModel();
         boolean found = false;
         for (int i = 0; i < model.getRowCount(); i++) {
@@ -1950,26 +1958,33 @@ public class FinanceDashboard extends javax.swing.JFrame {
 
     private void searchButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButton1ActionPerformed
         String empId = searchTextField1.getText().equals("Enter the Employee ID here...") ? "" : searchTextField1.getText().trim();
-        employeeSearchID = (empId.isEmpty()) ? null : Integer.parseInt(empId);
 
-        if (employeeSearchID != null) {
-            IT empAccount = empAccountService.getByEmpID(employeeSearchID);
+         // Check if input is not empty and contains only digits
+         if (!empId.isEmpty() && !empId.matches("\\d+")) {
+             JOptionPane.showMessageDialog(this, "Employee ID must contain numbers only!", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+             return;
+         }
 
-            if (empAccount != null) {
-                updatePayrollEmpLabels(empAccount);
+         employeeSearchID = (empId.isEmpty()) ? null : Integer.parseInt(empId);
 
-                if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
-                    Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-                    Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
+         if (employeeSearchID != null) {
+             IT empAccount = empAccountService.getByEmpID(employeeSearchID);
 
-                    fetchAndDisplayEmployeeHours(employeeSearchID, monthValue, year);
-                }     
-            } else {
-                JOptionPane.showMessageDialog(this, "Employee Not Found!", "Error", JOptionPane.ERROR_MESSAGE);
-            }   
-        } else {
-            JOptionPane.showMessageDialog(this, "Please input Employee ID!", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
+             if (empAccount != null) {
+                 updatePayrollEmpLabels(empAccount);
+
+                 if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
+                     Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+                     Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
+
+                     fetchAndDisplayEmployeeHours(employeeSearchID, monthValue, year);
+                 }     
+             } else {
+                 JOptionPane.showMessageDialog(this, "Employee Not Found!", "Error", JOptionPane.ERROR_MESSAGE);
+             }   
+         } else {
+             JOptionPane.showMessageDialog(this, "Please input Employee ID!", "Warning", JOptionPane.WARNING_MESSAGE);
+         }
     }//GEN-LAST:event_searchButton1ActionPerformed
     private void fetchAndDisplayEmployeeHours(Integer empId, Integer monthValue, Integer year) {
         if (empId != null && monthValue != null && year != null) {
