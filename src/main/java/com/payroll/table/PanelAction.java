@@ -7,6 +7,7 @@ package com.payroll.table;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,13 +29,31 @@ public class PanelAction extends javax.swing.JPanel {
         approveButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae){
-                event.onApprove(id);
+                int result = JOptionPane.showConfirmDialog(
+                    null,
+                    "Are you sure you want to approve this leave request?",
+                    "Confirm Approval",
+                    JOptionPane.YES_NO_OPTION
+                );
+
+                if (result == JOptionPane.YES_OPTION) {
+                    event.onApprove(id);
+                }
             }
         });
         declineButton.addActionListener(new ActionListener(){
             @Override
-            public void actionPerformed(ActionEvent ae){
-                event.onDecline(id);
+                public void actionPerformed(ActionEvent ae){
+                int result = JOptionPane.showConfirmDialog(
+                    null,
+                    "Are you sure you want to decline this leave request?",
+                    "Confirm Decline",
+                    JOptionPane.YES_NO_OPTION
+                );
+
+                if (result == JOptionPane.YES_OPTION) {
+                    event.onDecline(id);
+                }
             }
         });
         
@@ -57,9 +76,19 @@ public class PanelAction extends javax.swing.JPanel {
 
         approveButton.setForeground(new java.awt.Color(255, 255, 255));
         approveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/accept.png"))); // NOI18N
+        approveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                approveButtonActionPerformed(evt);
+            }
+        });
 
         declineButton.setForeground(new java.awt.Color(255, 255, 255));
         declineButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/delete.png"))); // NOI18N
+        declineButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                declineButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -81,6 +110,14 @@ public class PanelAction extends javax.swing.JPanel {
                     .addComponent(approveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void approveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_approveButtonActionPerformed
+
+    private void declineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_declineButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_declineButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

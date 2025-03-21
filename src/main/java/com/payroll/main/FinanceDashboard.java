@@ -331,7 +331,7 @@ public class FinanceDashboard extends javax.swing.JFrame {
         computedSalaryLabelValue = new javax.swing.JLabel();
         searchTextField1 = new javax.swing.JTextField();
         searchButton1 = new javax.swing.JButton();
-        empManagement = new javax.swing.JPanel();
+        payManagement = new javax.swing.JPanel();
         empSectionLabel = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
         updateButton = new javax.swing.JButton();
@@ -1369,7 +1369,7 @@ public class FinanceDashboard extends javax.swing.JFrame {
 
         mphCards.add(payroll, "card4");
 
-        empManagement.setBackground(new java.awt.Color(229, 229, 229));
+        payManagement.setBackground(new java.awt.Color(229, 229, 229));
 
         empSectionLabel.setFont(new java.awt.Font("Century Gothic", 1, 36)); // NOI18N
         empSectionLabel.setText("Payroll Management");
@@ -1687,15 +1687,15 @@ public class FinanceDashboard extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout empManagementLayout = new javax.swing.GroupLayout(empManagement);
-        empManagement.setLayout(empManagementLayout);
-        empManagementLayout.setHorizontalGroup(
-            empManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, empManagementLayout.createSequentialGroup()
+        javax.swing.GroupLayout payManagementLayout = new javax.swing.GroupLayout(payManagement);
+        payManagement.setLayout(payManagementLayout);
+        payManagementLayout.setHorizontalGroup(
+            payManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, payManagementLayout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addGroup(empManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(payManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(empManagementLayout.createSequentialGroup()
+                    .addGroup(payManagementLayout.createSequentialGroup()
                         .addComponent(empSectionLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1703,11 +1703,11 @@ public class FinanceDashboard extends javax.swing.JFrame {
                         .addComponent(searchButton)))
                 .addGap(39, 39, 39))
         );
-        empManagementLayout.setVerticalGroup(
-            empManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(empManagementLayout.createSequentialGroup()
+        payManagementLayout.setVerticalGroup(
+            payManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(payManagementLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(empManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(payManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(empSectionLabel)
                     .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchButton))
@@ -1716,7 +1716,7 @@ public class FinanceDashboard extends javax.swing.JFrame {
                 .addGap(20, 20, 20))
         );
 
-        mphCards.add(empManagement, "card5");
+        mphCards.add(payManagement, "card5");
 
         navigatorSplitPane.setRightComponent(mphCards);
 
@@ -1755,6 +1755,7 @@ public class FinanceDashboard extends javax.swing.JFrame {
 
     private void payrollButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payrollButtonActionPerformed
         cardLayout.show(mphCards, "card4"); 
+        updatePayrollEmpLabels (empAccount);
     }//GEN-LAST:event_payrollButtonActionPerformed
 
     private void payManagementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payManagementButtonActionPerformed
@@ -2096,21 +2097,42 @@ public class FinanceDashboard extends javax.swing.JFrame {
         biMonthlyTField.setText("");
         employeeIDTField.setText("");
     }//GEN-LAST:event_clearButtonActionPerformed
+private boolean hasEmptyFields() {
+    return salaryTField.getText().trim().isEmpty() ||
+           riceTField.getText().trim().isEmpty() ||
+           phoneAllowTField.getText().trim().isEmpty() ||
+           clothingTField.getText().trim().isEmpty() ||
+           tinTField.getText().trim().isEmpty() ||
+           pagibigTField.getText().trim().isEmpty() ||
+           sssTField.getText().trim().isEmpty() ||
+           philhealthTField.getText().trim().isEmpty() ||
+           biMonthlyTField.getText().trim().isEmpty() ||
+           hourlyTField.getText().trim().isEmpty();
+}
 
+  
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
+        // Validate that no required fields are empty
+            if (hasEmptyFields()) {
+                JOptionPane.showMessageDialog(this, "Please fill in all required fields before updating.", "Missing Fields", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             Person empDetails = updateEmpDetailValues();
             payrollService.updatePayrollDetails(empDetails);
 
             refreshTable();
             clearPayrollLabels();
+
             if (getEmpAccount().getEmpDetails().getEmpID() == empAccount.getEmpID()) {
                 updateUserLabels(empAccount);
-                 }
-                 JOptionPane.showMessageDialog(null, "Payroll Details has been successfully updated", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
-             } catch (Exception e) {
-                 JOptionPane.showMessageDialog(null, "Error updating payroll record: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
-             }
+            }
+
+            JOptionPane.showMessageDialog(null, "Payroll Details has been successfully updated", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error updating payroll record: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void pagibigTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagibigTFieldActionPerformed
@@ -2203,7 +2225,6 @@ public class FinanceDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel empIDPayLabel;
     private javax.swing.JLabel empIDPayLabelValue;
     private javax.swing.JLabel empLastNameLabel;
-    private javax.swing.JPanel empManagement;
     private javax.swing.JLabel empNumValue;
     private javax.swing.JLabel empPagibigLabel;
     private javax.swing.JLabel empPhilhealthLabel;
@@ -2263,6 +2284,7 @@ public class FinanceDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel pagibigLabel;
     private javax.swing.JLabel pagibigLabelValue;
     private javax.swing.JTextField pagibigTField;
+    private javax.swing.JPanel payManagement;
     private javax.swing.JButton payManagementButton;
     private javax.swing.JPanel payroll;
     private javax.swing.JButton payrollButton;

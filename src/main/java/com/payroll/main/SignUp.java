@@ -472,14 +472,20 @@ public class SignUp extends javax.swing.JFrame {
         if (!validateRequiredFields(empAccount,empDetails)) {
             return; // Stop execution if validation fails
         }
-        hrService.addEmployeeDetails(empDetails);
-        empAccountService.saveUserAccount(empAccount,empDetails);
+        if (hrService.isDuplicateEmployee(empDetails)) {
+            JOptionPane.showMessageDialog(null, "Employee already exists. Account cannot be created.");
+        } else {
+            // Only save if it's a new employee
+            hrService.addEmployeeDetails(empDetails);
+            empAccountService.saveUserAccount(empAccount, empDetails);
 
-        LeaveBalance  leaveBalance = new LeaveBalance();
-        leaveBalance.setEmpID(empDetails.getEmpID());
-        leaveDetailsService.saveLeaveBalance(leaveBalance);
+            LeaveBalance leaveBalance = new LeaveBalance();
+            leaveBalance.setEmpID(empDetails.getEmpID());
+            leaveDetailsService.saveLeaveBalance(leaveBalance);
 
-        JOptionPane.showMessageDialog(null, "Account created successfully! Please log in.");
+            JOptionPane.showMessageDialog(null, "Account created successfully! Please log in.");
+        }
+        
         LogIn info = new LogIn();
         info.setVisible(true);
         this.dispose();
@@ -523,6 +529,9 @@ public class SignUp extends javax.swing.JFrame {
         return empAccount;
     }
     
+    private long validatedPagibig;
+    private long validatedPhilhealth;
+       
     private boolean validateRequiredFields(IT empAccount, Person empDetails){
         List<String> errors = new ArrayList<>();
         if (empAccount == null) {
@@ -539,74 +548,141 @@ public class SignUp extends javax.swing.JFrame {
         if (empDetails == null) {
             errors.add("Employee details cannot be null.");
         } else {
+            // First Name - required and must contain only letters
             if (StringUtils.isEmpty(empDetails.getFirstName())) {
-                errors.add("First Name");
+                errors.add("First Name is required.");
+            } else if (!empDetails.getFirstName().matches("^[A-Za-z]+$")) {
+                errors.add("First Name must contain letters only.");
             }
+
+            // Last Name - required and must contain only letters
             if (StringUtils.isEmpty(empDetails.getLastName())) {
-                errors.add("Last Name");
+                errors.add("Last Name is required.");
+            } else if (!empDetails.getLastName().matches("^[A-Za-z]+$")) {
+                errors.add("Last Name must contain letters only.");
             }
+
+            // Address - required and max 250 characters
             if (StringUtils.isEmpty(empDetails.getEmpAddress())) {
-                errors.add("Address");
+                errors.add("Address is required.");
+            } else if (empDetails.getEmpAddress().length() > 250) {
+                errors.add("Address must not exceed 250 characters.");
             }
+
+            // Birthday - required and must be at least 18 years old
             if (empDetails.getEmpBirthday() == null) {
-                errors.add("Birthday (Format: YYYY-MM-DD)");
-            }else{
-                 Calendar dob = Calendar.getInstance();
-                 dob.setTime(empDetails.getEmpBirthday());
-                 Calendar today = Calendar.getInstance();
-
-                 int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-                 if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
-                     age--; // Adjust if birthdate hasn't occurred this year yet
-                 }
-
-                 if (age < 18) {
-                     errors.add("Employee must be at least 18 years old.");
-                 }
+                errors.add("Birthday is required (Format: YYYY-MM-DD).");
+            } else {
+                Calendar dob = Calendar.getInstance();
+                dob.setTime(empDetails.getEmpBirthday());
+                Calendar today = Calendar.getInstance();
+                int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+                if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+                    age--;
+                }
+                if (age < 18) {
+                    errors.add("Employee must be at least 18 years old.");
+                }
             }
 
-            if (empDetails.getEmpStatus() == null) {
-                errors.add("Status");
-            }
+            // Phone Number - required and digits only
             if (StringUtils.isEmpty(empDetails.getEmpPhoneNumber())) {
-                errors.add("Phone Number");
+                errors.add("Phone Number is required.");
+            } else if (!empDetails.getEmpPhoneNumber().matches("^[\\d\\-\\+]+$")) {
+                errors.add("Phone Number must contain only digits, dashes (-), or plus sign (+).");
             }
+
+            // Status
+            if (empDetails.getEmpStatus() == null) {
+                errors.add("Status is required.");
+            }
+
+            // Position
             if (empDetails.getEmpPosition() == null) {
-                errors.add("Position");
+                errors.add("Position is required.");
             }
+
+            // Supervisor
             if (empDetails.getEmpImmediateSupervisor() == null) {
-                errors.add("Supervisor");
+                errors.add("Immediate Supervisor is required.");
             }
+
+            // SSS - required and digits only
             if (StringUtils.isEmpty(empDetails.getEmpSSS())) {
-                errors.add("SSS#");
+                errors.add("SSS# is required.");
+            } else if (!empDetails.getEmpSSS().matches("^\\d+$")) {
+                errors.add("SSS# must contain digits only.");
             }
+
+            // TIN - required and digits only
             if (StringUtils.isEmpty(empDetails.getEmpTIN())) {
-                errors.add("TIN#");
+                errors.add("TIN# is required.");
+            } else if (!empDetails.getEmpTIN().matches("^\\d+$")) {
+                errors.add("TIN# must contain digits only.");
             }
-            if (empDetails.getEmpPagibig() <= 0) { 
-                errors.add("PAG-IBIG#");
+
+            String pagibigInput = pagibigTField.getText().trim();
+            if (StringUtils.isEmpty(pagibigInput)) {
+                errors.add("PAG-IBIG# is required.");
+            } else if (!pagibigInput.matches("^\\d+$")) {
+                errors.add("PAG-IBIG# must contain digits only.");
+            } else {
+                try {
+                    long pagibig = Long.parseLong(pagibigInput);
+                    if (pagibig <= 0) {
+                        errors.add("PAG-IBIG# must be a positive number.");
+                    } else {
+                        validatedPagibig = pagibig; // ✔️ store for later use
+                    }
+                } catch (NumberFormatException e) {
+                    errors.add("PAG-IBIG# is not a valid number.");
+                }
             }
-            if (empDetails.getEmpPhilHealth() <= 0) {
-                errors.add("PhilHealth#");
+
+            String philHealthInput = philhealthTField.getText().trim();
+            if (StringUtils.isEmpty(philHealthInput)) {
+                errors.add("PhilHealth# is required.");
+            } else if (!philHealthInput.matches("^\\d+$")) {
+                errors.add("PhilHealth# must contain digits only.");
+            } else {
+                try {
+                    long philhealth = Long.parseLong(philHealthInput);
+                    if (philhealth <= 0) {
+                        errors.add("PhilHealth# must be a positive number.");
+                    } else {
+                        validatedPhilhealth = philhealth; // ✔️ store for later use
+                    }
+                } catch (NumberFormatException e) {
+                    errors.add("PhilHealth# is not a valid number.");
+                }
             }
         }
         if (!errors.isEmpty()) {
-              String errorMessage = "These fields are required:\n" + String.join("\n", errors);
+              String errorMessage = "The following required fields are missing or invalid:\n\n" + String.join("\n", errors);
               JOptionPane.showMessageDialog(null, errorMessage, "Validation Error", JOptionPane.ERROR_MESSAGE);
               return false; // Prevents execution instead of throwing an exception
         }
+
          return true; // All fields are valid
     }
     private Person updateEmpDetailValues(){
         String lastname = lastNameTField.getText().trim() !=null ? lastNameTField.getText() : "";
         String firstname= firstNameTField.getText().trim() !=null ?  firstNameTField.getText().trim() : "";
-        //String birthday = birthdayTField.getText().trim()) !=null ? Date(birthdayTField.getText().trim()) : "";
         String address = addressTField.getText().trim() !=null ? addressTField.getText().trim():"";
         String phoneNumber = phoneTField.getText().trim() !=null ? phoneTField.getText().trim() :"";
-        long pagibig = !pagibigTField.getText().trim().equals("")? Long.valueOf(pagibigTField.getText().trim()): 0;
         String sss = sssTField.getText().trim() !=null ? sssTField.getText().trim() :"";
         String tin = tinTField.getText().trim() !=null ? tinTField.getText().trim():"";
-        long philhealth = !philhealthTField.getText().equals("") ? Long.valueOf(philhealthTField.getText().trim()): 0;
+        long pagibig = 0;
+        String pagibigInput = pagibigTField.getText().trim();
+        if (!pagibigInput.isEmpty() && pagibigInput.matches("^\\d+$")) {
+            pagibig = Long.parseLong(pagibigInput);
+        }
+
+        long philhealth = 0;
+        String philhealthInput = philhealthTField.getText().trim();
+        if (!philhealthInput.isEmpty() && philhealthInput.matches("^\\d+$")) {
+            philhealth = Long.parseLong(philhealthInput);
+        }
     
         
         Person empDetails = new Employee();
@@ -620,9 +696,6 @@ public class SignUp extends javax.swing.JFrame {
             // Setting the sqlDate to empDetails
             empDetails.setEmpBirthday(sqlDate);
         } catch (ParseException ex) {
-            //JOptionPane.showMessageDialog(null, "Invalid date format. Please use yyyy-MM-dd");
-            // Exit the method if the date format is invalid
-        //empDetails.setEmpBirthday(firstNameTField.getText().trim());
         }
         
         empDetails.setEmpAddress(address);
@@ -646,7 +719,6 @@ public class SignUp extends javax.swing.JFrame {
             empDetails.setEmpImmediateSupervisor(hrService.getByEmpID(supervisorValue.getKey()));  
         }
 
-        
         return empDetails;
     }
     

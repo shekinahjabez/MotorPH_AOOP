@@ -54,6 +54,9 @@
           <Image iconType="3" name="/icons/accept.png"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="approveButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="com.payroll.table.ActionButton" name="declineButton">
       <Properties>
@@ -64,6 +67,9 @@
           <Image iconType="3" name="/icons/delete.png"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="declineButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

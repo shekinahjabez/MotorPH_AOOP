@@ -68,6 +68,7 @@ public class ITDashboard extends javax.swing.JFrame {
             System.err.println("Error: empAccount is null");
             return;
         }
+
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         if (empAccount.getEmpDetails() != null) {
@@ -101,6 +102,7 @@ public class ITDashboard extends javax.swing.JFrame {
             } else {
                 supervisorLabelValue.setText("N/A");
             }
+
             if (empDetails.getEmpPosition() != null) {
                 positionLabelValue.setText(empDetails.getEmpPosition().getPosition());
             } else {
@@ -111,7 +113,13 @@ public class ITDashboard extends javax.swing.JFrame {
             } else {
                 statusLabelValue.setText("N/A");
             }
- 
+            if (empDetails.getEmpBirthday() != null) {
+                String formattedBirthday = formatter.format(empDetails.getEmpBirthday());
+                bdayLabelValue.setText(formattedBirthday);
+            } else {
+                bdayLabelValue.setText("N/A");
+            }
+            
         }
     }
     
@@ -1049,7 +1057,44 @@ public class ITDashboard extends javax.swing.JFrame {
     }
     
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        int empID = Integer.parseInt(searchTextField.getText().trim());
+        String input = searchTextField.getText().trim();
+
+        if (input.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Employee ID.");
+            return;
+        }
+
+        if (!input.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Employee ID must contain numbers only.");
+            return;
+        }
+
+        int empID = Integer.parseInt(input);
+        if (hrService.getByEmpID(empID) == null) {
+            JOptionPane.showMessageDialog(this, "Employee Not Found!");
+            clearButtonActionPerformed(evt);
+            return;
+        }
+        loadEmployeeValues(empID); 
+        refreshTable(); 
+
+        DefaultTableModel model = (DefaultTableModel) RoleTable.getModel();
+        boolean found = false;
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (empID == Integer.parseInt(model.getValueAt(i, 0).toString())) {
+                RoleTable.setRowSelectionInterval(i, i);
+                RoleTable.scrollRectToVisible(RoleTable.getCellRect(i, 0, true));
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "Employee Not Found!");
+            clearButtonActionPerformed(evt); 
+
+    /*    int empID = Integer.parseInt(searchTextField.getText().trim());
         loadEmployeeValues(empID); 
         refreshTable(); 
         
@@ -1065,7 +1110,7 @@ public class ITDashboard extends javax.swing.JFrame {
         }
         if (!found) {
             JOptionPane.showMessageDialog(this, "Employee Not Found!");
-            clearButtonActionPerformed(evt); 
+            clearButtonActionPerformed(evt); */
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -1178,6 +1223,34 @@ public class ITDashboard extends javax.swing.JFrame {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
+           if (employeeIDTField.getText().trim().isEmpty()) {
+               JOptionPane.showMessageDialog(null, "Please select an employee to update.", "Update Error", JOptionPane.ERROR_MESSAGE);
+               return;
+           }
+
+           // Validate all required fields are filled
+           if (usernameTField.getText().trim().isEmpty() ||
+               passwordTField.getText().trim().isEmpty()) {
+               JOptionPane.showMessageDialog(null, "All fields must be filled before updating.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+               return;
+           }
+
+           int empID = Integer.parseInt(employeeIDTField.getText().trim());
+
+           IT empAccount = updateEmpAccountValues();
+           empAccount.setEmpID(empID);  // Set the employee ID for updating
+           itService.updateEmployeeAccountWithRole(empAccount);
+
+           refreshTable();
+           clearButtonActionPerformed(evt);
+           JOptionPane.showMessageDialog(null, "Employee has been successfully updated.", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
+
+       } catch (NumberFormatException e) {
+           JOptionPane.showMessageDialog(null, "Invalid Employee ID. Please enter a valid number.", "Update Error", JOptionPane.ERROR_MESSAGE);
+       } catch (Exception e) {
+           JOptionPane.showMessageDialog(null, "Error updating employee: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
+       }
+        /*    try {
             if (employeeIDTField.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please select an employee to update.", "Update Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -1195,7 +1268,7 @@ public class ITDashboard extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Invalid Employee ID. Please enter a valid number.", "Update Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error updating employee: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }*/
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void roleDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roleDropdownActionPerformed

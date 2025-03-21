@@ -121,7 +121,6 @@ public class HRDashboard extends javax.swing.JFrame {
 
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
-        // ✅ Check if EmpDetails is null before accessing its properties
         if (empAccount.getEmpDetails() != null) {
             Person empDetails = empAccount.getEmpDetails();
 
@@ -142,33 +141,27 @@ public class HRDashboard extends javax.swing.JFrame {
             sssLabelValue.setText(sss);
             philhealthLabelValue.setText(philhealth);
 
-            // ✅ Fixed incorrect method calls and ensured salary values are properly formatted
             basicSalaryLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpBasicSalary()));
             riceLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpRice()));
             phoneAllowanceValue.setText("PHP " + String.format("%.2f", empDetails.getEmpPhone()));
             clothingLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpClothing()));
             hourlyrateLabelValue.setText("PHP " + String.format("%.2f", empDetails.getEmpHourlyRate()));
 
-            // ✅ Payroll Labels
             empIDPayLabelValue.setText(String.valueOf(empDetails.getEmpID()));
             namePayLabelValue.setText(empDetails.getFormattedName());
 
 
-            // ✅ Check for supervisor existence before accessing
             if (empDetails.getEmpImmediateSupervisor() != null) {
                 supervisorLabelValue.setText(empDetails.getEmpImmediateSupervisor().getFormattedName());
             } else {
                 supervisorLabelValue.setText("N/A");
             }
 
-            // ✅ Check for job position existence before accessing
             if (empDetails.getEmpPosition() != null) {
                 positionLabelValue.setText(empDetails.getEmpPosition().getPosition());
             } else {
                 positionLabelValue.setText("N/A");
             }
-
-            // ✅ Check for employment status existence before accessing
             if (empDetails.getEmpStatus() != null) {
                 statusLabelValue.setText(empDetails.getEmpStatus().getStatus());
             } else {
@@ -177,9 +170,7 @@ public class HRDashboard extends javax.swing.JFrame {
             if (empDetails.getEmpBirthday() != null) {
                 String formattedBirthday = formatter.format(empDetails.getEmpBirthday());
                 bdayLabelValue.setText(formattedBirthday);
-                bdayLabelValue.setText(formattedBirthday);
             } else {
-                bdayLabelValue.setText("N/A");
                 bdayLabelValue.setText("N/A");
             }
             
@@ -1740,6 +1731,11 @@ public class HRDashboard extends javax.swing.JFrame {
     
     private void loadEmployeeValues(int empID){
         Person empDetails = hrService.getByEmpID(empID);
+        
+        if (empDetails == null) {
+            JOptionPane.showMessageDialog(this, "No employee details found for ID: " + empID);
+            return;
+        }
         employeeIDTField.setText(String.valueOf(empDetails.getEmpID()));
         lastNameTField.setText(empDetails.getLastName());
         firstNameTField.setText(empDetails.getFirstName());
@@ -1776,6 +1772,8 @@ public class HRDashboard extends javax.swing.JFrame {
         passwordTField.setText(empAccount.getEmpPassword());   
 
     }
+    private long validatedPagibig;
+    private long validatedPhilhealth;
        
     private boolean validateRequiredFields(IT empAccount, Person empDetails){
         List<String> errors = new ArrayList<>();
@@ -1793,65 +1791,124 @@ public class HRDashboard extends javax.swing.JFrame {
         if (empDetails == null) {
             errors.add("Employee details cannot be null.");
         } else {
+            // First Name - required and must contain only letters
             if (StringUtils.isEmpty(empDetails.getFirstName())) {
-                errors.add("First Name");
+                errors.add("First Name is required.");
+            } else if (!empDetails.getFirstName().matches("^[A-Za-z]+$")) {
+                errors.add("First Name must contain letters only.");
             }
+
+            // Last Name - required and must contain only letters
             if (StringUtils.isEmpty(empDetails.getLastName())) {
-                errors.add("Last Name");
+                errors.add("Last Name is required.");
+            } else if (!empDetails.getLastName().matches("^[A-Za-z]+$")) {
+                errors.add("Last Name must contain letters only.");
             }
+
+            // Address - required and max 250 characters
             if (StringUtils.isEmpty(empDetails.getEmpAddress())) {
-                errors.add("Address");
+                errors.add("Address is required.");
+            } else if (empDetails.getEmpAddress().length() > 250) {
+                errors.add("Address must not exceed 250 characters.");
             }
+
+            // Birthday - required and must be at least 18 years old
             if (empDetails.getEmpBirthday() == null) {
-                errors.add("Birthday (Format: YYYY-MM-DD)");
-            }else{
-                 Calendar dob = Calendar.getInstance();
-                 dob.setTime(empDetails.getEmpBirthday());
-                 Calendar today = Calendar.getInstance();
-
-                 int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-                 if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
-                     age--; // Adjust if birthdate hasn't occurred this year yet
-                 }
-
-                 if (age < 18) {
-                     errors.add("Employee must be at least 18 years old.");
-                 }
+                errors.add("Birthday is required (Format: YYYY-MM-DD).");
+            } else {
+                Calendar dob = Calendar.getInstance();
+                dob.setTime(empDetails.getEmpBirthday());
+                Calendar today = Calendar.getInstance();
+                int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+                if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+                    age--;
+                }
+                if (age < 18) {
+                    errors.add("Employee must be at least 18 years old.");
+                }
             }
 
-            if (empDetails.getEmpStatus() == null) {
-                errors.add("Status");
-            }
+            // Phone Number - required and digits only
             if (StringUtils.isEmpty(empDetails.getEmpPhoneNumber())) {
-                errors.add("Phone Number");
+                errors.add("Phone Number is required.");
+            } else if (!empDetails.getEmpPhoneNumber().matches("^[\\d\\-\\+]+$")) {
+                errors.add("Phone Number must contain only digits, dashes (-), or plus sign (+).");
             }
+
+            // Status
+            if (empDetails.getEmpStatus() == null) {
+                errors.add("Status is required.");
+            }
+
+            // Position
             if (empDetails.getEmpPosition() == null) {
-                errors.add("Position");
+                errors.add("Position is required.");
             }
+
+            // Supervisor
             if (empDetails.getEmpImmediateSupervisor() == null) {
-                errors.add("Supervisor");
+                errors.add("Immediate Supervisor is required.");
             }
+
+            // SSS - required and digits only
             if (StringUtils.isEmpty(empDetails.getEmpSSS())) {
-                errors.add("SSS#");
+                errors.add("SSS# is required.");
+            } else if (!empDetails.getEmpSSS().matches("^\\d+$")) {
+                errors.add("SSS# must contain digits only.");
             }
+
+            // TIN - required and digits only
             if (StringUtils.isEmpty(empDetails.getEmpTIN())) {
-                errors.add("TIN#");
+                errors.add("TIN# is required.");
+            } else if (!empDetails.getEmpTIN().matches("^\\d+$")) {
+                errors.add("TIN# must contain digits only.");
             }
-            if (empDetails.getEmpPagibig() <= 0) { 
-                errors.add("PAG-IBIG#");
+
+            String pagibigInput = pagibigTField.getText().trim();
+            if (StringUtils.isEmpty(pagibigInput)) {
+                errors.add("PAG-IBIG# is required.");
+            } else if (!pagibigInput.matches("^\\d+$")) {
+                errors.add("PAG-IBIG# must contain digits only.");
+            } else {
+                try {
+                    long pagibig = Long.parseLong(pagibigInput);
+                    if (pagibig <= 0) {
+                        errors.add("PAG-IBIG# must be a positive number.");
+                    } else {
+                        validatedPagibig = pagibig; // ✔️ store for later use
+                    }
+                } catch (NumberFormatException e) {
+                    errors.add("PAG-IBIG# is not a valid number.");
+                }
             }
-            if (empDetails.getEmpPhilHealth() <= 0) {
-                errors.add("PhilHealth#");
+
+            String philHealthInput = philhealthTField.getText().trim();
+            if (StringUtils.isEmpty(philHealthInput)) {
+                errors.add("PhilHealth# is required.");
+            } else if (!philHealthInput.matches("^\\d+$")) {
+                errors.add("PhilHealth# must contain digits only.");
+            } else {
+                try {
+                    long philhealth = Long.parseLong(philHealthInput);
+                    if (philhealth <= 0) {
+                        errors.add("PhilHealth# must be a positive number.");
+                    } else {
+                        validatedPhilhealth = philhealth; // ✔️ store for later use
+                    }
+                } catch (NumberFormatException e) {
+                    errors.add("PhilHealth# is not a valid number.");
+                }
             }
         }
         if (!errors.isEmpty()) {
-              String errorMessage = "These fields are required:\n" + String.join("\n", errors);
+              String errorMessage = "The following required fields are missing or invalid:\n\n" + String.join("\n", errors);
               JOptionPane.showMessageDialog(null, errorMessage, "Validation Error", JOptionPane.ERROR_MESSAGE);
               return false; // Prevents execution instead of throwing an exception
         }
 
          return true; // All fields are valid
     }
+
     
     private Person updateEmpDetailValues(){
         String lastname = lastNameTField.getText().trim() !=null ? lastNameTField.getText() : "";
@@ -1865,10 +1922,21 @@ public class HRDashboard extends javax.swing.JFrame {
         double rice = !riceTField.getText().trim().equals("") ? Double.parseDouble(riceTField.getText().trim()): 0;
         double phoneAllow= !phoneAllowTField.getText().trim().equals("") ? Double.parseDouble(phoneAllowTField.getText().trim()): 0;
         double clothing = !clothingTField.getText().trim().equals("")? Double.parseDouble(clothingTField.getText().trim()): 0;
-        long pagibig = !pagibigTField.getText().trim().equals("")? Long.valueOf(pagibigTField.getText().trim()): 0;
+        //long pagibig = !pagibigTField.getText().trim().equals("")? Long.valueOf(pagibigTField.getText().trim()): 0;
         String sss = sssTField.getText().trim() !=null ? sssTField.getText().trim() :"";
         String tin = tinTField.getText().trim() !=null ? tinTField.getText().trim():"";
-        long philhealth = !philhealthTField.getText().equals("") ? Long.valueOf(philhealthTField.getText().trim()): 0;
+        //long philhealth = !philhealthTField.getText().equals("") ? Long.valueOf(philhealthTField.getText().trim()): 0;
+        long pagibig = 0;
+        String pagibigInput = pagibigTField.getText().trim();
+        if (!pagibigInput.isEmpty() && pagibigInput.matches("^\\d+$")) {
+            pagibig = Long.parseLong(pagibigInput);
+        }
+
+        long philhealth = 0;
+        String philhealthInput = philhealthTField.getText().trim();
+        if (!philhealthInput.isEmpty() && philhealthInput.matches("^\\d+$")) {
+            philhealth = Long.parseLong(philhealthInput);
+        }
     
         
         Person empDetails = new Employee();
@@ -1882,9 +1950,7 @@ public class HRDashboard extends javax.swing.JFrame {
             // Setting the sqlDate to empDetails
             empDetails.setEmpBirthday(sqlDate);
         } catch (ParseException ex) {
-            //JOptionPane.showMessageDialog(null, "Invalid date format. Please use yyyy-MM-dd");
-            // Exit the method if the date format is invalid
-        //empDetails.setEmpBirthday(firstNameTField.getText().trim());
+
         }
         if(!employeeIDTField.getText().trim().equals("")){
             empDetails.setEmpID(Integer.parseInt(employeeIDTField.getText().trim()));
@@ -1928,23 +1994,36 @@ public class HRDashboard extends javax.swing.JFrame {
     }
     
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        int empID = Integer.parseInt(searchTextField.getText().trim());
-        loadEmployeeValues(empID); 
+        String input = searchTextField.getText().trim();
+
+        if (input.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please input Employee ID!");
+            return;
+        } else if (!input.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Employee ID must contain numbers only.");
+            return;
+        }
+
+        int empID = Integer.parseInt(input);
+
+        // Check if employee exists BEFORE calling loadEmployeeValues
+        if (hrService.getByEmpID(empID) == null) {
+            JOptionPane.showMessageDialog(this, "Employee Not Found!");
+            clearButtonActionPerformed(evt);
+            return;
+        }
+
+        // Safe to load values since employee exists
+        loadEmployeeValues(empID);
         refreshTable(); 
-        
+
         DefaultTableModel model = (DefaultTableModel) employeeTable.getModel();
-        boolean found = false;
         for (int i = 0; i < model.getRowCount(); i++) {
             if (empID == Integer.parseInt(model.getValueAt(i, 0).toString())) {
                 employeeTable.setRowSelectionInterval(i, i);
                 employeeTable.scrollRectToVisible(employeeTable.getCellRect(i, 0, true));
-                found = true;
                 break;
             }
-        }
-        if (!found) {
-            JOptionPane.showMessageDialog(this, "Employee Not Found!");
-            clearButtonActionPerformed(evt); 
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -2103,9 +2182,13 @@ public class HRDashboard extends javax.swing.JFrame {
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
             Person empDetails = updateEmpDetailValues();
+            IT empAccount = updateEmpAccountValues();
+            if (!validateRequiredFields(empAccount,empDetails)) {
+                clearButtonActionPerformed(null);
+                return; // Stop execution if validation fails
+            }
             hrService.updateEmployeeDetails(empDetails);
 
-            IT empAccount = updateEmpAccountValues();
             empAccount.setEmpID(empDetails.getEmpID()); // Linking account with details
             empAccount.setEmpDetails(empDetails);
             empAccountService.updateEmployeeCredentials(empAccount);
@@ -2130,17 +2213,22 @@ public class HRDashboard extends javax.swing.JFrame {
         if (!validateRequiredFields(empAccount,empDetails)) {
             return; // Stop execution if validation fails
         }
-        hrService.addEmployeeDetails(empDetails);
-        empAccountService.saveUserAccount(empAccount,empDetails);
-        
-        LeaveBalance  leaveBalance = new LeaveBalance();
-        leaveBalance.setEmpID(empDetails.getEmpID());
-        leaveDetailsService.saveLeaveBalance(leaveBalance);
-       
-        JOptionPane.showMessageDialog(null, "Account added successfully!");
+        if (hrService.isDuplicateEmployee(empDetails)) {
+            JOptionPane.showMessageDialog(null, "Employee already exists. No new record created.");
+        } else {
+            // Only save if it's a new employee
+            hrService.addEmployeeDetails(empDetails);
+            empAccountService.saveUserAccount(empAccount, empDetails);
+
+            LeaveBalance leaveBalance = new LeaveBalance();
+            leaveBalance.setEmpID(empDetails.getEmpID());
+            leaveDetailsService.saveLeaveBalance(leaveBalance);
+
+            JOptionPane.showMessageDialog(null, "Account added successfully!");
+        }
+
         clearButtonActionPerformed(null);
         refreshTable();
-
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void changePasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordButtonActionPerformed
@@ -2184,38 +2272,42 @@ public class HRDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_searchTextField1ActionPerformed
 
     private void searchButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButton1ActionPerformed
-        
         String empId = searchTextField1.getText().equals("Enter the Employee ID here...") ? "" : searchTextField1.getText().trim();
-        employeeSearchID = (empId == "" || empId == null) ? null : Integer.parseInt(empId);
-        
-        if(employeeSearchID !=null){
-            IT empAccount = empAccountService.getByEmpID(employeeSearchID);
-            if(empAccount != null){
-                updatePayrollEmpLabels(empAccount);
-                if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
-                    Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-                    Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
 
-                    if(monthValue != null & year != null){
-                        List<Employee> empHours = getEmployeeHours(monthValue,year,employeeSearchID);
-                        populateAttendanceTable(empHours);
-
-                    }
-                }     
-            }else{
-                JOptionPane.showMessageDialog(this, "Employee Not Found!");
-            }   
-        }else{
+        // Check if empId is not empty and contains only digits
+        if(empId.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please input Employee ID!");
+            return;
+        } else if (!empId.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Employee ID must contain numbers only.");
+            return;
+        }
+
+    // Parse Employee ID
+        employeeSearchID = Integer.parseInt(empId);
+
+        IT empAccount = empAccountService.getByEmpID(employeeSearchID);
+        if (empAccount != null) {
+            updatePayrollEmpLabels(empAccount);
+            if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
+                Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+                Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
+
+                if (monthValue != null && year != null) {
+                    List<Employee> empHours = getEmployeeHours(monthValue, year, employeeSearchID);
+
+                    if (empHours == null || empHours.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "No attendance records found for the selected month and year.");
+                    } else {
+                        populateAttendanceTable(empHours);
+                    }
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Employee Not Found!");
         }
     }//GEN-LAST:event_searchButton1ActionPerformed
     
-    private void clearPayrollLabels(){
-        empIDPayLabelValue.setText("");
-
-        namePayLabelValue.setText("");
-
-    }
     
     private void loadAllMonths(){
         monthDropdown.addItem(new ComboItem(null,"Select Month"));
@@ -2240,10 +2332,30 @@ public class HRDashboard extends javax.swing.JFrame {
 
         });
     }
+    private void loadAttendanceIfReady() {
+        if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
+            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+            Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
+            Integer empId = employeeSearchID != null ? employeeSearchID : empAccount.getEmpID();
+
+            if (monthValue != null && year != null) {
+                List<Employee> empHours = getEmployeeHours(monthValue, year, empId);
+
+                if (empHours.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No attendance found for the selected month and year.");
+                    populateAttendanceTable(new ArrayList<>()); // Optionally clear table
+                    return;
+                }
+
+                populateAttendanceTable(empHours);
+            }
+        }
+    }
     
     
     private void monthDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthDropdownActionPerformed
-        if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
+        loadAttendanceIfReady();
+        /*    if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
             Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
             Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
             Integer empId = employeeSearchID != null ? employeeSearchID : empAccount.getEmpID();
@@ -2254,11 +2366,13 @@ public class HRDashboard extends javax.swing.JFrame {
                 populateAttendanceTable(empHours);
 
             }
-        }    
+        }
+    */
     }//GEN-LAST:event_monthDropdownActionPerformed
 
     private void yearDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearDropdownActionPerformed
-        if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
+         loadAttendanceIfReady();
+        /*    if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
             Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
             Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
             Integer empId = employeeSearchID != null ? employeeSearchID : empAccount.getEmpID();
@@ -2268,7 +2382,8 @@ public class HRDashboard extends javax.swing.JFrame {
                 populateAttendanceTable(empHours);
 
             }
-        }    
+        } 
+    */
     }//GEN-LAST:event_yearDropdownActionPerformed
 
     private void clothingTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clothingTFieldActionPerformed

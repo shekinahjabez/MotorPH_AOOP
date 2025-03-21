@@ -1845,7 +1845,7 @@
                     </Component>
                   </SubComponents>
                 </Container>
-                <Container class="javax.swing.JPanel" name="empManagement">
+                <Container class="javax.swing.JPanel" name="payManagement">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="e5" green="e5" red="e5" type="rgb"/>

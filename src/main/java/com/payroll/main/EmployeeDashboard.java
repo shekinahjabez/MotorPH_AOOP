@@ -1811,7 +1811,6 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             refreshLeaveBalance();
 
         } catch (RuntimeException e) {
-            // Validation error messages are already shown in JOptionPane inside the method
             System.err.println("Leave request validation failed: " + e.getMessage());
         }
         

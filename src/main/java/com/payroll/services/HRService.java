@@ -19,6 +19,7 @@ import java.util.List;
 import java.sql.Statement;
 import java.sql.Types;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -192,18 +193,85 @@ public class HRService {
         return empDetails;
     }
     
+    public boolean isDuplicateEmployee(Person empDetails) {
+        String query = """
+            SELECT employee_id FROM public.employee
+            WHERE lastname = ? AND firstname = ? AND birthday = ? AND address = ? AND phone_number = ?
+            AND sss = ? AND philhealth = ? AND tin = ? AND pag_ibig = ? AND status = ? AND position = ? AND immediate_supervisor = ?
+        """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, empDetails.getLastName());
+            preparedStatement.setString(2, empDetails.getFirstName());
+            preparedStatement.setDate(3, new java.sql.Date(empDetails.getEmpBirthday().getTime()));
+            preparedStatement.setString(4, empDetails.getEmpAddress());
+            preparedStatement.setString(5, empDetails.getEmpPhoneNumber());
+            preparedStatement.setString(6, empDetails.getEmpSSS());
+            preparedStatement.setLong(7, empDetails.getEmpPhilHealth());
+            preparedStatement.setString(8, empDetails.getEmpTIN());
+            preparedStatement.setLong(9, empDetails.getEmpPagibig());
+            preparedStatement.setObject(10, empDetails.getEmpStatus().getId(), Types.INTEGER);
+            preparedStatement.setObject(11, empDetails.getEmpPosition().getId(), Types.INTEGER);
+            preparedStatement.setObject(12, empDetails.getEmpImmediateSupervisor().getEmpID(), Types.INTEGER);
+
+            try (ResultSet resultset = preparedStatement.executeQuery()) {
+                return resultset.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public Integer getEmployeeIdIfExists(Person empDetails) {
+        String query = """
+            SELECT employee_id FROM public.employee
+            WHERE lastname = ? AND firstname = ? AND birthday = ? AND address = ? AND phone_number = ?
+            AND sss = ? AND philhealth = ? AND tin = ? AND pag_ibig = ? AND status = ? AND position = ? AND immediate_supervisor = ?
+        """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, empDetails.getLastName());
+            preparedStatement.setString(2, empDetails.getFirstName());
+            preparedStatement.setDate(3, new java.sql.Date(empDetails.getEmpBirthday().getTime()));
+            preparedStatement.setString(4, empDetails.getEmpAddress());
+            preparedStatement.setString(5, empDetails.getEmpPhoneNumber());
+            preparedStatement.setString(6, empDetails.getEmpSSS());
+            preparedStatement.setLong(7, empDetails.getEmpPhilHealth());
+            preparedStatement.setString(8, empDetails.getEmpTIN());
+            preparedStatement.setLong(9, empDetails.getEmpPagibig());
+            preparedStatement.setObject(10, empDetails.getEmpStatus().getId(), Types.INTEGER);
+            preparedStatement.setObject(11, empDetails.getEmpPosition().getId(), Types.INTEGER);
+            preparedStatement.setObject(12, empDetails.getEmpImmediateSupervisor().getEmpID(), Types.INTEGER);
+
+            try (ResultSet resultset = preparedStatement.executeQuery()) {
+                if (resultset.next()) {
+                    return resultset.getInt("employee_id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }    
+    
     public Person addEmployeeDetails(Person empDetails){
-         java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
-         Integer superVisorId = empDetails.getEmpImmediateSupervisor() != null ? empDetails.getEmpImmediateSupervisor().getEmpID() : null;
-         Integer positionId = empDetails.getEmpPosition() != null ? empDetails.getEmpPosition().getId() : null;
-         Integer statusId = empDetails.getEmpStatus() != null ? empDetails.getEmpStatus().getId() : null;
-         
-         
-            if (connection != null) {
+            if (connection == null)return null; 
+            
+            /*if (isDuplicateEmployee(empDetails)) {
+                JOptionPane.showMessageDialog(null, "Duplicate employee found. No insertion performed.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
+                return null;
+            }*/
             String Query = "INSERT into public.employee (lastname, firstname,birthday,address,phone_number,sss,philhealth,tin,pag_ibig,status,position,immediate_supervisor,basic_salary, rice_subsidy, phone_allowance, clothing_allowance, gross_semi_monthly_rate, hourly_rate)"
                     + "values(?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query,Statement.RETURN_GENERATED_KEYS);
+                java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
+                Integer superVisorId = empDetails.getEmpImmediateSupervisor() != null ? empDetails.getEmpImmediateSupervisor().getEmpID() : null;
+                Integer positionId = empDetails.getEmpPosition() != null ? empDetails.getEmpPosition().getId() : null;
+                Integer statusId = empDetails.getEmpStatus() != null ? empDetails.getEmpStatus().getId() : null;
                 preparedStatement.setString(1,empDetails.getLastName());
                 preparedStatement.setString(2,empDetails.getFirstName());
                 preparedStatement.setDate(3,birthDate);
@@ -223,23 +291,19 @@ public class HRService {
                 preparedStatement.setDouble(17, empDetails.getEmpMonthlyRate());
                 preparedStatement.setDouble(18, empDetails.getEmpHourlyRate());
   
-                
-         
                 int affectedrows = preparedStatement.executeUpdate();
-                    if(affectedrows > 0){
-                     try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if(affectedrows > 0){
+                    try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
                             empDetails.setEmpID(generatedKeys.getInt(1));
                         } else {
                             throw new SQLException("Updating user failed, no ID obtained.");
                          }
                     }
-            };
-                preparedStatement.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
-            }         
-        }                          
+            }                              
         return empDetails;
     }
     
