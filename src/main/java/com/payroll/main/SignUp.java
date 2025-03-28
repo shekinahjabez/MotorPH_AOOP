@@ -551,15 +551,15 @@ public class SignUp extends javax.swing.JFrame {
             // First Name - required and must contain only letters
             if (StringUtils.isEmpty(empDetails.getFirstName())) {
                 errors.add("First Name is required.");
-            } else if (!empDetails.getFirstName().matches("^[A-Za-z]+$")) {
-                errors.add("First Name must contain letters only.");
+            } else if (!empDetails.getFirstName().matches("^[A-Za-z\\-]+$")) {
+                errors.add("First Name must contain letters and dashes only.");
             }
 
             // Last Name - required and must contain only letters
             if (StringUtils.isEmpty(empDetails.getLastName())) {
                 errors.add("Last Name is required.");
-            } else if (!empDetails.getLastName().matches("^[A-Za-z]+$")) {
-                errors.add("Last Name must contain letters only.");
+            } else if (!empDetails.getLastName().matches("^[A-Za-z\\-]+$")) {
+                errors.add("Last Name must contain letters and dashes only.");
             }
 
             // Address - required and max 250 characters
