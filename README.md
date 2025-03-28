@@ -37,8 +37,11 @@ Do not move the file from your **Downloads** directory.
 ### **Step 3: Navigate to the Downloads Folder**
 In PowerShell, run:
 ```powershell
-cd Downloads
+cd $HOME\Downloads
 ```
+
+---
+
 ### **Step 4: Restore Database Using PowerShell**  
 Run the following command to restore the database:  
 
@@ -59,6 +62,7 @@ Run the following command to restore the database:
        admin
        ```
     5. Click **Save**.
+---
 
 ### 🔧 Configure the `DatabaseConnection` Java Class 
 In NetBeans, navigate to: 
