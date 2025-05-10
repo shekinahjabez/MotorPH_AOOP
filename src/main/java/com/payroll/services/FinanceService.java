@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -150,7 +151,32 @@ public class FinanceService {
         return empDetails;
     }
     
- 
+    public LocalDate[] getPayrollPeriodFromEmployeeHours(int empId, int month, int year) {
+        String query = """
+            SELECT MIN(date) AS start_date, MAX(date) AS end_date
+            FROM employee_hours
+            WHERE employee_id = ?
+              AND EXTRACT(MONTH FROM date) = ?
+              AND EXTRACT(YEAR FROM date) = ?
+        """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, empId);
+            preparedStatement.setInt(2, month + 1); // Calendar.JANUARY = 0
+            preparedStatement.setInt(3, year);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next() && resultSet.getDate("start_date") != null) {
+                LocalDate start = resultSet.getDate("start_date").toLocalDate();
+                LocalDate end = resultSet.getDate("end_date").toLocalDate();
+                return new LocalDate[]{start, end};
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }    
+    
 
     
     public Finance savePayrollReport(Finance payrollReportDetails) {
@@ -158,7 +184,7 @@ public class FinanceService {
 
         String query = """
             INSERT INTO public.payroll 
-            (employee_id, payroll_period_start, payroll_period_end, number_of_hours_w, gross_pay, deduction, net_pay)
+            (employee_id, payroll_period_start_date, payroll_period_end_date, number_of_hours_worked, gross_pay, deduction, net_pay)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 

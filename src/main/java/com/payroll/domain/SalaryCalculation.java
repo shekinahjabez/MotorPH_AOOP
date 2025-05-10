@@ -91,7 +91,11 @@ public class SalaryCalculation {
         return String.format("%d:%02d", totalHoursWorked / 3600, (totalHoursWorked % 3600) / 60);
     }
      
-    public static double getBasicSalary(List<Employee> empHours,IT empAccount){
+    public static double getBasicSalary(List<Employee> empHours, IT empAccount) {
+        return empAccount.getEmpDetails().getEmpBasicSalary(); // fixed monthly basic salary
+    } 
+     
+    public static double getComputedSalary(List<Employee> empHours, IT empAccount) {
         double totalHoursWorked = SalaryCalculation.getTotalHoursWorked(empHours);
         double hourlyRate = empAccount.getEmpDetails().getEmpHourlyRate();
         return totalHoursWorked * hourlyRate;
@@ -114,8 +118,8 @@ public class SalaryCalculation {
         return empSalary - totalDeductions;
     }
     
-    public static double getNetPay(double empSalary,double sssContri){
-       double netPay = getTaxableIncome(empSalary, sssContri) - calculateWithholdingTax(empSalary);
-       return netPay;
+    public static double getNetPay(double empSalary, double sssContri) {
+        double taxableIncome = getTaxableIncome(empSalary, sssContri);
+        return taxableIncome - calculateWithholdingTax(taxableIncome);
     }
 }   

@@ -31,6 +31,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPTable;
+import java.io.File;
 import java.time.LocalDateTime;
 
 
@@ -49,6 +50,7 @@ public class FinanceDashboard extends javax.swing.JFrame {
     private HRService hrService;
     private FinanceService payrollService;
     private Integer employeeSearchID;
+    private double computedSalary;
     
     public FinanceDashboard(IT empAccount) {
         initComponents();
@@ -176,28 +178,43 @@ public class FinanceDashboard extends javax.swing.JFrame {
     }
     
     private void updatePayrollLabels(List<Employee> employeeHours){
-        if(employeeHours.isEmpty()){
+        if (employeeHours.isEmpty()) {
             resetPayrollLabels();
-        }else{
-            totalHoursPayLabelValue.setText(SalaryCalculation.getFormattedTotalHoursWorked(employeeHours));
-        
-            double basicSalary = SalaryCalculation.getBasicSalary(employeeHours, empAccount);
-            computedSalaryLabelValue.setText(String.format("%.2f",basicSalary));
+        } else {
+            // 1. Calculate total hours
+            String totalHoursStr = SalaryCalculation.getFormattedTotalHoursWorked(employeeHours);
+            totalHoursPayLabelValue.setText(totalHoursStr);
+            double totalHoursWorked = convertHoursStringToDecimal(totalHoursStr);
 
+            // 2. Hourly rate
+            double hourlyRate = empAccount.getEmpHourlyRate();
+
+            // 3. Computed salary (based on hours)
+            computedSalary = totalHoursWorked * hourlyRate;
+            computedSalaryLabelValue.setText(String.format("%.2f", computedSalary));
+
+            // 4. Basic salary (fixed monthly)
+            double basicSalary = empAccount.getEmpBasicSalary();
+            basicSalaryPayLabelValue.setText(String.format("%.2f", basicSalary));
+
+            // 5. Gross pay = computedSalary + allowance
             double grossPay = SalaryCalculation.getGrossSalary(employeeHours, empAccount);
             grossSalaryPayLabelValue.setText(String.format("%.2f", grossPay));
 
+            // 6. SSS contribution (based on basic salary)
             double sssContri = payrollService.calculateSssContribution(basicSalary);
 
-            // Contributions
+            // 7. Contributions
             philhealthContriPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculatePhilHealthContribution(grossPay)));
             pagibigContriPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculatePagibigContribution(grossPay)));
             sssContriPayLabelValue.setText(String.format("%.2f", sssContri));
-            totalDeductionsPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTotalDeductions(grossPay,sssContri)));
-            taxableIncomePayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTaxableIncome(grossPay,sssContri)));
+
+            // 8. Totals
+            totalDeductionsPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTotalDeductions(grossPay, sssContri)));
+            taxableIncomePayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTaxableIncome(grossPay, sssContri)));
             taxPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculateWithholdingTax(grossPay)));
-            netPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getNetPay(grossPay,sssContri)));
-         }
+            netPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getNetPay(grossPay, sssContri)));
+        }
     }
     
     private void resetPayrollLabels(){
@@ -2168,8 +2185,14 @@ private boolean hasEmptyFields() {
             }
 
             // 2. Define period
-            LocalDate startDate = LocalDate.of(year, monthValue + 1, 1);
-            LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+            LocalDate[] period = payrollService.getPayrollPeriodFromEmployeeHours(empId, monthValue, year);
+            if (period == null) {
+                JOptionPane.showMessageDialog(this, "No attendance records found for the selected period.");
+                return;
+            }
+            LocalDate startDate = period[0];
+            LocalDate endDate = period[1];
+
 
             // 3. Get values from UI
             double hoursWorked = convertHoursStringToDecimal(totalHoursPayLabelValue.getText()); // ✅ safe for "168:00"
@@ -2188,11 +2211,17 @@ private boolean hasEmptyFields() {
             payroll.setNetPay(netPay);
 
             // 5. Save to DB
-            FinanceService financeService = new FinanceService(new DatabaseConnection());
-            Finance saved = financeService.savePayrollReport(payroll);
+            Finance saved = payrollService.savePayrollReport(payroll);
 
             if (saved != null && saved.getPayrollId() > 0) {
                 // 6. Generate PDF
+                 String basePath = System.getProperty("user.home") + "/Documents/MotorPH_AOOP/payrollreports";
+                File folder = new File(basePath);
+                if (!folder.exists()) {
+                    folder.mkdirs();
+                }
+               
+                
                 Document document = new Document();
                 String filename = "Payroll_Report_Emp" + empId + "_" + System.currentTimeMillis() + ".pdf";
                 PdfWriter.getInstance(document, new FileOutputStream(filename));
