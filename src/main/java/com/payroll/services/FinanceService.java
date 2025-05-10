@@ -4,13 +4,16 @@
  */
 package com.payroll.services;
 import com.payroll.domain.Employee;
+import com.payroll.domain.Finance;
 import com.payroll.domain.Person;
 import com.payroll.util.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -83,6 +86,9 @@ public class FinanceService {
         return empHours;   
     }
     
+    
+    
+    
     public float  calculateSssContribution(double empSalary){
         String sssContributionQuery = """
                 select contribution from sss
@@ -142,7 +148,56 @@ public class FinanceService {
             }         
         }                          
         return empDetails;
-    }    
+    }
+    
+ 
+
+    
+    public Finance savePayrollReport(Finance payrollReportDetails) {
+        if (connection == null) return null;
+
+        String query = """
+            INSERT INTO public.payroll 
+            (employee_id, payroll_period_start, payroll_period_end, number_of_hours_w, gross_pay, deduction, net_pay)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            // Convert dates
+            java.sql.Date payrollPeriodStart = payrollReportDetails.getPayrollPeriodStart() != null ? new java.sql.Date(payrollReportDetails.getPayrollPeriodStart().getTime()): null;
+            java.sql.Date payrollPeriodEnd = payrollReportDetails.getPayrollPeriodEnd() != null? new java.sql.Date(payrollReportDetails.getPayrollPeriodEnd().getTime()): null;
+
+            // Set parameters
+            preparedStatement.setInt(1, payrollReportDetails.getEmpID());
+            preparedStatement.setDate(2, payrollPeriodStart);
+            preparedStatement.setDate(3, payrollPeriodEnd);
+            preparedStatement.setDouble(4, payrollReportDetails.getNumberOfHoursWorked());
+            preparedStatement.setDouble(5, payrollReportDetails.getGrossPay());
+            preparedStatement.setDouble(6, payrollReportDetails.getDeduction());
+            preparedStatement.setDouble(7, payrollReportDetails.getNetPay());
+
+            // Execute and get generated ID
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        payrollReportDetails.setPayrollId(generatedKeys.getInt(1));
+                    } else {
+                        throw new SQLException("Inserting payroll record failed, no ID returned.");
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return payrollReportDetails;
+    }
+    
+    
+    
     
     private Person toPayrollDetails(ResultSet resultSet) 
         throws SQLException {
