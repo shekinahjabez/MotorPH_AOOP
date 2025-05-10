@@ -30,5 +30,5 @@
             <version>3.14.0</version>
         </dependency>
     </dependencies>
-    <name>MotorPH_OOP_Practice</name>
+    <name>MotorPH_AOOP</name>
 </project>
