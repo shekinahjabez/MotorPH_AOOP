@@ -28,15 +28,15 @@ import javax.swing.JOptionPane;
 public class HRService {
     
     private Connection connection;
-    private DatabaseConnection dbConnection;
     
-    public HRService(DatabaseConnection dbConnection){
-        this.connection = dbConnection.connect();   
+    public HRService(Connection connection) {
+        try {
+            this.connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Consider logging this instead
+        }
     }
 
-    public HRService() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     
     public Person getByEmpID(int empID){
         return getByEmpID(empID,true);

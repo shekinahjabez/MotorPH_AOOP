@@ -475,22 +475,17 @@
                                           <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="addressLabelValue" min="-2" max="-2" attributes="0"/>
-                                              <Component id="fullNameValue" min="-2" max="-2" attributes="0"/>
-                                              <Component id="positionLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empIDLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="statusLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="phoneLabelValue" alignment="0" min="-2" pref="155" max="-2" attributes="0"/>
-                                              <Component id="bdayLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
-                                              <Component id="philhealthLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
-                                              <Component id="supervisorLabelValue" alignment="0" min="-2" pref="282" max="-2" attributes="0"/>
-                                              <Component id="sssLabelValue" min="-2" pref="107" max="-2" attributes="0"/>
-                                              <Component id="pagibigLabelValue" min="-2" pref="107" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="addressLabelValue" min="-2" max="-2" attributes="0"/>
+                                      <Component id="fullNameValue" min="-2" max="-2" attributes="0"/>
+                                      <Component id="positionLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="empIDLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="statusLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="phoneLabelValue" alignment="0" min="-2" pref="155" max="-2" attributes="0"/>
+                                      <Component id="bdayLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
+                                      <Component id="philhealthLabelValue" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
+                                      <Component id="supervisorLabelValue" alignment="0" min="-2" pref="282" max="-2" attributes="0"/>
+                                      <Component id="sssLabelValue" min="-2" pref="107" max="-2" attributes="0"/>
+                                      <Component id="pagibigLabelValue" min="-2" pref="107" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>

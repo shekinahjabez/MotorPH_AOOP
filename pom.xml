@@ -34,12 +34,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.14.0</version>
         </dependency>
-        <dependency>
-            <groupId>itext</groupId>
-            <artifactId>itext</artifactId>
-            <version>1.02b</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
     <name>MotorPH_AOOP</name>
 </project>

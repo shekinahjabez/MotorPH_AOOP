@@ -22,6 +22,8 @@ import com.payroll.table.TableActionCellRender;
 import com.payroll.table.TableActionEvent;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,14 +54,19 @@ public class HRDashboard extends javax.swing.JFrame {
     
     public HRDashboard(IT empAccount) {
         initComponents();
-        cardLayout = (CardLayout)(mphCards.getLayout());
-        this.empAccount=empAccount;
-        this.dbConnection = new DatabaseConnection();
+        cardLayout = (CardLayout) (mphCards.getLayout());
+        this.empAccount = empAccount;
         updateUserLabels(empAccount);
-        this.empAccountService = new ITService(this.dbConnection);
-        this.hrService = new HRService(this.dbConnection);  
-        this.payrollService = new FinanceService(this.dbConnection);
-        this. leaveDetailsService = new EmployeeService(this.dbConnection);
+
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            this.empAccountService = new ITService(connection);
+            this.hrService = new HRService(connection);
+            this.payrollService = new FinanceService(connection);
+            this.leaveDetailsService = new EmployeeService(connection);
+        } catch (SQLException e) {
+            e.printStackTrace(); // Optionally use JOptionPane for user-friendly error
+        }
         TableActionEvent event = new TableActionEvent(){
             @Override
             public void onApprove(int row){

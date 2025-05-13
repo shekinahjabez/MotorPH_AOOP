@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class SalaryCalculation {
     private Connection connection;
-    public SalaryCalculation(DatabaseConnection dbConnection){
-        this.connection = dbConnection.getConnection();  
+    public SalaryCalculation(Connection connection){
+        this.connection = connection;  
     }
     
      public static double calculatePhilHealthContribution(double empSalary)  {

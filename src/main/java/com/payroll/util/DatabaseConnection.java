@@ -3,53 +3,34 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.payroll.util;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.util.Properties;
 
 /**
  *
  * @author leniejoice
  */
 public class DatabaseConnection {
-    Connection connection;
-    private final String url = "jdbc:postgresql://localhost:5432/postgres"; // 
-    private final String username = "postgres"; 
-    private final String password = "postgres"; 
+    private static String url, username, password;
 
-    public Connection connect() {
-        try {
-            return DriverManager.getConnection(url, username, password);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+    static {
+        try (InputStream input = DatabaseConnection.class.getClassLoader()
+                .getResourceAsStream("com/payroll/config/db.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            url = prop.getProperty("db.url");
+            username = prop.getProperty("db.username");
+            password = prop.getProperty("db.password");
+        } catch (Exception e) {
+            e.printStackTrace(); // Or log the error properly
         }
     }
-    
-    public void close() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    public Connection getConnection(){
-        return connection;
-    }
-    
-///Database connection
-    
-    public PreparedStatement prepareStatement(String query) throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            // Optionally, attempt to reconnect or throw an exception if not connected
-            connect();
-        }
-        return connection.prepareStatement(query);
-    }
 
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, username, password);
+    }
 }

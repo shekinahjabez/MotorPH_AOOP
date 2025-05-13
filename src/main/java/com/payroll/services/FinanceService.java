@@ -32,8 +32,12 @@ import java.util.logging.Logger;
 public class FinanceService {
     private Connection connection;
     
-    public FinanceService(DatabaseConnection dbConnection){
-        this.connection = dbConnection.connect();    
+    public FinanceService(Connection connection) {
+        try {
+            this.connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace(); // You can replace with logging if needed
+        }
     }
     
     public Person getByEmpID(int empID) throws SQLException {

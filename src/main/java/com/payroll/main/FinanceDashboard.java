@@ -32,6 +32,8 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPTable;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 
@@ -54,16 +56,21 @@ public class FinanceDashboard extends javax.swing.JFrame {
     
     public FinanceDashboard(IT empAccount) {
         initComponents();
-        cardLayout = (CardLayout)(mphCards.getLayout());
-        this.empAccount=empAccount;
-        this.dbConnection = new DatabaseConnection();
+        cardLayout = (CardLayout) (mphCards.getLayout());
+        this.empAccount = empAccount;
         updateUserLabels(empAccount);
-        this.empAccountService = new ITService(this.dbConnection);
-        this.hrService = new HRService(this.dbConnection);  
-        this.payrollService = new FinanceService(this.dbConnection);
+
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            this.empAccountService = new ITService(connection);
+            this.hrService = new HRService(connection);
+            this.payrollService = new FinanceService(connection);
+        } catch (SQLException e) {
+            e.printStackTrace(); // Optional: show a JOptionPane for better user feedback
+        }
+
         loadAllYears();
         loadAllMonths();
-        
     }
     public FinanceDashboard(){
         this(null);

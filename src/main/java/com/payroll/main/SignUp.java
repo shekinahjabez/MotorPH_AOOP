@@ -18,6 +18,8 @@ import com.payroll.subdomain.EmployeeStatus;
 import com.payroll.util.DatabaseConnection;
 import javax.swing.JOptionPane;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,17 +47,23 @@ public class SignUp extends javax.swing.JFrame {
     private EmployeeService leaveDetailsService;
 
     
+
     public SignUp() {
-       initComponents();
-       DatabaseConnection dbConnection = new DatabaseConnection();
-       dbConnection.connect();
-       this.empAccountService = new ITService(dbConnection);
-       this.hrService = new HRService(dbConnection);
-       this.leaveDetailsService = new EmployeeService(dbConnection);
-       loadAllPositions();
-       loadAllStatus();
-       loadAllEmployee();
+        initComponents();
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            this.empAccountService = new ITService(connection);
+            this.hrService = new HRService(connection);
+            this.leaveDetailsService = new EmployeeService(connection);
+        } catch (SQLException e) {
+            e.printStackTrace(); // You can show a message dialog here for better UX
+        }
+
+        loadAllPositions();
+        loadAllStatus();
+        loadAllEmployee();
     }
+
      
     /**
      * This method is called from within the constructor to initialize the form.

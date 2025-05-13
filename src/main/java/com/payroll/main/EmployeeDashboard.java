@@ -17,6 +17,7 @@ import com.payroll.services.FinanceService;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.domain.SalaryCalculation;
 import java.awt.CardLayout;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -54,13 +55,19 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     public EmployeeDashboard(IT empAccount) {
         initComponents();
         cardLayout = (CardLayout)(mphCards.getLayout());
-        this.empAccount=empAccount;
+        this.empAccount = empAccount;
         this.currentEmployeeId = empAccount.getEmpDetails().getEmpID(); 
-        this.dbConnection = new DatabaseConnection();
         updateUserLabels(empAccount);
-        this.empAccountService = new ITService(this.dbConnection);
-        this.payrollService = new FinanceService(this.dbConnection);
-        this.empService = new EmployeeService(this.dbConnection);
+
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            this.empAccountService = new ITService(connection);
+            this.payrollService = new FinanceService(connection);
+            this.empService = new EmployeeService(connection);
+        } catch (SQLException e) {
+            e.printStackTrace(); // You can replace this with a popup if needed
+        }
+
         checkAttendanceStatusForToday();
         loadAllYears();
         loadAllMonths();

@@ -23,20 +23,19 @@ import javax.swing.JOptionPane;
  */
 public class ITService {
     private Connection connection;
-    private DatabaseConnection dbConnection;
     private HRService hrService;
     private FinanceService financeService;
     private EmployeeService leaveDetailsService;
-    
-    
-    public ITService(DatabaseConnection dbConnection){
-        this.connection = dbConnection.connect();  
-        this.hrService = new HRService(dbConnection);
-        this.leaveDetailsService = new EmployeeService(dbConnection);
-    }
 
-    public ITService() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public ITService(Connection connection) {
+        try {
+            this.connection = DatabaseConnection.getConnection();
+            this.hrService = new HRService(connection);
+            this.financeService = new FinanceService(connection);
+            this.leaveDetailsService = new EmployeeService(connection);
+        } catch (SQLException e) {
+            e.printStackTrace(); // Consider using a logger in real applications
+        }
     }
     
 

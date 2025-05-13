@@ -27,10 +27,13 @@ import java.util.List;
  */
 public class EmployeeService {
     private Connection connection;
-    
-    
-    public EmployeeService(DatabaseConnection dbConnection){
-        this.connection = dbConnection.connect();    
+
+    public EmployeeService(Connection connection) {
+        try {
+            this.connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Consider logging in production
+        }
     }
     
     public List<LeaveType> getAllLeaveTypes(){

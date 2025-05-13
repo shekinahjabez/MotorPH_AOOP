@@ -33,12 +33,15 @@ public class LogIn extends javax.swing.JFrame {
     
     private ITService empAccountService;
     public LogIn() {
-        DatabaseConnection dbConnection = new DatabaseConnection();
-        dbConnection.connect();
-        empAccountService= new ITService(dbConnection);
-        initComponents();
-       
-    }
+           try {
+               Connection connection = DatabaseConnection.getConnection();
+               empAccountService = new ITService(connection);
+           } catch (SQLException e) {
+               e.printStackTrace(); // You may also want to show a dialog to the user
+           }
+
+           initComponents();
+       }
 
     /**
      * This method is called from within the constructor to initialize the form.

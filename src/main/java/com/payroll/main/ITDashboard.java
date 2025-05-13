@@ -13,6 +13,8 @@ import com.payroll.services.ITService;
 import com.payroll.util.DatabaseConnection;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,14 +42,20 @@ public class ITDashboard extends javax.swing.JFrame {
     public ITDashboard(IT empAccount) {
         initComponents();
         cardLayout = (CardLayout)(mphCards.getLayout());
-        this.empAccount=empAccount;
-        this.dbConnection = new DatabaseConnection();
+        this.empAccount = empAccount;
         updateUserLabels(empAccount);
-        this.itService = new ITService(this.dbConnection);
-        this.hrService = new HRService(this.dbConnection);  
+
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            this.itService = new ITService(connection);
+            this.hrService = new HRService(connection);
+        } catch (SQLException e) {
+            e.printStackTrace(); // You can show a dialog box here for better UX
+        }
+
         loadAllRoles();
-        
     }
+    
     public ITDashboard(){
         
     }
