@@ -1,4 +1,4 @@
-# 💰 MotorPH Payroll System (Group 1)
+# 💰 MotorPH Payroll System (Group 8)
 
 ## 📖 Overview
 MotorPH Payroll System is a **Java-based payroll management system** designed to automate employee salary calculations, deductions, attendance tracking, and leave management. The project follows **Object-Oriented Programming (OOP)** principles and integrates with **PostgreSQL 16** using **JDK 23** to securely store and manage payroll data.
