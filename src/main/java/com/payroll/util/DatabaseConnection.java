@@ -19,7 +19,7 @@ public class DatabaseConnection {
 
     static {
         try (InputStream input = DatabaseConnection.class.getClassLoader()
-                .getResourceAsStream("com/payroll/config/db.properties")) {
+                .getResourceAsStream("config/db.properties")) {
             Properties prop = new Properties();
             prop.load(input);
             url = prop.getProperty("db.url");
