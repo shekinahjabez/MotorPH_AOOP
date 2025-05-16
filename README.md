@@ -1,7 +1,7 @@
 # 💰 MotorPH Payroll System (Group 8)
 
 ## 📖 Overview
-MotorPH Payroll System is a **Java-based payroll management system** designed to automate employee salary calculations, deductions, attendance tracking, and leave management. The project follows **Object-Oriented Programming (OOP)** principles and integrates with **PostgreSQL 16** using **JDK 23** to securely store and manage payroll data.
+MotorPH Payroll System is a **Java-based payroll management system** designed to automate employee salary calculations, deductions, attendance tracking, and leave management. The project follows **Adanced Object-Oriented Programming (OOP)** principles and integrates with **PostgreSQL 16** using **JDK 23** to securely store and manage payroll data.
 
 ---
 
@@ -17,7 +17,7 @@ Before running this project, ensure you have installed:
 
 ### **Step 1: Download `postgres.dump`**
 Download the database dump file via the following link:  
-📥 **[Download postgres.dump](https://drive.google.com/file/d/1Z8sjzk5R2BPrzGBSkDAOO6i1lBkVk3Xo/view?usp=sharing)**  
+📥 **[Download postgres.dump](https://drive.google.com/file/d/1WwFq37e_yk4N4PvOtZx0H8D9JFq9JuEk/view?usp=sharing)**  
 
 Do not move the file from your **Downloads** directory.
 
@@ -55,25 +55,27 @@ Run the following command to restore the database:
 - This assumes that the **admin role** is set up in PostgreSQL, as shown in **pgAdmin** under **Login/Group Roles**.
   - **If the `admin` role does not exist, create it manually in pgAdmin**:
     1. Open **pgAdmin**.
-    2. In the left panel, **right-click** on **Login/Group Roles**.
-    3. Select **Create** → **Login/Group Role**.
-    4. In the **Name** field, enter:  
+    2. In the left panel, expand your server.
+    3. Connect to **PostgreSQL 16**.
+    4. Scroll down, then **right-click** on **Login/Group Roles**.
+    5.  Select **Create** → **Login/Group Role**.
+    6.  In the **Name** field, enter:  
        ```
        admin
        ```
-    5. Click **Save**.
+    7. Click **Save**.
 ---
 
-### 🔧 Configure the `DatabaseConnection` Java Class 
+### 🔧 Configure the `db.properties` File
 In NetBeans, navigate to: 
 
-**MotorPH_OOP> Source Packages > com.payroll.util > DatabaseConnection.java**
+**MotorPH_AOOP> Other Sources > src/main/resources > config**
 
-Ensure that the **database URL, username, and password** match your **PostgreSQL credentials**:
+Ensure your `db.properties` file matches your PostgreSQL setup:
 
 ```java
 
-private final String url = "jdbc:postgresql://localhost:5432/postgres"; // 
-private final String username = "postgres"; 
-private final String password = "[yourpassword]"; 
+db.url=jdbc:postgresql://localhost:5432/postgres
+db.username=postgres
+db.password=[yourpassword]
 ```
