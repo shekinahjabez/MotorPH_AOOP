@@ -20,7 +20,8 @@ public class SalaryCalculation {
         this.connection = connection;  
     }
     
-     public static double calculatePhilHealthContribution(double empSalary)  {
+    
+    public static double calculatePhilHealthContribution(double empSalary)  {
         double contribution = empSalary * 0.015;
         contribution = Math.round(contribution * 100) / 100.0;
         if (empSalary <= 10000) {
@@ -90,23 +91,19 @@ public class SalaryCalculation {
         }
         return String.format("%d:%02d", totalHoursWorked / 3600, (totalHoursWorked % 3600) / 60);
     }
-     
-    public static double getBasicSalary(List<Employee> empHours, IT empAccount) {
-        return empAccount.getEmpDetails().getEmpBasicSalary(); // fixed monthly basic salary
-    } 
-     
-    public static double getComputedSalary(List<Employee> empHours, IT empAccount) {
+    //total hrs worked * hourly rate 
+    public static double getBasicSalary(List<Employee> empHours,IT empAccount){
         double totalHoursWorked = SalaryCalculation.getTotalHoursWorked(empHours);
         double hourlyRate = empAccount.getEmpDetails().getEmpHourlyRate();
         return totalHoursWorked * hourlyRate;
     }
-    
+    //total hrs worked * hourly rate + allowance
     public static double getGrossSalary(List<Employee> empHours,IT empAccount){
         double basicSalary = getBasicSalary(empHours, empAccount);
         return basicSalary + getTotalAllowance(empAccount.getEmpDetails());
                 
     }
-    
+    //total contri
     public static double getTotalDeductions(double empSalary, double sssContri){
         double philhealthContri = calculatePhilHealthContribution(empSalary);
         double pagibigContri = calculatePagibigContribution(empSalary);
@@ -118,8 +115,8 @@ public class SalaryCalculation {
         return empSalary - totalDeductions;
     }
     
-    public static double getNetPay(double empSalary, double sssContri) {
-        double taxableIncome = getTaxableIncome(empSalary, sssContri);
-        return taxableIncome - calculateWithholdingTax(taxableIncome);
+    public static double getNetPay(double empSalary,double sssContri){
+       double netPay = getTaxableIncome(empSalary, sssContri) - calculateWithholdingTax(empSalary);
+       return netPay;
     }
 }   

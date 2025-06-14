@@ -24,17 +24,10 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.payroll.domain.Finance;
-import java.io.FileOutputStream;
 import java.time.LocalDate;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.PdfPTable;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+
 
 
 
@@ -52,7 +45,6 @@ public class FinanceDashboard extends javax.swing.JFrame {
     private HRService hrService;
     private FinanceService payrollService;
     private Integer employeeSearchID;
-    private double computedSalary;
     
     public FinanceDashboard(IT empAccount) {
         initComponents();
@@ -183,8 +175,9 @@ public class FinanceDashboard extends javax.swing.JFrame {
         totalAllowPayLabelValue.setText(String.valueOf(SalaryCalculation.getTotalAllowance(empAccount.getEmpDetails())));
         basicSalaryPayLabelValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpBasicSalary()));
     }
-    
-    private void updatePayrollLabels(List<Employee> employeeHours){
+   
+    /*this method is for itext
+    private void updatePayrollLabelsDraft(List<Employee> employeeHours){
         if (employeeHours.isEmpty()) {
             resetPayrollLabels();
         } else {
@@ -222,6 +215,33 @@ public class FinanceDashboard extends javax.swing.JFrame {
             taxPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculateWithholdingTax(grossPay)));
             netPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getNetPay(grossPay, sssContri)));
         }
+    }*/
+    
+    private void updatePayrollLabels(List<Employee> employeeHours){
+        if(employeeHours.isEmpty()){
+            resetPayrollLabels();
+        }else{
+            totalHoursPayLabelValue.setText(SalaryCalculation.getFormattedTotalHoursWorked(employeeHours));
+        
+            double basicSalary = SalaryCalculation.getBasicSalary(employeeHours, empAccount);
+            computedSalaryLabelValue.setText(String.format("%.2f",basicSalary));
+
+            double grossPay = SalaryCalculation.getGrossSalary(employeeHours, empAccount);
+            grossSalaryPayLabelValue.setText(String.format("%.2f", grossPay));
+
+            double sssContri = payrollService.calculateSssContribution(basicSalary);
+
+            // Deductions
+            philhealthContriPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculatePhilHealthContribution(grossPay)));
+            pagibigContriPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculatePagibigContribution(grossPay)));
+            sssContriPayLabelValue.setText(String.format("%.2f", sssContri));
+            totalDeductionsPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTotalDeductions(grossPay,sssContri)));
+            
+            //Tax and Net Pay
+            taxableIncomePayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTaxableIncome(grossPay,sssContri)));
+            taxPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculateWithholdingTax(grossPay)));
+            netPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getNetPay(grossPay,sssContri)));
+         }
     }
     
     private void resetPayrollLabels(){
@@ -1967,46 +1987,57 @@ public class FinanceDashboard extends javax.swing.JFrame {
     private void searchButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButton1ActionPerformed
         String empId = searchTextField1.getText().equals("Enter the Employee ID here...") ? "" : searchTextField1.getText().trim();
 
-         // Check if input is not empty and contains only digits
+         // Validate that input contains digits only
          if (!empId.isEmpty() && !empId.matches("\\d+")) {
              JOptionPane.showMessageDialog(this, "Employee ID must contain numbers only!", "Invalid Input", JOptionPane.WARNING_MESSAGE);
              return;
          }
 
-         employeeSearchID = (empId.isEmpty()) ? null : Integer.parseInt(empId);
+         employeeSearchID = empId.isEmpty() ? null : Integer.parseInt(empId);
 
-         if (employeeSearchID != null) {
-             IT empAccount = empAccountService.getByEmpID(employeeSearchID);
-
-             if (empAccount != null) {
-                 updatePayrollEmpLabels(empAccount);
-
-                 if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
-                     Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-                     Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
-
-                     fetchAndDisplayEmployeeHours(employeeSearchID, monthValue, year);
-                 }     
-             } else {
-                 JOptionPane.showMessageDialog(this, "Employee Not Found!", "Error", JOptionPane.ERROR_MESSAGE);
-             }   
-         } else {
+         if (employeeSearchID == null) {
              JOptionPane.showMessageDialog(this, "Please input Employee ID!", "Warning", JOptionPane.WARNING_MESSAGE);
+             return;
          }
-    }//GEN-LAST:event_searchButton1ActionPerformed
-    private void fetchAndDisplayEmployeeHours(Integer empId, Integer monthValue, Integer year) {
-        if (empId != null && monthValue != null && year != null) {
-            List<Employee> empHours = getEmployeeHours(monthValue, year, empId);
 
-            if (empHours.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No records found for the selected month and year.", 
-                        "No Data", JOptionPane.WARNING_MESSAGE);
-            } else {
-                populateAttendanceTable(empHours);
-                updatePayrollLabels(empHours);
-            }
-        }
-    }
+         empAccount = empAccountService.getByEmpID(employeeSearchID);
+
+         if (empAccount == null) {
+             JOptionPane.showMessageDialog(this, "Employee Not Found!", "Error", JOptionPane.ERROR_MESSAGE);
+             return;
+         }
+
+         updatePayrollEmpLabels(empAccount);
+
+         // Safely get selected items
+         ComboItem selectedMonth = (ComboItem) monthDropdown.getSelectedItem();
+         ComboItem selectedYear = (ComboItem) yearDropdown.getSelectedItem();
+
+         // Check if valid selections exist
+         if (selectedMonth == null || selectedYear == null ||
+             selectedMonth.getKey() == null || selectedYear.getKey() == null) {
+             JOptionPane.showMessageDialog(this, "Please select both a valid month and year before searching.",
+                     "Missing Selection", JOptionPane.WARNING_MESSAGE);
+             return;
+         }
+
+         Integer monthValue = selectedMonth.getKey();
+         Integer year = selectedYear.getKey();
+
+         List<Employee> empHours = getEmployeeHours(monthValue, year, employeeSearchID);
+
+         if (empHours.isEmpty()) {
+             JOptionPane.showMessageDialog(this, "No records found for the selected month and year.",
+                     "No Data", JOptionPane.WARNING_MESSAGE);
+             resetPayrollLabels(); // Optional
+             return;
+         }
+
+         // Success: populate data
+         populateAttendanceTable(empHours);
+         updatePayrollLabels(empHours);
+    }//GEN-LAST:event_searchButton1ActionPerformed
+  
     private void clearPayrollLabels(){
         empIDPayLabelValue.setText("");
         birthdayPayLabelValue.setText("");
@@ -2046,15 +2077,25 @@ public class FinanceDashboard extends javax.swing.JFrame {
 
         });
     }
-
+    
     private void monthDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthDropdownActionPerformed
         if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
-                Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-                Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
-                Integer empId = (employeeSearchID != null) ? employeeSearchID : empAccount.getEmpID();
+            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+            Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
+            Integer empId = (employeeSearchID != null) ? employeeSearchID : (empAccount != null ? empAccount.getEmpID() : null);
 
-                fetchAndDisplayEmployeeHours(empId, monthValue, year);
-            }      
+            if (monthValue != null & year != null){
+                List<Employee>empHours = getEmployeeHours(monthValue,year,empId);
+                if (empHours.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No records found for the selected month and year.",
+                            "No Data", JOptionPane.WARNING_MESSAGE);
+                    resetPayrollLabels(); // Optional
+                    return;
+                }                
+                populateAttendanceTable(empHours);
+                updatePayrollLabels(empHours);
+            }
+        }
     }//GEN-LAST:event_monthDropdownActionPerformed
 
     private void yearDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearDropdownActionPerformed
@@ -2063,8 +2104,18 @@ public class FinanceDashboard extends javax.swing.JFrame {
             Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
             Integer empId = (employeeSearchID != null) ? employeeSearchID : empAccount.getEmpID();
 
-            fetchAndDisplayEmployeeHours(empId, monthValue, year);
-        }    
+            if (monthValue != null & year != null){
+                List<Employee>empHours = getEmployeeHours(monthValue,year,empId);
+                if (empHours.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No records found for the selected month and year.",
+                            "No Data", JOptionPane.WARNING_MESSAGE);
+                    resetPayrollLabels(); // Optional
+                    return;
+                }
+                populateAttendanceTable(empHours);
+                updatePayrollLabels(empHours);
+            }
+        }                                                   
     }//GEN-LAST:event_yearDropdownActionPerformed
     
     private void viewAllPayrollRecords(){
@@ -2177,93 +2228,100 @@ private boolean hasEmptyFields() {
             return 0.0;
         }
     }
+    
+    private void savePayrollDetails(){
+    
+       try {
+             //Header
+            // Step 1: Collect required input 
+             Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+             Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
+             Integer empId = (employeeSearchID != null) ? employeeSearchID : empAccount.getEmpID();
 
+             if (empId == null || monthValue == null || year == null) {
+                 JOptionPane.showMessageDialog(this, "Please select a valid employee, month, and year.");
+                 return;
+             }
 
-    private void payrollReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payrollReportButtonActionPerformed
-        try {
-            // Step 1: Get selected employee, month, and year
-            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-            Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
-            Integer empId = (employeeSearchID != null) ? employeeSearchID : empAccount.getEmpID();
+             // Step 2: Determine payroll period
+             LocalDate[] period = payrollService.getPayrollPeriodFromEmployeeHours(empId, monthValue, year);
+             if (period == null) {
+                 JOptionPane.showMessageDialog(this, "No attendance records found for the selected period.");
+                 return;
+             }
 
-            if (empId == null || monthValue == null || year == null) {
-                JOptionPane.showMessageDialog(this, "Please select a valid employee, month, and year.");
-                return;
-            }
+             LocalDate startDate = period[0];
+             LocalDate endDate = period[1];
 
-            // 2. Define period
-            LocalDate[] period = payrollService.getPayrollPeriodFromEmployeeHours(empId, monthValue, year);
-            if (period == null) {
-                JOptionPane.showMessageDialog(this, "No attendance records found for the selected period.");
-                return;
-            }
-            LocalDate startDate = period[0];
-            LocalDate endDate = period[1];
+             // Step 3: Retrieve payroll values from UI
+             String payName = namePayLabelValue.getText();
+             String payPosition = positionPayLabelValue.getText();
+             //int empID = Integer.parseInt(empIDPayLabelValue.getText());
+             
+             //Earnings
+             double payHourlyRate = Double.parseDouble(hourlyRatePayLabelValue.getText());
+             double payTotalHoursWorked = convertHoursStringToDecimal(totalHoursPayLabelValue.getText());
+             double payComputedSalary = Double.parseDouble(computedSalaryLabelValue.getText());
+             
+             //benefits
+             double payRiceSubsidy = Double.parseDouble(ricePayLabelValue.getText());
+             double payPhoneAllowance = Double.parseDouble(phonePayLabelValue.getText());
+             double payClothingAllowance = Double.parseDouble(clothingPayLabelValue.getText());
+             double payTotalAllowance = Double.parseDouble(totalAllowPayLabelValue.getText());
+             
+             
+             //Contri
+             double paySssContri = Double.parseDouble(sssContriPayLabelValue.getText());
+             double payPhealthContri = Double.parseDouble(philhealthContriPayLabelValue.getText());
+             double payPagibigContri = Double.parseDouble(pagibigContriPayLabelValue.getText());
+             double payTotalContri = Double.parseDouble(totalDeductionsPayLabelValue.getText());
+             
+             //tax
+             double payTax = Double.parseDouble(taxPayLabelValue.getText());
+             
+             /*Summary 
+             computedSalary
+             totalAllowPay
+             TotalDeduct
+             */;
+             double payNetPay = Double.parseDouble(netPayLabelValue.getText());
+             
+            
+             // Step 4: Create and save Finance object
+             Finance payroll = new Finance();
+             payroll.setPayEmpId(empId);
+             payroll.setPayrollPeriodStart(java.sql.Date.valueOf(startDate));
+             payroll.setPayrollPeriodEnd(java.sql.Date.valueOf(endDate));
+             payroll.setPayFullName(payName);
+             payroll.setPayPosition(payPosition);
+             payroll.setPayHourlyRate(payHourlyRate);
+             payroll.setPayNumberOfHoursWorked(payTotalHoursWorked);
+             payroll.setPayComputedSalary(payComputedSalary);
+             payroll.setPayRiceAllowance(payRiceSubsidy);
+             payroll.setPayPhoneAllowance(payPhoneAllowance);
+             payroll.setPayClothingAllowance(payClothingAllowance);
+             payroll.setPayTotalAllowance(payTotalAllowance);
+             payroll.setPaySssContri(paySssContri);
+             payroll.setPayPhealthContri(payPhealthContri);
+             payroll.setPayPagibigContri(payPagibigContri);
+             payroll.setPayTotalContributions(payTotalContri);
+             payroll.setPayWithholdingTax(payTax);
+             payroll.setPayNetPay(payNetPay);
 
-
-            // 3. Get values from UI
-            double hoursWorked = convertHoursStringToDecimal(totalHoursPayLabelValue.getText()); // ✅ safe for "168:00"
-            double grossPay = Double.parseDouble(grossSalaryPayLabelValue.getText());
-            double deduction = Double.parseDouble(totalDeductionsPayLabelValue.getText());
-            double netPay = Double.parseDouble(netPayLabelValue.getText());
-
-            // 4. Create Finance object
-            Finance payroll = new Finance();
-            payroll.setEmpID(empId);
-            payroll.setPayrollPeriodStart(java.sql.Date.valueOf(startDate));
-            payroll.setPayrollPeriodEnd(java.sql.Date.valueOf(endDate));
-            payroll.setNumberOfHoursWorked(hoursWorked);
-            payroll.setGrossPay(grossPay);
-            payroll.setDeduction(deduction);
-            payroll.setNetPay(netPay);
-
-            // 5. Save to DB
+    
             Finance saved = payrollService.savePayrollReport(payroll);
-
-            if (saved != null && saved.getPayrollId() > 0) {
-                // 6. Generate PDF
-                 String basePath = System.getProperty("user.home") + "/Documents/MotorPH_AOOP/payrollreports";
-                File folder = new File(basePath);
-                if (!folder.exists()) {
-                    folder.mkdirs();
-                }
-               
-                
-                Document document = new Document();
-                String filename = "Payroll_Report_Emp" + empId + "_" + System.currentTimeMillis() + ".pdf";
-                PdfWriter.getInstance(document, new FileOutputStream(filename));
-                document.open();
-
-                document.add(new Paragraph("MotorPH Payroll Report", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)));
-                document.add(new Paragraph("Employee ID: " + empId));
-                document.add(new Paragraph("Payroll Period: " + startDate + " to " + endDate));
-                document.add(new Paragraph(" ")); // spacing
-
-                PdfPTable table = new PdfPTable(2);
-                table.setWidthPercentage(100);
-
-                table.addCell("Total Hours Worked:");
-                table.addCell(String.valueOf(hoursWorked));
-                table.addCell("Gross Pay:");
-                table.addCell(String.format("%.2f", grossPay));
-                table.addCell("Total Deductions:");
-                table.addCell(String.format("%.2f", deduction));
-                table.addCell("Net Pay:");
-                table.addCell(String.format("%.2f", netPay));
-
-                document.add(table);
-                document.add(new Paragraph("Generated on: " + LocalDateTime.now()));
-                document.close();
-
-                JOptionPane.showMessageDialog(null, "Payroll report saved and PDF generated:\n" + filename);
-            } else {
-                JOptionPane.showMessageDialog(null, "Failed to save payroll report.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Exception", JOptionPane.ERROR_MESSAGE);
+            payrollService.generatePayrollReport(saved.getPayrollId());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid number format in one of the fields. Please review your input.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "An unexpected error occurred while generating the payroll report.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
+    }
+    private void payrollReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payrollReportButtonActionPerformed
+        savePayrollDetails();
+        
     }//GEN-LAST:event_payrollReportButtonActionPerformed
     
     

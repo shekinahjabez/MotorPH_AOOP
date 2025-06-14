@@ -355,6 +355,7 @@ public class HRDashboard extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         employeeTable = new javax.swing.JTable();
         viewAllButton = new javax.swing.JButton();
+        printAllEmployees = new javax.swing.JButton();
         searchButton = new javax.swing.JButton();
         searchTextField = new javax.swing.JTextField();
         leaveManagement = new javax.swing.JPanel();
@@ -712,20 +713,17 @@ public class HRDashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel31)
                         .addGap(15, 15, 15))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addressLabelValue)
-                            .addComponent(fullNameValue)
-                            .addComponent(positionLabelValue)
-                            .addComponent(empIDLabelValue)
-                            .addComponent(statusLabelValue)
-                            .addComponent(phoneLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bdayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(philhealthLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(supervisorLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sssLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pagibigLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, 0))))
+                    .addComponent(addressLabelValue)
+                    .addComponent(fullNameValue)
+                    .addComponent(positionLabelValue)
+                    .addComponent(empIDLabelValue)
+                    .addComponent(statusLabelValue)
+                    .addComponent(phoneLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bdayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(philhealthLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(supervisorLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sssLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pagibigLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1254,6 +1252,14 @@ public class HRDashboard extends javax.swing.JFrame {
             }
         });
 
+        printAllEmployees.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        printAllEmployees.setText("Print");
+        printAllEmployees.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printAllEmployeesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -1355,7 +1361,7 @@ public class HRDashboard extends javax.swing.JFrame {
                                                 .addComponent(empPhoneAllowLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(phoneAllowTField, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addButton)
@@ -1365,13 +1371,15 @@ public class HRDashboard extends javax.swing.JFrame {
                         .addComponent(deleteButton)
                         .addGap(26, 26, 26)))
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addComponent(viewAllButton)
-                        .addGap(528, 528, 528))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 437, Short.MAX_VALUE)
+                        .addComponent(printAllEmployees)
+                        .addGap(17, 17, 17))))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1383,7 +1391,8 @@ public class HRDashboard extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(employeeIDTField)
                     .addComponent(clearButton)
-                    .addComponent(viewAllButton))
+                    .addComponent(viewAllButton)
+                    .addComponent(printAllEmployees))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
@@ -2376,6 +2385,15 @@ public class HRDashboard extends javax.swing.JFrame {
     private void riceTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riceTFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_riceTFieldActionPerformed
+
+    private void printAllEmployeesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printAllEmployeesActionPerformed
+        try {
+           hrService.generateEmployeeReport();
+        } catch (Exception e) {
+           e.printStackTrace();
+           JOptionPane.showMessageDialog(this, "Error generating employee report: " + e.getMessage());
+        }     
+    }//GEN-LAST:event_printAllEmployeesActionPerformed
     
     
     private List<Employee> getEmployeeHours(int month, int year, int empID){
@@ -2539,6 +2557,7 @@ public class HRDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField phoneTField;
     private javax.swing.JComboBox<ComboItem> positionDropdown;
     private javax.swing.JLabel positionLabelValue;
+    private javax.swing.JButton printAllEmployees;
     private javax.swing.JPanel profile;
     private javax.swing.JButton profileButton;
     private javax.swing.JLabel profileLabel;

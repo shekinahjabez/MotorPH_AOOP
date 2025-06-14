@@ -7,6 +7,7 @@ import com.payroll.domain.Employee;
 import com.payroll.domain.Finance;
 import com.payroll.domain.Person;
 import com.payroll.util.DatabaseConnection;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,9 +21,17 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -91,8 +100,36 @@ public class FinanceService {
         return empHours;   
     }
     
-    
-    
+    /*public void generateEmployeePayslipReport(int payrollId) {
+        try {
+            // Load the JRXML file from the classpath
+            InputStream input = getClass().getResourceAsStream("/report/Invoice.jrxml");
+            if (input == null) {
+                throw new RuntimeException("JRXML file not found. Make sure it's in src/main/resources/report/");
+            }
+
+            // Compile the report
+            JasperReport report = JasperCompileManager.compileReport(input);
+
+            // Parameters for the report
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("employee_id", employeeId);
+            parameters.put("report_month", selectedMonth + 1); // Java Calendar is 0-based, SQL is 1-based
+            parameters.put("report_year", selectedYear);
+
+            // Get JDBC connection
+            Connection conn = DatabaseConnection.getConnection();
+
+            // Fill and view the report
+            JasperPrint print = JasperFillManager.fillReport(report, parameters, conn);
+            JasperViewer.viewReport(print, false);
+
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
+
     
     public float  calculateSssContribution(double empSalary){
         String sssContributionQuery = """
@@ -154,7 +191,6 @@ public class FinanceService {
         }                          
         return empDetails;
     }
-    
     public LocalDate[] getPayrollPeriodFromEmployeeHours(int empId, int month, int year) {
         String query = """
             SELECT MIN(date) AS start_date, MAX(date) AS end_date
@@ -179,35 +215,72 @@ public class FinanceService {
             e.printStackTrace();
         }
         return null;
-    }    
-    
+    }
+ 
+    public void generatePayrollReport(int payrollId) {
+        try {
+            // Compile the JRXML file
+            JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/report/Payslip.jrxml");
 
-    
-    public Finance savePayrollReport(Finance payrollReportDetails) {
+            // Prepare parameters
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("payroll_id", payrollId); // parameter defined in your .jrxml
+
+            // Get database connection
+            Connection connection = DatabaseConnection.getConnection();
+
+            // Fill and display the report
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+            JasperViewer.viewReport(jasperPrint, false);
+
+            // Close the connection
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to generate payroll report.\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+     public Finance savePayrollReport(Finance payrollReportDetails) {
         if (connection == null) return null;
 
         String query = """
-            INSERT INTO public.payroll 
-            (employee_id, payroll_period_start_date, payroll_period_end_date, number_of_hours_worked, gross_pay, deduction, net_pay)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO report.payroll 
+            (employee_id, payroll_period_start_date, payroll_period_end_date, number_of_hours_worked, 
+             computed_salary, total_contributions, net_pay, total_allowance, sss_contribution, phealth_contribution, 
+             pagibig_contribution, tax, hourly_rate,full_name,position, rice_subsidy,phone_allowance,cloth_allowance)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             // Convert dates
-            java.sql.Date payrollPeriodStart = payrollReportDetails.getPayrollPeriodStart() != null ? new java.sql.Date(payrollReportDetails.getPayrollPeriodStart().getTime()): null;
-            java.sql.Date payrollPeriodEnd = payrollReportDetails.getPayrollPeriodEnd() != null? new java.sql.Date(payrollReportDetails.getPayrollPeriodEnd().getTime()): null;
+            java.sql.Date payrollPeriodStart = payrollReportDetails.getPayrollPeriodStart() != null 
+                    ? new java.sql.Date(payrollReportDetails.getPayrollPeriodStart().getTime()) : null;
+            java.sql.Date payrollPeriodEnd = payrollReportDetails.getPayrollPeriodEnd() != null 
+                    ? new java.sql.Date(payrollReportDetails.getPayrollPeriodEnd().getTime()) : null;
 
             // Set parameters
-            preparedStatement.setInt(1, payrollReportDetails.getEmpID());
+            preparedStatement.setInt(1, payrollReportDetails.getPayEmpId());
             preparedStatement.setDate(2, payrollPeriodStart);
             preparedStatement.setDate(3, payrollPeriodEnd);
-            preparedStatement.setDouble(4, payrollReportDetails.getNumberOfHoursWorked());
-            preparedStatement.setDouble(5, payrollReportDetails.getGrossPay());
-            preparedStatement.setDouble(6, payrollReportDetails.getDeduction());
-            preparedStatement.setDouble(7, payrollReportDetails.getNetPay());
+            preparedStatement.setDouble(4, payrollReportDetails.getPayNumberOfHoursWorked());
+            preparedStatement.setDouble(5, payrollReportDetails.getPayComputedSalary());
+            preparedStatement.setDouble(6, payrollReportDetails.getPayTotalContributions());
+            preparedStatement.setDouble(7, payrollReportDetails.getPayNetPay());
+            preparedStatement.setDouble(8, payrollReportDetails.getPayTotalAllowance());
+            preparedStatement.setDouble(9, payrollReportDetails.getPaySssContri());
+            preparedStatement.setDouble(10, payrollReportDetails.getPayPhealthContri());
+            preparedStatement.setDouble(11, payrollReportDetails.getPayPagibigContri());
+            preparedStatement.setDouble(12, payrollReportDetails.getPayWithholdingTax());
+            preparedStatement.setDouble(13, payrollReportDetails.getPayHourlyRate());
+            preparedStatement.setString(14,payrollReportDetails.getPayFullName());
+            preparedStatement.setString(15,payrollReportDetails.getPayPosition());
+            preparedStatement.setDouble(16, payrollReportDetails.getPayRiceAllowance());
+            preparedStatement.setDouble(17, payrollReportDetails.getPayPhoneAllowance());
+            preparedStatement.setDouble(18, payrollReportDetails.getPayClothingAllowance());
+            
 
-            // Execute and get generated ID
+            // Execute and retrieve the generated payroll_id
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
@@ -223,9 +296,63 @@ public class FinanceService {
             e.printStackTrace();
         }
 
-        return payrollReportDetails;
-    }
+        return payrollReportDetails;    
+     }
     
+    
+    
+    /* old - for itext
+    public Finance savePayrollReport(Finance payrollReportDetails) {
+        if (connection == null) return null;
+
+        String query = """
+            INSERT INTO public.payroll 
+            (employee_id, payroll_period_start_date, payroll_period_end_date, number_of_hours_worked, 
+             gross_pay, deduction, net_pay, total_allowance, sss_contribution, phealth_contribution, 
+             pagibig_contribution, tax)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            // Convert dates
+            java.sql.Date payrollPeriodStart = payrollReportDetails.getPayrollPeriodStart() != null 
+                    ? new java.sql.Date(payrollReportDetails.getPayrollPeriodStart().getTime()) : null;
+            java.sql.Date payrollPeriodEnd = payrollReportDetails.getPayrollPeriodEnd() != null 
+                    ? new java.sql.Date(payrollReportDetails.getPayrollPeriodEnd().getTime()) : null;
+
+            // Set parameters
+            preparedStatement.setInt(1, payrollReportDetails.getEmpID());
+            preparedStatement.setDate(2, payrollPeriodStart);
+            preparedStatement.setDate(3, payrollPeriodEnd);
+            preparedStatement.setDouble(4, payrollReportDetails.getNumberOfHoursWorked());
+            preparedStatement.setDouble(5, payrollReportDetails.getGrossPay());
+            preparedStatement.setDouble(6, payrollReportDetails.getDeduction());
+            preparedStatement.setDouble(7, payrollReportDetails.getNetPay());
+            preparedStatement.setDouble(8, payrollReportDetails.getTotalAllowance());
+            preparedStatement.setDouble(9, payrollReportDetails.getSssContribution());
+            preparedStatement.setDouble(10, payrollReportDetails.getPhealthContribution());
+            preparedStatement.setDouble(11, payrollReportDetails.getPagibigContribution());
+            preparedStatement.setDouble(12, payrollReportDetails.getWithholdingTax());
+
+            // Execute and retrieve the generated payroll_id
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        payrollReportDetails.setPayrollId(generatedKeys.getInt(1));
+                    } else {
+                        throw new SQLException("Inserting payroll record failed, no ID returned.");
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return payrollReportDetails;    
+    }*/
     
     
     

@@ -9,6 +9,7 @@ import com.payroll.domain.IT;
 import com.payroll.subdomain.EmployeePosition;
 import com.payroll.subdomain.EmployeeStatus;
 import com.payroll.util.DatabaseConnection;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,8 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -424,6 +432,25 @@ public class HRService {
         }
 
         return empHours;
+    }
+    
+    public void generateEmployeeReport() {
+        try {
+            // Use classloader to load JRXML from resources
+            InputStream reportStream = getClass().getClassLoader().getResourceAsStream("report/EmployeeReport.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+
+            // No parameters needed
+            Map<String, Object> parameters = new HashMap<>();
+
+            Connection connection = DatabaseConnection.getConnection();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+            JasperViewer.viewReport(jasperPrint, false);
+            connection.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     private Person toEmployeeDetails(ResultSet resultSet, boolean fetchSupervisor) 
