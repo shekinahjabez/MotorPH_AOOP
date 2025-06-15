@@ -14,7 +14,7 @@
     TO_CHAR(eh.date, 'Dy') AS day,
     TO_CHAR(eh.time_in, 'HH24:MI') AS time_in,
     TO_CHAR(eh.time_out, 'HH24:MI') AS time_out,
-    TO_CHAR((eh.time_out - eh.time_in), 'HH24:MI') AS total_hours_worked,
+    TO_CHAR((eh.time_out - eh.time_in - INTERVAL '1 hour'), 'HH24:MI') AS total_hours_worked,
     CASE 
         WHEN eh.time_in IS NULL OR eh.time_out IS NULL THEN
             CASE 
