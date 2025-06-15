@@ -33,7 +33,10 @@ WHERE
     eh.employee_id = $P{employee_id}
     AND EXTRACT(MONTH FROM eh.date) = $P{month}
     AND EXTRACT(YEAR FROM eh.date) = $P{year}
-ORDER BY eh.date;]]></query>
+    AND NOT (
+        eh.time_in::time = TIME '00:00' AND 
+        eh.time_out::time = TIME '00:00'
+    )]]></query>
 	<field name="employee_id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="employee_id"/>
 		<property name="com.jaspersoft.studio.field.label" value="employee_id"/>
