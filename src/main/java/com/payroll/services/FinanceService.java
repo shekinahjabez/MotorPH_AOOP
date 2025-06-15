@@ -7,7 +7,9 @@ import com.payroll.domain.Employee;
 import com.payroll.domain.Finance;
 import com.payroll.domain.Person;
 import com.payroll.util.DatabaseConnection;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -219,26 +221,34 @@ public class FinanceService {
  
     public void generatePayrollReport(int payrollId) {
         try {
-            // Compile the JRXML file
-            JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/report/Payslip.jrxml");
+             JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/report/Payslip.jrxml");
 
-            // Prepare parameters
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("payroll_id", payrollId); // parameter defined in your .jrxml
+             URL logoUrl = getClass().getClassLoader().getResource("report/mph_logo.png");
+             if (logoUrl == null) {
+                 throw new FileNotFoundException("Logo not found at /report/mph_logo.png");
+             }
 
-            // Get database connection
-            Connection connection = DatabaseConnection.getConnection();
+             Map<String, Object> parameters = new HashMap<>();
+             parameters.put("payroll_id", payrollId);   // Matches parameter in JRXML
+             parameters.put("LogoPath", logoUrl);        // For the image
 
-            // Fill and display the report
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-            JasperViewer.viewReport(jasperPrint, false);
+             Connection connection = DatabaseConnection.getConnection();
 
-            // Close the connection
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to generate payroll report.\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
-        }
+             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+             if (jasperPrint.getPages().isEmpty()) {
+                 JOptionPane.showMessageDialog(null, "No pages found. Check if data exists for payroll_id: " + payrollId, "No Data", JOptionPane.INFORMATION_MESSAGE);
+             } else {
+                 JasperViewer.viewReport(jasperPrint, false);
+             }
+
+             connection.close();
+
+             System.out.println("Logo URL: " + logoUrl);
+         } catch (Exception e) {
+             e.printStackTrace();
+             JOptionPane.showMessageDialog(null, "Failed to generate payroll report.\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
+         }        
     }
      public Finance savePayrollReport(Finance payrollReportDetails) {
         if (connection == null) return null;

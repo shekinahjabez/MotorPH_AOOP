@@ -4,10 +4,13 @@
  */
 package com.payroll.util;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -21,29 +24,8 @@ import net.sf.jasperreports.view.JasperViewer;
 public class ReportGenerator {
     
 public void generatePayslipReport() {
-        try {
-            // Compile the JRXML file
-            JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/report/Payslip.jrxml");
-
-            // Prepare parameters map (empty for now since we're not using any)
-            Map<String, Object> parameters = new HashMap<>();
-
-            // Get database connection
-            Connection connection = DatabaseConnection.getConnection();
-
-            // Fill the report with the parameters and connection
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-
-            // Display the report
-            JasperViewer.viewReport(jasperPrint, false);
-
-            // Close connection
-            connection.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//financeservice  
+}
 
 public void generateEmployeeReport() {
         try {

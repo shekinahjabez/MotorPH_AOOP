@@ -3,6 +3,9 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value="cmVwb3J0LnBheXJvbGwgQVMgLDQzLDEwOCw1YzJmYzQ0ZC0xZmE0LTQ0MmEtODU5YS1lYzA0Mzkx&#xa;ZWZlMWI7"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MotorPH_AOOP"/>
 	<parameter name="payroll_id" class="java.lang.Integer"/>
+	<parameter name="LogoPath" class="java.net.URL">
+		<defaultValueExpression><![CDATA[$P{LogoPath}]]></defaultValueExpression>
+	</parameter>
 	<query language="SQL"><![CDATA[SELECT payroll_id,
 	payroll_period_start_date,
 	payroll_period_end_date,
@@ -121,7 +124,7 @@ WHERE
 		<property name="com.jaspersoft.studio.field.tree.path" value="payroll"/>
 	</field>
 	<background splitType="Stretch"/>
-	<title height="87" splitType="Stretch">
+	<title height="81" splitType="Stretch">
 		<element kind="staticText" uuid="a2f6b007-0016-47eb-8954-0953fa047b64" x="411" y="57" width="50" height="20" hTextAlign="Right">
 			<text><![CDATA[Date:]]></text>
 			<box rightPadding="4"/>
@@ -142,6 +145,9 @@ WHERE
 		</element>
 		<element kind="staticText" uuid="521208c4-7130-4212-9636-2950e6eec162" x="140" y="45" width="180" height="15">
 			<text><![CDATA[Phone: (028) 911-5071]]></text>
+		</element>
+		<element kind="image" uuid="fe51d59f-3e3d-405f-be06-fb557840b4be" x="2" y="-3" width="100" height="80" linkType="None" linkTarget="Self">
+			<expression><![CDATA[$P{LogoPath}]]></expression>
 		</element>
 	</title>
 	<pageHeader height="104" splitType="Stretch">

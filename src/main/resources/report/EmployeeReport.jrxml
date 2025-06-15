@@ -1,348 +1,93 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
-<jasperReport name="EmployeeReport" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cce7fb8e-e01a-47ac-adfa-966a7d42cb7e">
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+<jasperReport name="EmployeeReport" language="java" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b8f6b33b-87cc-4c64-865f-bf4748c07a1f">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MotorPH_AOOP"/>
-	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Table_CH" mode="Opaque" backcolor="#0A0869">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<dataset name="Dataset1" uuid="75f799ad-15b3-40f6-b995-26df4ac9c582">
-		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MotorPH_AOOP"/>
-		<query language="SQL"><![CDATA[SELECT 
-    e.*, 
-    CONCAT(e.firstname, ' ', e.lastname) AS full_name
-FROM employee e ORDER BY employee_id ASC]]></query>
-		<field name="employee_id" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="employee_id"/>
-			<property name="com.jaspersoft.studio.field.label" value="employee_id"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-		</field>
-		<field name="full_name" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="full_name"/>
-			<property name="com.jaspersoft.studio.field.label" value="full_name"/>
-		</field>
-		<field name="sss" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="sss"/>
-			<property name="com.jaspersoft.studio.field.label" value="sss"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-		</field>
-		<field name="philhealth" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="philhealth"/>
-			<property name="com.jaspersoft.studio.field.label" value="philhealth"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-		</field>
-		<field name="tin" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tin"/>
-			<property name="com.jaspersoft.studio.field.label" value="tin"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-		</field>
-		<field name="pag_ibig" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="pag_ibig"/>
-			<property name="com.jaspersoft.studio.field.label" value="pag_ibig"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-		</field>
-		<group name="employee_id">
-			<expression><![CDATA[$F{employee_id}]]></expression>
-		</group>
-		<group name="full_name">
-			<expression><![CDATA[$F{full_name}]]></expression>
-		</group>
-		<group name="sss">
-			<expression><![CDATA[$F{sss}]]></expression>
-		</group>
-		<group name="philhealth">
-			<expression><![CDATA[$F{philhealth}]]></expression>
-		</group>
-		<group name="tin">
-			<expression><![CDATA[$F{tin}]]></expression>
-		</group>
-		<group name="pag_ibig">
-			<expression><![CDATA[$F{pag_ibig}]]></expression>
-		</group>
-	</dataset>
-	<query language="SQL"><![CDATA[SELECT 
-    e.*, 
-    CONCAT(e.firstname, ' ', e.lastname) AS full_name
-FROM employee e
+	<parameter name="LogoPath" class="java.net.URL"/>
+	<query language="SQL"><![CDATA[SELECT e.*, CONCAT(e.firstname, ' ', e.lastname) AS full_name FROM employee e ORDER BY employee_id ASC;
 ]]></query>
-	<field name="employee_id" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="employee_id"/>
-		<property name="com.jaspersoft.studio.field.label" value="employee_id"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="lastname" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="lastname"/>
-		<property name="com.jaspersoft.studio.field.label" value="lastname"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="firstname" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="firstname"/>
-		<property name="com.jaspersoft.studio.field.label" value="firstname"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="birthday" class="java.sql.Date">
-		<property name="com.jaspersoft.studio.field.name" value="birthday"/>
-		<property name="com.jaspersoft.studio.field.label" value="birthday"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="address" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="address"/>
-		<property name="com.jaspersoft.studio.field.label" value="address"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="phone_number" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="phone_number"/>
-		<property name="com.jaspersoft.studio.field.label" value="phone_number"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="sss" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="sss"/>
-		<property name="com.jaspersoft.studio.field.label" value="sss"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="philhealth" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="philhealth"/>
-		<property name="com.jaspersoft.studio.field.label" value="philhealth"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="tin" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="tin"/>
-		<property name="com.jaspersoft.studio.field.label" value="tin"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="pag_ibig" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="pag_ibig"/>
-		<property name="com.jaspersoft.studio.field.label" value="pag_ibig"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="position" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="position"/>
-		<property name="com.jaspersoft.studio.field.label" value="position"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="immediate_supervisor" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="immediate_supervisor"/>
-		<property name="com.jaspersoft.studio.field.label" value="immediate_supervisor"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="basic_salary" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="basic_salary"/>
-		<property name="com.jaspersoft.studio.field.label" value="basic_salary"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="rice_subsidy" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="rice_subsidy"/>
-		<property name="com.jaspersoft.studio.field.label" value="rice_subsidy"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="phone_allowance" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="phone_allowance"/>
-		<property name="com.jaspersoft.studio.field.label" value="phone_allowance"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="clothing_allowance" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="clothing_allowance"/>
-		<property name="com.jaspersoft.studio.field.label" value="clothing_allowance"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="gross_semi_monthly_rate" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="gross_semi_monthly_rate"/>
-		<property name="com.jaspersoft.studio.field.label" value="gross_semi_monthly_rate"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="hourly_rate" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="hourly_rate"/>
-		<property name="com.jaspersoft.studio.field.label" value="hourly_rate"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="status" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="status"/>
-		<property name="com.jaspersoft.studio.field.label" value="status"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="full_name" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="full_name"/>
-		<property name="com.jaspersoft.studio.field.label" value="full_name"/>
-	</field>
-	<group name="employee_id">
-		<expression><![CDATA[$F{employee_id}]]></expression>
-	</group>
-	<group name="full_name">
-		<expression><![CDATA[$F{full_name}]]></expression>
-	</group>
-	<group name="sss">
-		<expression><![CDATA[$F{sss}]]></expression>
-	</group>
-	<group name="tin">
-		<expression><![CDATA[$F{tin}]]></expression>
-	</group>
-	<group name="pag_ibig">
-		<expression><![CDATA[$F{pag_ibig}]]></expression>
-	</group>
-	<group name="philhealth">
-		<expression><![CDATA[$F{philhealth}]]></expression>
-	</group>
-	<background splitType="Stretch"/>
-	<title height="117" splitType="Stretch">
-		<element kind="staticText" uuid="5271e1af-34c3-4db1-b5ad-1c96b23d79e7" x="411" y="76" width="50" height="20" hTextAlign="Right">
+	<field name="employee_id" class="java.lang.Long"/>
+	<field name="full_name" class="java.lang.String"/>
+	<field name="sss" class="java.lang.String"/>
+	<field name="philhealth" class="java.lang.Long"/>
+	<field name="tin" class="java.lang.String"/>
+	<field name="pag_ibig" class="java.lang.Long"/>
+	<title height="125">
+		<element kind="staticText" uuid="7707e69e-6f99-4d54-ad4f-8acebe39eafa" x="0" y="87" width="558" height="30" fontSize="16.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[MOTORPH EMPLOYEES]]></text>
+		</element>
+		<element kind="staticText" uuid="74efdb69-a64f-46af-bf7b-897435e8f37e" x="411" y="53" width="50" height="20" hTextAlign="Right">
 			<text><![CDATA[Date:]]></text>
 			<box rightPadding="4"/>
 		</element>
-		<element kind="textField" uuid="3fd6940a-1d4e-47e3-adc1-653f90e7ec9b" x="461" y="76" width="84" height="20" pattern="EEEEE dd MMMMM yyyy">
+		<element kind="textField" uuid="2ec3a83c-8f52-46e6-8cac-5c226363647c" x="461" y="53" width="84" height="20" pattern="EEEEE dd MMMMM yyyy">
 			<expression><![CDATA[new java.util.Date()]]></expression>
 		</element>
-		<element kind="staticText" uuid="f0675899-2060-4fa4-b5c3-c4cbb74a7b50" x="140" y="22" width="184" height="25" fontSize="19.0" bold="true">
+		<element kind="staticText" uuid="2b6fcdd4-9006-4744-8f17-9811f352af96" x="140" y="1" width="184" height="25" fontSize="19.0" bold="true">
 			<text><![CDATA[MotorPH]]></text>
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
-		<element kind="staticText" uuid="7a129e88-6c20-4175-83f2-0fda4bd75ea7" x="140" y="77" width="181" height="15">
+		<element kind="staticText" uuid="216fc34d-de27-4118-b600-2b35accf0778" x="140" y="56" width="181" height="15">
 			<text><![CDATA[Email: corporate@motorph.com]]></text>
 		</element>
-		<element kind="staticText" uuid="4812fd08-e446-48e4-854b-d1f53b13c334" x="140" y="47" width="260" height="15">
+		<element kind="staticText" uuid="511803a1-6d53-4bde-8796-e33c1fada985" x="140" y="26" width="260" height="15">
 			<text><![CDATA[Bagong Nayon, Quezon City]]></text>
 		</element>
-		<element kind="staticText" uuid="893e08ec-22d0-4580-ba6d-6d336f1404dc" x="140" y="62" width="180" height="15">
+		<element kind="staticText" uuid="c57abb65-b67f-4b09-9ee8-2f75d0dd8a94" x="140" y="41" width="180" height="15">
 			<text><![CDATA[Phone: (028) 911-5071]]></text>
 		</element>
-	</title>
-	<columnHeader height="61" splitType="Stretch">
-		<element kind="staticText" uuid="95ab11d1-591c-48be-b4b1-5f8f643dff22" x="180" y="20" width="210" height="30" fontSize="20.0" bold="true">
-			<text><![CDATA[MotorPH Employees]]></text>
+		<element kind="image" uuid="aa7eb8f0-584a-4e7e-9aa5-1fc8cbd25058" x="2" y="-7" width="100" height="80">
+			<expression><![CDATA[$P{LogoPath}]]></expression>
 		</element>
-		<element kind="rectangle" uuid="882446e1-9442-45b6-b491-28299d705272" x="-20" y="1" width="600" height="1" backcolor="#030000"/>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</title>
+	<columnHeader height="20">
+		<element kind="staticText" uuid="43be7913-4b69-4ecb-b624-986e484d50f1" x="0" y="0" width="50" height="20" bold="true" hTextAlign="Center">
+			<text><![CDATA[EMP ID]]></text>
+		</element>
+		<element kind="staticText" uuid="9650d897-8744-4e89-a590-32a0ff847737" x="50" y="0" width="120" height="20" bold="true" hTextAlign="Center">
+			<text><![CDATA[NAME]]></text>
+		</element>
+		<element kind="staticText" uuid="6e15dd0e-5a5f-4d3a-9a47-d16625bf5204" x="170" y="0" width="90" height="20" bold="true" hTextAlign="Center">
+			<text><![CDATA[SSS]]></text>
+		</element>
+		<element kind="staticText" uuid="7cf889ac-94f5-4837-932b-7ae9015c86f2" x="260" y="0" width="90" height="20" bold="true" hTextAlign="Center">
+			<text><![CDATA[PHILHEALTH]]></text>
+		</element>
+		<element kind="staticText" uuid="38654fc1-c01f-43cb-b7c8-369b2e3d6211" x="350" y="0" width="90" height="20" bold="true" hTextAlign="Center">
+			<text><![CDATA[TIN]]></text>
+		</element>
+		<element kind="staticText" uuid="77d32e57-0ad1-4144-84b9-74ef5511b982" x="440" y="0" width="115" height="20" bold="true" hTextAlign="Center">
+			<text><![CDATA[PAG-IBIG]]></text>
+		</element>
 	</columnHeader>
 	<detail>
-		<band height="245" splitType="Stretch">
-			<element kind="component" uuid="ac006456-c4f6-49f4-8dd3-46bdaf50a673" stretchType="ElementGroupHeight" x="0" y="14" width="555" height="225">
-				<component kind="table" horizontalPosition="Center" shrinkWidth="true">
-					<datasetRun uuid="8e7d6ba8-73d6-4e8d-8036-0daf77d3c67d" subDataset="Dataset1">
-						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					</datasetRun>
-					<column kind="single" uuid="fe9fa62b-9056-4cc0-98cf-1c73c7fd976e" width="50">
-						<columnHeader height="30" rowSpan="1" style="Table_CH">
-							<element kind="staticText" uuid="dd28cf37-682e-49e2-be21-db50b37cc6a1" x="0" y="0" width="50" height="30" forecolor="#FFFFFF" printWhenGroupChanges="tin" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-								<text><![CDATA[EMP ID]]></text>
-							</element>
-						</columnHeader>
-						<detailCell height="30" style="Table_TD">
-							<element kind="textField" uuid="e9f98f7b-a4e4-43cc-b666-9a3d416eb6ae" x="0" y="0" width="50" height="30" hTextAlign="Center" vTextAlign="Middle">
-								<expression><![CDATA[$F{employee_id}]]></expression>
-							</element>
-						</detailCell>
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
-					</column>
-					<column kind="single" uuid="513d77be-584c-49f6-b22d-26025cf3e3cc" width="120">
-						<columnHeader height="30" rowSpan="1" style="Table_CH">
-							<element kind="staticText" uuid="9c822dc1-087b-4451-89d1-c16a7b77f39a" x="0" y="0" width="120" height="30" forecolor="#FFFFFF" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-								<text><![CDATA[NAME]]></text>
-								<box>
-									<pen lineColor="#FFFFFF"/>
-								</box>
-							</element>
-						</columnHeader>
-						<detailCell height="30" style="Table_TD">
-							<element kind="textField" uuid="3f58f36b-fef7-44e3-8668-5998aaa565f4" x="0" y="0" width="120" height="30" hTextAlign="Center" vTextAlign="Middle">
-								<expression><![CDATA[$F{full_name}]]></expression>
-							</element>
-						</detailCell>
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
-					</column>
-					<column kind="single" uuid="cf2961af-d193-4c7a-9c44-7d4fb648e91d" width="100">
-						<columnHeader height="30" rowSpan="1" style="Table_CH">
-							<element kind="staticText" uuid="06564127-7146-446d-bd23-10cd4bb967cc" x="0" y="0" width="100" height="30" forecolor="#FFFFFF" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-								<text><![CDATA[SSS]]></text>
-							</element>
-						</columnHeader>
-						<detailCell height="30" style="Table_TD">
-							<element kind="textField" uuid="9c6861cb-3e56-498c-a958-d981b5d3cbf3" x="0" y="0" width="100" height="30" hTextAlign="Center" vTextAlign="Middle">
-								<expression><![CDATA[$F{sss}]]></expression>
-							</element>
-						</detailCell>
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
-					</column>
-					<column kind="single" uuid="80380077-649f-4de2-a517-8bfee77552c4" width="90">
-						<columnHeader height="30" rowSpan="1" style="Table_CH">
-							<element kind="staticText" uuid="0b6e0fc6-f9e6-41b0-b47c-5353b4eb306e" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-								<text><![CDATA[PHILHEALTH]]></text>
-							</element>
-						</columnHeader>
-						<detailCell height="30" style="Table_TD">
-							<element kind="textField" uuid="6199dfa4-1382-414a-b44b-061918a912b4" x="0" y="0" width="90" height="30" hTextAlign="Center" vTextAlign="Middle">
-								<expression><![CDATA[$F{philhealth}]]></expression>
-							</element>
-						</detailCell>
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
-					</column>
-					<column kind="single" uuid="488db4a2-5125-40ca-a9ac-f411985d683b" width="90">
-						<columnHeader height="30" rowSpan="1" style="Table_CH">
-							<element kind="staticText" uuid="bf487d06-344c-4f4b-83b1-5a26695016f4" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-								<text><![CDATA[TIN]]></text>
-							</element>
-						</columnHeader>
-						<detailCell height="30" style="Table_TD">
-							<element kind="textField" uuid="f7e7fb60-8f18-4a2d-b910-f6f13c859eb0" x="0" y="0" width="90" height="30" printWhenGroupChanges="sss" linkType="None" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
-								<expression><![CDATA[$F{tin}]]></expression>
-							</element>
-						</detailCell>
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
-					</column>
-					<column kind="single" uuid="facf8987-7ba1-4420-89a5-22096e8aa35b" width="105">
-						<columnHeader height="30" rowSpan="1" style="Table_CH">
-							<element kind="staticText" uuid="187163e2-7b60-47ba-8ddf-c11ae6fe714d" x="0" y="0" width="105" height="30" forecolor="#FFFFFF" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-								<text><![CDATA[PAG-IBIG]]></text>
-								<box>
-									<pen lineColor="#FFFFFF"/>
-								</box>
-							</element>
-						</columnHeader>
-						<detailCell height="30" style="Table_TD">
-							<element kind="textField" uuid="e1227167-b608-4daa-a163-4681757a2b36" x="0" y="0" width="105" height="30" hTextAlign="Center" vTextAlign="Middle">
-								<expression><![CDATA[$F{pag_ibig}]]></expression>
-							</element>
-						</detailCell>
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
-					</column>
-				</component>
-				<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
-				<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
-				<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
-				<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-				<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
-				<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+		<band height="18">
+			<element kind="textField" uuid="2250f045-6158-422b-a8b3-491c3e336e9d" x="0" y="0" width="50" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{employee_id}]]></expression>
+			</element>
+			<element kind="textField" uuid="06d469b2-df20-4752-a23b-1db191ba0761" x="50" y="0" width="120" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{full_name}]]></expression>
+			</element>
+			<element kind="textField" uuid="1ce260c9-5509-490e-99cf-6aad8fd87489" x="170" y="0" width="90" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{sss}]]></expression>
+			</element>
+			<element kind="textField" uuid="7eacfd7f-0952-4a44-aa71-12437b294fc1" x="260" y="0" width="90" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{philhealth}]]></expression>
+			</element>
+			<element kind="textField" uuid="3c547b05-2d2a-4da1-9c84-6980267ba14a" x="350" y="0" width="90" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{tin}]]></expression>
+			</element>
+			<element kind="textField" uuid="a041a885-3c78-4b54-97b7-f40a45ecc09e" x="440" y="0" width="115" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{pag_ibig}]]></expression>
 			</element>
 		</band>
 	</detail>
-	<pageFooter height="54" splitType="Stretch">
-		<element kind="textField" uuid="ca676b07-3a8d-4b13-8b7e-82b41230334c" x="430" y="20" width="100" height="30" hTextAlign="Right">
+	<pageFooter height="20">
+		<element kind="textField" uuid="4f86884b-57a2-4cdd-9de9-bcb9e4e37683" x="0" y="0" width="300" height="20">
+			<expression><![CDATA["Generated by MotorPH System"]]></expression>
+		</element>
+		<element kind="textField" uuid="28462f9b-c42c-47d6-87ab-ce2fce051d42" x="480" y="0" width="70" height="20" pattern="Page {0} of">
 			<expression><![CDATA["Page " + $V{PAGE_NUMBER}]]></expression>
 		</element>
 	</pageFooter>
-	<summary height="42" splitType="Stretch"/>
 </jasperReport>

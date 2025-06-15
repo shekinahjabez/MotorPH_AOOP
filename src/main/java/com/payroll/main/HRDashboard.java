@@ -27,10 +27,16 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -298,6 +304,7 @@ public class HRDashboard extends javax.swing.JFrame {
         namePayLabel = new javax.swing.JLabel();
         empIDPayLabelValue = new javax.swing.JLabel();
         namePayLabelValue = new javax.swing.JLabel();
+        exportAttendance = new javax.swing.JButton();
         searchTextField1 = new javax.swing.JTextField();
         searchButton1 = new javax.swing.JButton();
         empManagement = new javax.swing.JPanel();
@@ -922,13 +929,13 @@ public class HRDashboard extends javax.swing.JFrame {
         attendanceTable.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         attendanceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Date", "Time-in", "Time-out", "Total Hours"
+                "Date", "Day", "Time-in", "Time-out", "Total Hours", "Remarks"
             }
         ));
         attendanceTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -958,29 +965,40 @@ public class HRDashboard extends javax.swing.JFrame {
 
         namePayLabelValue.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
 
+        exportAttendance.setText("Export");
+        exportAttendance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportAttendanceActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(monthDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(yearDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(51, 51, 51)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(namePayLabel)
+                                    .addComponent(empIDPayLabel))
+                                .addGap(31, 31, 31)
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(empIDPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(namePayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 554, Short.MAX_VALUE))
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(monthDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(yearDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(exportAttendance))))
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(namePayLabel)
-                            .addComponent(empIDPayLabel))
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(empIDPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(namePayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addContainerGap(51, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 952, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(51, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 952, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(112, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
@@ -997,7 +1015,8 @@ public class HRDashboard extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(monthDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(yearDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(yearDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(exportAttendance))
                 .addGap(30, 30, 30)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55))
@@ -2076,13 +2095,46 @@ public class HRDashboard extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) attendanceTable.getModel();
         model.setRowCount(0);
 
-        for(Employee employeeHours : empHours) {
+        for (Employee employeeHours : empHours) {
             Vector<Object> rowData = new Vector<>();
-            rowData.add(employeeHours.getDate());
-            rowData.add(employeeHours.getTimeIn());
-            rowData.add(employeeHours.getTimeOut());
-            rowData.add(employeeHours.getFormattedHoursWorked());
-            model.addRow(rowData);
+
+            try {
+                // Safe way to convert java.util.Date or java.sql.Date to LocalDate
+                Date rawDate = employeeHours.getDate(); // java.util.Date or java.sql.Date
+                LocalDate localDate;
+
+                if (rawDate instanceof java.sql.Date) {
+                    localDate = ((java.sql.Date) rawDate).toLocalDate();
+                } else {
+                    localDate = rawDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                }
+
+                String day = localDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+
+                LocalTime timeIn = employeeHours.getTimeIn();
+                LocalTime timeOut = employeeHours.getTimeOut();
+                String formattedHours = employeeHours.getFormattedHoursWorked();
+
+                String remarks;
+                if (timeIn == null || timeOut == null) {
+                    remarks = (day.equals("Sat") || day.equals("Sun")) ? "Weekend" : "Absent";
+                } else {
+                    remarks = "Present";
+                }
+
+                rowData.add(localDate.toString());
+                rowData.add(day);
+                rowData.add(timeIn != null ? timeIn.toString() : "-");
+                rowData.add(timeOut != null ? timeOut.toString() : "-");
+                rowData.add(formattedHours);
+                rowData.add(remarks);
+
+                model.addRow(rowData);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error processing attendance row: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     private void viewAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAllButtonActionPerformed
@@ -2394,7 +2446,28 @@ public class HRDashboard extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(this, "Error generating employee report: " + e.getMessage());
         }     
     }//GEN-LAST:event_printAllEmployeesActionPerformed
-    
+
+    private void exportAttendanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAttendanceActionPerformed
+        try {
+            Integer empId = (employeeSearchID != null) ? employeeSearchID : empAccount.getEmpID();
+
+            if (empId == null || monthDropdown.getSelectedItem() == null || yearDropdown.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Please select a valid employee, month, and year first.", "Missing Info", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            Integer month = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+            Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey(); // ✅ getKey not getValue
+            int reportMonth = month + 1;
+
+            hrService.generateTimecardReport(empId, reportMonth, year); // ✅ all values as Integer
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Something went wrong when exporting the attendance report.\n" + ex.getMessage(), "Export Error", JOptionPane.ERROR_MESSAGE);
+        } 
+    }//GEN-LAST:event_exportAttendanceActionPerformed
+
     
     private List<Employee> getEmployeeHours(int month, int year, int empID){
        Calendar dateFrom = Calendar.getInstance();
@@ -2495,6 +2568,7 @@ public class HRDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel employeeIDTField;
     private javax.swing.JTable employeeTable;
     private javax.swing.JPasswordField existingPasswordTField;
+    private javax.swing.JButton exportAttendance;
     private javax.swing.JTextField firstNameTField;
     private javax.swing.JLabel fullNameValue;
     private javax.swing.JLabel fullNameValue2;

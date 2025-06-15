@@ -9,7 +9,9 @@ import com.payroll.domain.IT;
 import com.payroll.subdomain.EmployeePosition;
 import com.payroll.subdomain.EmployeeStatus;
 import com.payroll.util.DatabaseConnection;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -434,23 +436,79 @@ public class HRService {
         return empHours;
     }
     
-    public void generateEmployeeReport() {
+    public void generateTimecardReport(int employeeId, int month, int year) {
         try {
-            // Use classloader to load JRXML from resources
-            InputStream reportStream = getClass().getClassLoader().getResourceAsStream("report/EmployeeReport.jrxml");
+            // Compile the JRXML file from classpath
+            InputStream reportStream = getClass().getClassLoader().getResourceAsStream("report/Timecard.jrxml");
+            if (reportStream == null) {
+                throw new FileNotFoundException("Report file not found in classpath: report/Timecard.jrxml");
+            }
             JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
 
-            // No parameters needed
-            Map<String, Object> parameters = new HashMap<>();
+            // Load logo (optional)
+            URL logoUrl = getClass().getClassLoader().getResource("report/mph_logo.png");
+            if (logoUrl == null) {
+                throw new FileNotFoundException("Logo not found at /report/mph_logo.png");
+            }
 
+            // Prepare parameters
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("employee_id", employeeId);
+            parameters.put("month", month);
+            parameters.put("year", year); // ✅ convert String to Integer
+            parameters.put("LogoPath", logoUrl);
+
+            // Connect to DB
             Connection connection = DatabaseConnection.getConnection();
+
+            // Fill and view report
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-            JasperViewer.viewReport(jasperPrint, false);
+
+            if (jasperPrint.getPages().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No data available for Employee ID: " + employeeId, "Empty Report", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JasperViewer.viewReport(jasperPrint, false);
+            }
+
             connection.close();
+            System.out.println("✅ Timecard report generated for Employee ID: " + employeeId);
 
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to generate timecard report.\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public void generateEmployeeReport() {
+        try {
+              // Load and compile the report file
+              InputStream reportStream = getClass().getClassLoader().getResourceAsStream("report/EmployeeReport.jrxml");
+              if (reportStream == null) {
+                  throw new FileNotFoundException("Report file not found in classpath: report/EmployeeReport.jrxml");
+              }
+              JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+
+              // Load the logo from resources
+              URL logoUrl = getClass().getClassLoader().getResource("report/mph_logo.png");
+              if (logoUrl == null) {
+                  throw new FileNotFoundException("Logo not found at: report/mph_logo.png");
+              }
+
+              // Prepare report parameters
+              Map<String, Object> parameters = new HashMap<>();
+              parameters.put("LogoPath", logoUrl);  // Pass the logo URL to the report
+
+              // Fill the report with DB connection
+              Connection connection = DatabaseConnection.getConnection();
+              JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+              JasperViewer.viewReport(jasperPrint, false);
+              connection.close();
+
+          } catch (Exception e) {
+              e.printStackTrace();
+              JOptionPane.showMessageDialog(null, "Failed to generate employee report.\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
+          }
     }
     
     private Person toEmployeeDetails(ResultSet resultSet, boolean fetchSupervisor) 
