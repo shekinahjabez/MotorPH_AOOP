@@ -2449,23 +2449,32 @@ public class HRDashboard extends javax.swing.JFrame {
 
     private void exportAttendanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAttendanceActionPerformed
         try {
-            Integer empId = (employeeSearchID != null) ? employeeSearchID : empAccount.getEmpID();
-
-            if (empId == null || monthDropdown.getSelectedItem() == null || yearDropdown.getSelectedItem() == null) {
-                JOptionPane.showMessageDialog(this, "Please select a valid employee, month, and year first.", "Missing Info", JOptionPane.WARNING_MESSAGE);
+            if (employeeSearchID == null && empAccount == null) {
+                JOptionPane.showMessageDialog(this, "Please search for a valid employee first.", "Missing Info", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            Integer month = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-            Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey(); // ✅ getKey not getValue
-            int reportMonth = month + 1;
+            ComboItem selectedMonth = (ComboItem) monthDropdown.getSelectedItem();
+            ComboItem selectedYear = (ComboItem) yearDropdown.getSelectedItem();
 
-            hrService.generateTimecardReport(empId, reportMonth, year); // ✅ all values as Integer
+            if (selectedMonth == null || selectedMonth.getKey() == null ||
+                selectedYear == null || selectedYear.getKey() == null) {
+                JOptionPane.showMessageDialog(this, "Please select a valid month and year.", "Missing Info", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            Integer empId = (employeeSearchID != null) ? employeeSearchID : empAccount.getEmpID();
+            Integer month = selectedMonth.getKey();
+            Integer year = selectedYear.getKey();
+
+            int reportMonth = month + 1; // ✅ Now safe to increment
+
+            hrService.generateTimecardReport(empId, reportMonth, year);
 
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Something went wrong when exporting the attendance report.\n" + ex.getMessage(), "Export Error", JOptionPane.ERROR_MESSAGE);
-        } 
+        }
     }//GEN-LAST:event_exportAttendanceActionPerformed
 
     
