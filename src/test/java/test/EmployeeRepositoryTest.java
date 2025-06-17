@@ -4,7 +4,12 @@ import org.junit.jupiter.api.*;
 import java.sql.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
+//**
+ * Unit Test for direct Employee table database interactions.
+ *
+ * This test class verifies the basic CRUD (Create, Read, Update, Delete)
+ * functionality against the 'employee' table in the database. It ensures that
+ * the database connection is working and that fundamental SQL operations are successful.
  *
  * @author paulomolina
  */
