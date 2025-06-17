@@ -38,7 +38,7 @@ public class ITService {
         }
     }
     
-
+    //CORRECTED
     public IT getUserAccount(String username, String password){
         IT employeeAccount = null ;
         if (connection != null) {
@@ -73,9 +73,44 @@ public class ITService {
             }        
         }                          
         return employeeAccount;
-    } 
+    }
     
+    //CORRECTED
     public IT getByEmpID(int empID){
+        IT employeeAccount = null;
+        if (connection != null) {
+            String Query = "SELECT * FROM public.employee_account where employee_id = ?";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(Query);
+                preparedStatement.setInt(1,empID);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                // CORRECTED: check if a row exists first
+                if(resultSet.next()){
+                    employeeAccount = new IT(); // Create the object now that we know there's data
+                    employeeAccount.setAccountID(resultSet.getInt("account_id"));
+                    employeeAccount.setEmpUserName(resultSet.getString("username"));
+                    employeeAccount.setEmpPassword(resultSet.getString("password"));
+
+                    int roleID = resultSet.getInt("role_id");
+                    UserRole role = getByRolesId(roleID);
+                    employeeAccount.setUserRole(role);
+
+                    Person employeeDetails = hrService.getByEmpID(empID);
+                    employeeAccount.setEmpDetails(employeeDetails);
+                }
+
+                resultSet.close();
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }        
+        }                          
+        return employeeAccount;
+    }
+    
+    //ERROR
+    /*public IT getByEmpID(int empID){
         IT employeeAccount = null ;
             if (connection != null) {
             String Query = "SELECT * FROM public.employee_account where employee_id = ?";
@@ -104,7 +139,7 @@ public class ITService {
             }        
         }                          
         return employeeAccount;
-    }
+    }*/
     
     public void updateEmployeeCredentials(IT empAccount){
         if(connection !=null){
@@ -247,22 +282,47 @@ public class ITService {
 
         return false; // Employee does not exist
     }
+    
+    public Person saveUserAccount(IT empAccount, Person empDetails) throws SQLException {
+        if (connection == null) {
+            throw new IllegalStateException("Database connection is not established.");
+        }
 
+        String query = "INSERT INTO public.employee_account (employee_id, username, password, role_id) VALUES (?, ?, ?, ?)";
+
+        // Remove the try-catch block to let exceptions propagate up
+        PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, empDetails.getEmpID());
+        preparedStatement.setString(2, empAccount.getEmpUserName());
+        preparedStatement.setString(3, empAccount.getEmpPassword());
+        preparedStatement.setInt(4, 2); // Default role_id = 2
+
+        int affectedRows = preparedStatement.executeUpdate();
+        if (affectedRows > 0) {
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    empAccount.setAccountID(generatedKeys.getInt(1));
+                } else {
+                    // It's better to throw an exception here if the ID isn't returned
+                    throw new SQLException("Creating user account failed, no ID obtained.");
+                }
+            }
+        } else {
+            throw new SQLException("Creating user account failed, no rows affected.");
+        }
+
+        // Don't forget to close the preparedStatement
+        preparedStatement.close();
+
+        return empDetails;
+    }
    
     
-    public Person saveUserAccount(IT empAccount,Person empDetails){
+    /*public Person saveUserAccount(IT empAccount,Person empDetails){
         if (connection != null) {
             
         }
-        // Check if an employee account already exists by first name and last name
-        /*if (employeeExistsByName(empDetails)) {
-            JOptionPane.showMessageDialog(null, 
-                "Error: An employee account with the same name already exists.", 
-                "Duplicate Entry", 
-                JOptionPane.WARNING_MESSAGE);
-            return null; // Return null to indicate failure
-        }*/
-
+       
         String query = "INSERT INTO public.employee_account (employee_id, username, password, role_id) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -290,7 +350,7 @@ public class ITService {
         }
 
         return empDetails;
-     }
+    }*/
     
     public void deleteEmpAccount(int empID){
         if (connection != null) {

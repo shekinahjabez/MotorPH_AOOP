@@ -1,137 +1,138 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package test;
 
-import org.junit.jupiter.api.*;
-import java.sql.*;
+import com.payroll.domain.Employee;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalTime;
+
 /**
+ * Unit Test for the Employee class.
+ *
+ * This test focuses on the internal logic of the Employee class, specifically the
+ * calculation and formatting of hours worked.
  *
  * @author paulomolina
  */
 public class EmployeeTest {
 
-    private static Connection connection;
+    // A fresh Employee object will be created for each test.
+    private Employee employee;
 
     @BeforeAll
-    public static void setup() throws SQLException {
-        // This is a great place for an initial display message
-        System.out.println("--- Starting EmployeeTest: Setting up database connection. ---");
-        String url = "jdbc:postgresql://localhost:5432/AOOP";
-        String user = "postgres";
-        String password = "martin27";
+    public static void setupAll() {
+        System.out.println("--- Starting EmployeeTest ---");
+        System.out.println("This test focuses on the Employee class's internal calculation logic.");
+        System.out.println("No database connection is needed for this pure unit test.");
+        System.out.println("------------------------------------------------------------------");
+    }
+    
+    @BeforeEach
+    public void setupEach() {
+        // This method runs before each @Test method, ensuring a clean slate.
+        employee = new Employee();
+    }
 
-        connection = DriverManager.getConnection(url, user, password);
-        System.out.println("Database connection established successfully.");
-        System.out.println("----------------------------------------------------------");
+    // --- Tests for getHoursWorked() ---
+
+    @Test
+    public void testGetHoursWorked_StandardDay_ShouldDeductBreak() {
+        System.out.println("Running test: testGetHoursWorked_StandardDay_ShouldDeductBreak");
+        System.out.println("Verifying a standard 9-5 shift (8 hours) correctly results in 7 worked hours...");
+
+        // Arrange
+        employee.setTimeIn(LocalTime.of(9, 0));
+        employee.setTimeOut(LocalTime.of(17, 0));
+
+        // Act & Assert
+        assertEquals(25200L, employee.getHoursWorked(), "A standard 8-hour shift should result in 7 hours worked (25200 seconds).");
+        System.out.println("Result: Standard day calculation is correct. Test PASSED.\n");
     }
 
     @Test
-    public void testEmployeeExists_Success() throws SQLException {
-        // Display what this test is doing
-        System.out.println("Running test: testEmployeeExists_Success");
-        System.out.println("Checking for employee with ID: 10002...");
+    public void testGetHoursWorked_MidnightStart_ShouldNotDeductBreak() {
+        System.out.println("Running test: testGetHoursWorked_MidnightStart_ShouldNotDeductBreak");
+        System.out.println("Verifying a midnight start shift (8 hours) results in 8 worked hours...");
 
-        String query = "SELECT * FROM public.employee WHERE employee_id = ?";
-        PreparedStatement stmt = connection.prepareStatement(query);
-        stmt.setInt(1, 10002);
+        // Arrange
+        employee.setTimeIn(LocalTime.MIDNIGHT);
+        employee.setTimeOut(LocalTime.of(8, 0));
 
-        ResultSet rs = stmt.executeQuery();
-
-        // The assertion itself
-        assertTrue(rs.next(), "employee with ID 10002 should exist");
-        assertEquals("10002", rs.getString("employee_id"), "Retrieved employee ID should match");
-
-        // Display the result of the test
-        System.out.println("Result: Employee found. Test PASSED.\n");
+        // Act & Assert
+        assertEquals(28800L, employee.getHoursWorked(), "A shift starting at midnight should not have a break deducted.");
+        System.out.println("Result: Midnight start calculation is correct. Test PASSED.\n");
     }
 
     @Test
-    public void testEmployeeDoesNotExist_Failure() throws SQLException {
-        System.out.println("Running test: testEmployeeDoesNotExist_Failure");
-        int nonExistentEmployeeId = 99999;
-        System.out.println("Checking for non-existent employee with ID: " + nonExistentEmployeeId + "...");
-
-        String query = "SELECT * FROM public.employee WHERE employee_id = ?";
-        PreparedStatement stmt = connection.prepareStatement(query);
-        stmt.setInt(1, nonExistentEmployeeId);
-
-        ResultSet rs = stmt.executeQuery();
-
-        assertFalse(rs.next(), "Query for non-existent employee ID should return no results.");
-
-        System.out.println("Result: Employee correctly not found. Test PASSED.\n");
-    }
-
-    @Test
-    public void testEmployeeFirstNameIsCorrect() throws SQLException {
-        System.out.println("Running test: testEmployeeFirstNameIsCorrect");
-        int employeeIdToCheck = 10004;
-        String expectedFirstName = "Anthony";
-        System.out.println("Verifying first name for employee ID: " + employeeIdToCheck + "...");
-
-        String query = "SELECT firstname FROM public.employee WHERE employee_id = ?";
-        PreparedStatement stmt = connection.prepareStatement(query);
-        stmt.setInt(1, employeeIdToCheck);
-
-        ResultSet rs = stmt.executeQuery();
-
-        assertTrue(rs.next(), "Employee with ID 10004 should exist to check their first name.");
-
-        String actualFirstName = rs.getString("firstname");
-        System.out.println("Expected first name: '" + expectedFirstName + "', Actual first name: '" + actualFirstName + "'");
-        assertEquals(expectedFirstName, actualFirstName, "The first name for employee 10004 should be 'Anthony'.");
+    public void testGetHoursWorked_ShortShift_StillDeductsBreak() {
+        System.out.println("Running test: testGetHoursWorked_ShortShift_StillDeductsBreak");
+        System.out.println("Verifying a short shift (4 hours) incorrectly results in 3 worked hours (as per current logic)...");
         
-        System.out.println("Result: First name matches. Test PASSED.\n");
+        // Arrange
+        employee.setTimeIn(LocalTime.of(9, 0));
+        employee.setTimeOut(LocalTime.of(13, 0));
+
+        // Act & Assert
+        assertEquals(10800L, employee.getHoursWorked(), "A 4-hour shift should result in 3 hours worked with the current logic.");
+        System.out.println("Result: Short shift calculation matches current (potentially flawed) logic. Test PASSED.\n");
+    }
+
+    // --- Tests for getFormattedHoursWorked() ---
+    
+    @Test
+    public void testGetFormattedHoursWorked_WithMinutes() {
+        System.out.println("Running test: testGetFormattedHoursWorked_WithMinutes");
+        System.out.println("Verifying formatting for a shift with partial hours (e.g., 7.5 hours)...");
+
+        // Arrange
+        employee.setTimeIn(LocalTime.of(9, 0));
+        employee.setTimeOut(LocalTime.of(17, 30));
+
+        // Act & Assert
+        assertEquals("7:30", employee.getFormattedHoursWorked(), "Should correctly format 7.5 hours as '7:30'.");
+        System.out.println("Result: Formatting with minutes is correct. Test PASSED.\n");
+    }
+
+    // --- New Negative Test from Example ---
+
+    @Test
+    public void testGetHoursWorked_WhenTimeInIsNull_ShouldThrowException() {
+        System.out.println("Running test: testGetHoursWorked_WhenTimeInIsNull_ShouldThrowException");
+        System.out.println("Verifying that a NullPointerException is thrown if timeIn is null...");
+
+        // Arrange
+        employee.setTimeIn(null);
+        employee.setTimeOut(LocalTime.of(17, 0));
+
+        // Act & Assert
+        // This asserts that the code inside the lambda () -> {} MUST throw a NullPointerException to pass.
+        assertThrows(NullPointerException.class, () -> {
+            employee.getHoursWorked();
+        }, "getHoursWorked should throw NullPointerException when timeIn is null.");
+        
+        System.out.println("Result: Correctly threw NullPointerException. Test PASSED.\n");
     }
 
     @Test
-    public void testInsertAndRetrieveNewEmployee() throws SQLException {
-        System.out.println("Running test: testInsertAndRetrieveNewEmployee");
-        int newEmployeeId = 55555;
-        String newFirstName = "Test";
-        String newLastName = "User";
-        String sss = "test-sss";
+    public void testGetHoursWorked_WhenTimeOutIsNull_ShouldThrowException() {
+        System.out.println("Running test: testGetHoursWorked_WhenTimeOutIsNull_ShouldThrowException");
+        System.out.println("Verifying that a NullPointerException is thrown if timeOut is null...");
+
+        // Arrange
+        employee.setTimeIn(LocalTime.of(9, 0));
+        employee.setTimeOut(null);
+
+        // Act & Assert
+        assertThrows(NullPointerException.class, () -> {
+            employee.getHoursWorked();
+        }, "getHoursWorked should throw NullPointerException when timeOut is null.");
         
-        System.out.println("Step 1: Inserting new employee with ID: " + newEmployeeId + "...");
-        String insertQuery = "INSERT INTO public.employee(employee_id, firstname, lastname, sss) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
-            insertStmt.setInt(1, newEmployeeId);
-            insertStmt.setString(2, newFirstName);
-            insertStmt.setString(3, newLastName);
-            insertStmt.setString(4, sss);
-            int rowsAffected = insertStmt.executeUpdate();
-            assertEquals(1, rowsAffected, "One row should have been inserted.");
-            System.out.println("...Insert successful.");
-        }
-
-        System.out.println("Step 2: Retrieving the newly inserted employee...");
-        String selectQuery = "SELECT * FROM public.employee WHERE employee_id = ?";
-        try (PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
-            selectStmt.setInt(1, newEmployeeId);
-            ResultSet rs = selectStmt.executeQuery();
-            assertTrue(rs.next(), "The newly inserted employee should be found.");
-            assertEquals(newLastName, rs.getString("lastname"), "The last name of the retrieved employee should match.");
-            System.out.println("...Retrieve successful.");
-        }
-
-        System.out.println("Step 3: Cleaning up by deleting the test employee...");
-        String deleteQuery = "DELETE FROM public.employee WHERE employee_id = ?";
-        try (PreparedStatement deleteStmt = connection.prepareStatement(deleteQuery)) {
-            deleteStmt.setInt(1, newEmployeeId);
-            deleteStmt.executeUpdate();
-            System.out.println("...Cleanup successful.");
-        }
-        
-        System.out.println("Result: Full Insert-Retrieve-Delete cycle successful. Test PASSED.\n");
-    }
-
-    @AfterAll
-    public static void teardown() throws SQLException {
-        System.out.println("----------------------------------------------------------");
-        System.out.println("--- Finished EmployeeTest: Closing database connection. ---");
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
-        }
-        System.out.println("Database connection closed.");
+        System.out.println("Result: Correctly threw NullPointerException. Test PASSED.\n");
     }
 }

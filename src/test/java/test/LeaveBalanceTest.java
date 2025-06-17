@@ -19,7 +19,7 @@ import java.util.List;
  * This test focuses on verifying the logic of the updateLeaveBalance method
  * under various scenarios.
  *
- * @author paulomolina
+ * @author paulomolinap
  */
 public class LeaveBalanceTest {
 

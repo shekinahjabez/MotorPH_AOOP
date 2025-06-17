@@ -44,6 +44,24 @@ public class SalaryCalculationTest {
         assertEquals(expectedContribution, actualContribution, 0.01, "PhilHealth contribution should be 1.5% of salary.");
         System.out.println("Result: PhilHealth calculation is correct. Test PASSED.\n");
     }
+    
+    @Test
+    public void testCalculatePhilHealth_WithRounding() {
+        System.out.println("Running test: testCalculatePhilHealth_WithRounding");
+        System.out.println("Verifying PhilHealth contribution rounds correctly to two decimal places...");
+        
+        // Arrange: A salary that will produce more than two decimal places
+        // 25123.45 * 0.015 = 376.85175
+        double salaryWithDecimals = 25123.45;
+        double expectedRoundedContribution = 376.85; 
+
+        // Act
+        double actualContribution = SalaryCalculation.calculatePhilHealthContribution(salaryWithDecimals);
+        
+        // Assert
+        assertEquals(expectedRoundedContribution, actualContribution, 0.001, "PhilHealth contribution should be correctly rounded to two decimal places.");
+        System.out.println("Result: PhilHealth rounding is correct. Test PASSED.\n");
+    }
 
     // --- Pag-ibig Contribution Tests ---
     @Test
@@ -87,6 +105,22 @@ public class SalaryCalculationTest {
         System.out.println("Result: Tax Bracket 2 is correct. Test PASSED.\n");
     }
     
+    @Test
+    public void testCalculateWithholdingTax_WithNegativeIncome() {
+        System.out.println("Running test: testCalculateWithholdingTax_WithNegativeIncome");
+        System.out.println("Verifying tax calculation handles negative taxable income gracefully...");
+        
+        // Arrange
+        double negativeTaxableIncome = -5000.00;
+        
+        // Act
+        double actualTax = SalaryCalculation.calculateWithholdingTax(negativeTaxableIncome);
+        
+        // Assert: The tax should be 0, as it falls into the first bracket (<= 20832).
+        assertEquals(0.0, actualTax, "Tax for negative income should be 0.");
+        System.out.println("Result: Negative income tax calculation is correct. Test PASSED.\n");
+    }
+    
     // --- Allowance and Hours Tests ---
     @Test
     public void testGetTotalAllowance() {
@@ -103,6 +137,24 @@ public class SalaryCalculationTest {
         // Assert
         assertEquals(2000.0, totalAllowance, "Total allowance should be the sum of rice, phone, and clothing.");
         System.out.println("Result: Total allowance calculation is correct. Test PASSED.\n");
+    }
+    
+    @Test
+    public void testGetTotalAllowance_WithNoAllowances() {
+        System.out.println("Running test: testGetTotalAllowance_WithNoAllowances");
+        System.out.println("Verifying total allowance is zero when no allowances are given...");
+        // Arrange
+        Person person = new Employee();
+        person.setEmpRice(0.0);
+        person.setEmpPhone(0.0);
+        person.setEmpClothing(0.0);
+        
+        // Act
+        double totalAllowance = SalaryCalculation.getTotalAllowance(person);
+        
+        // Assert
+        assertEquals(0.0, totalAllowance, "Total allowance should be zero for an employee with no allowances.");
+        System.out.println("Result: Zero allowance calculation is correct. Test PASSED.\n");
     }
     
     @Test

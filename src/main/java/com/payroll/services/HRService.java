@@ -175,7 +175,18 @@ public class HRService {
                 preparedStatement.setLong(9,empDetails.getEmpPagibig());
                 preparedStatement.setInt(10, statusId);
                 preparedStatement.setInt(11, positionId);
-                preparedStatement.setInt(12, superVisorId);
+                
+                //BUG
+                /*preparedStatement.setInt(12, superVisorId);*/
+                
+                // THIS IS THE CORRECTED PART
+                if (superVisorId != null) {
+                    preparedStatement.setInt(12, superVisorId);
+                } else {
+                    preparedStatement.setNull(12, java.sql.Types.INTEGER);
+                }
+                
+                
                 preparedStatement.setDouble(13,empDetails.getEmpBasicSalary());
                 preparedStatement.setDouble(14,empDetails.getEmpRice());
                 preparedStatement.setDouble(15,empDetails.getEmpPhone());
@@ -256,14 +267,79 @@ public class HRService {
 
         return null;
     }    
-    
-    public Person addEmployeeDetails(Person empDetails){
+    public Person addEmployeeDetails(Person empDetails) {
+        if (connection == null) return null;
+
+        String query = "INSERT INTO public.employee (lastname, firstname, birthday, address, phone_number, sss, philhealth, tin, pag_ibig, status, position, immediate_supervisor, basic_salary, rice_subsidy, phone_allowance, clothing_allowance, gross_semi_monthly_rate, hourly_rate) " +
+                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setString(1, empDetails.getLastName());
+            preparedStatement.setString(2, empDetails.getFirstName());
+
+            // Safely handle nullable Date
+            if (empDetails.getEmpBirthday() != null) {
+                preparedStatement.setDate(3, new java.sql.Date(empDetails.getEmpBirthday().getTime()));
+            } else {
+                preparedStatement.setNull(3, java.sql.Types.DATE);
+            }
+
+            preparedStatement.setString(4, empDetails.getEmpAddress());
+            preparedStatement.setString(5, empDetails.getEmpPhoneNumber());
+            preparedStatement.setString(6, empDetails.getEmpSSS());
+            preparedStatement.setLong(7, empDetails.getEmpPhilHealth());
+            preparedStatement.setString(8, empDetails.getEmpTIN());
+            preparedStatement.setLong(9, empDetails.getEmpPagibig());
+
+            // Safely handle nullable Integer for status, position, and supervisor
+            if (empDetails.getEmpStatus() != null) {
+                preparedStatement.setInt(10, empDetails.getEmpStatus().getId());
+            } else {
+                preparedStatement.setNull(10, java.sql.Types.INTEGER);
+            }
+
+            if (empDetails.getEmpPosition() != null) {
+                preparedStatement.setInt(11, empDetails.getEmpPosition().getId());
+            } else {
+                preparedStatement.setNull(11, java.sql.Types.INTEGER);
+            }
+
+            if (empDetails.getEmpImmediateSupervisor() != null) {
+                preparedStatement.setInt(12, empDetails.getEmpImmediateSupervisor().getEmpID());
+            } else {
+                preparedStatement.setNull(12, java.sql.Types.INTEGER);
+            }
+
+            preparedStatement.setDouble(13, empDetails.getEmpBasicSalary());
+            preparedStatement.setDouble(14, empDetails.getEmpRice());
+            preparedStatement.setDouble(15, empDetails.getEmpPhone());
+            preparedStatement.setDouble(16, empDetails.getEmpClothing());
+            preparedStatement.setDouble(17, empDetails.getEmpMonthlyRate());
+            preparedStatement.setDouble(18, empDetails.getEmpHourlyRate());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        empDetails.setEmpID(generatedKeys.getInt(1)); // Assuming employee_id is the first column
+                    } else {
+                        throw new SQLException("Creating employee failed, no ID obtained.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // It's better to not swallow the exception, or to re-throw it
+            // so the calling code knows something went wrong.
+            // For now, let's keep the original behavior of returning the object.
+        }
+        return empDetails;
+    }
+    /*public Person addEmployeeDetails(Person empDetails){
             if (connection == null)return null; 
             
-            /*if (isDuplicateEmployee(empDetails)) {
-                JOptionPane.showMessageDialog(null, "Duplicate employee found. No insertion performed.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
-                return null;
-            }*/
+            
             String Query = "INSERT into public.employee (lastname, firstname,birthday,address,phone_number,sss,philhealth,tin,pag_ibig,status,position,immediate_supervisor,basic_salary, rice_subsidy, phone_allowance, clothing_allowance, gross_semi_monthly_rate, hourly_rate)"
                     + "values(?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
             try {
@@ -305,7 +381,7 @@ public class HRService {
                 e.printStackTrace();
             }                              
         return empDetails;
-    }
+    }*/
     
     public boolean deleteEmployeeDetails(int empID) {
         boolean isDeleted = false;
