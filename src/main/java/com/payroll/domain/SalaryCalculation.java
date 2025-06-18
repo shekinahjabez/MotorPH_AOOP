@@ -20,7 +20,7 @@ public class SalaryCalculation {
         this.connection = connection;  
     }
     
- //CORRECTED
+//CORRECTED
     public static double calculatePhilHealthContribution(double empSalary) {
         // 1. Calculate the raw contribution
         double rawContribution = empSalary * 0.015;
