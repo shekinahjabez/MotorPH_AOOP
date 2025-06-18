@@ -2193,6 +2193,38 @@ public class HRDashboard extends javax.swing.JFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         Person empDetails = updateEmpDetailValues();
         IT empAccount = updateEmpAccountValues();
+        if (!validateRequiredFields(empAccount, empDetails)) {
+            return; // Stop if validation fails
+        }
+
+        if (hrService.isDuplicateEmployee(empDetails)) {
+            JOptionPane.showMessageDialog(this, "An employee with these details already exists.", "Duplicate Employee", JOptionPane.WARNING_MESSAGE);
+        } else {
+            // --- Wrap the database operations in a try-catch block ---
+            try {
+                // Only save if it's a new employee
+                hrService.addEmployeeDetails(empDetails);
+                empAccountService.saveUserAccount(empAccount, empDetails);
+
+                LeaveBalance leaveBalance = new LeaveBalance();
+                leaveBalance.setEmpID(empDetails.getEmpID());
+                leaveDetailsService.saveLeaveBalance(leaveBalance);
+
+                JOptionPane.showMessageDialog(this, "Account added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (SQLException e) {
+                // This block will run if any of the service calls fail
+                e.printStackTrace(); // For debugging in the console
+                JOptionPane.showMessageDialog(this, "A database error occurred while adding the employee.\n" + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        clearButtonActionPerformed(null);
+        refreshTable();
+        
+         
+        /*Person empDetails = updateEmpDetailValues();
+        IT empAccount = updateEmpAccountValues();
         if (!validateRequiredFields(empAccount,empDetails)) {
             return; // Stop execution if validation fails
         }
@@ -2211,7 +2243,7 @@ public class HRDashboard extends javax.swing.JFrame {
         }
 
         clearButtonActionPerformed(null);
-        refreshTable();
+        refreshTable();*/
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void changePasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordButtonActionPerformed

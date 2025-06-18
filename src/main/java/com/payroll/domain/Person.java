@@ -222,10 +222,25 @@ public abstract class Person {
         this.empHourlyRate = empHourlyRate;
     }
 
-    public String getFormattedName(){
-        return (firstName+" "+lastName).trim();
-    }
+    // CORRECT version
+    public String getFormattedName() {
+        // Start with the first name, which we assume is always present.
+        String result = firstName != null ? firstName : "";
+
+        // Only add the last name if it's not null and not empty.
+        if (lastName != null && !lastName.isEmpty()) {
+            result = result + " " + lastName;
+        }
+
+        return result.trim(); // Use trim() just in case firstName has spaces.
+
+        }   
     
+    // WRONG version    
+    /*public String getFormattedName(){
+        return (firstName+" "+lastName).trim();*/
+        
+
     public String getFormattedBirthday(){
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return this.empBirthday != null ? formatter.format(this.empBirthday) : null;

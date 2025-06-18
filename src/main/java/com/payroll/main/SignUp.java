@@ -477,6 +477,40 @@ public class SignUp extends javax.swing.JFrame {
     private void signUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpActionPerformed
         Person empDetails = updateEmpDetailValues();
         IT empAccount = updateEmpAccountValues();
+        if (!validateRequiredFields(empAccount, empDetails)) {
+            return; // Stop execution if validation fails
+        }
+
+        if (hrService.isDuplicateEmployee(empDetails)) {
+            JOptionPane.showMessageDialog(this, "An employee with these details already exists.", "Duplicate Employee", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                // --- Start of the try block ---
+                // Save the employee details first. This might throw an error.
+                hrService.addEmployeeDetails(empDetails);
+
+                // If the first save was successful, save the account details.
+                empAccountService.saveUserAccount(empAccount, empDetails);
+
+                // If both saves were successful, create the initial leave balance.
+                LeaveBalance leaveBalance = new LeaveBalance();
+                leaveBalance.setEmpID(empDetails.getEmpID());
+                leaveDetailsService.saveLeaveBalance(leaveBalance);
+
+                // Show a success message and navigate away.
+                JOptionPane.showMessageDialog(this, "Account created successfully! Please log in.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                new LogIn().setVisible(true);
+                this.dispose();
+
+            } catch (SQLException e) {
+                // --- This block runs ONLY if a database error occurs ---
+                e.printStackTrace(); // Good for debugging
+                JOptionPane.showMessageDialog(this, "A database error occurred while creating the account.\n" + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        /*Person empDetails = updateEmpDetailValues();
+        IT empAccount = updateEmpAccountValues();
         if (!validateRequiredFields(empAccount,empDetails)) {
             return; // Stop execution if validation fails
         }
@@ -496,7 +530,7 @@ public class SignUp extends javax.swing.JFrame {
         
         LogIn info = new LogIn();
         info.setVisible(true);
-        this.dispose();
+        this.dispose();*/
     }//GEN-LAST:event_signUpActionPerformed
 
     private void passwordTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFieldActionPerformed

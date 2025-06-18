@@ -53,13 +53,26 @@ public class LeaveBalance {
     public void updateLeaveBalance(List<HR> leaveDetails){
         int totalDays = 0;
         for(HR l: leaveDetails){
-            if(!l.getStatus().equals(LeaveStatus.DECLINED.name())){
+            // THIS IS THE CORRECTED LINE: Compare enum to enum
+            if (l.getStatus() != LeaveStatus.DECLINED) {
                 totalDays += l.getTotalDays();
             }
         }
         setTaken(totalDays);
         int available = total - taken;
         setAvailable(available);
+    
+    // WRONG version
+    /*public void updateLeaveBalance(List<HR> leaveDetails){
+        int totalDays = 0;
+        for(HR l: leaveDetails){
+            if(!l.getStatus().equals(LeaveStatus.DECLINED.name())){
+                totalDays += l.getTotalDays();
+            }
+        }
+        setTaken(totalDays);
+        int available = total - taken;
+        setAvailable(available);*/
     }
-   
 }
+
