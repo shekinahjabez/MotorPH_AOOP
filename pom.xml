@@ -72,5 +72,12 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>java.net</id>
+            <name>Java.net Repository for JAI</name>
+            <url>https://download.java.net/maven/2/</url>
+        </repository>
+    </repositories>
     <name>MotorPH_AOOP</name>
 </project>
