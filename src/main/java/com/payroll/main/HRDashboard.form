@@ -1059,31 +1059,37 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="monthDropdown" min="-2" pref="248" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="yearDropdown" min="-2" pref="198" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="namePayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="empIDPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="empIDPayLabelValue" min="-2" pref="74" max="-2" attributes="0"/>
+                                                      <Component id="namePayLabelValue" min="-2" pref="317" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace pref="554" max="32767" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="monthDropdown" min="-2" pref="248" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="yearDropdown" min="-2" pref="198" max="-2" attributes="0"/>
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <Component id="exportAttendance" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="namePayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empIDPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="empIDPayLabelValue" min="-2" pref="74" max="-2" attributes="0"/>
-                                              <Component id="namePayLabelValue" min="-2" pref="317" max="-2" attributes="0"/>
-                                          </Group>
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace pref="51" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane3" min="-2" pref="952" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace pref="51" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane3" min="-2" pref="952" max="-2" attributes="0"/>
                                   <EmptySpace pref="112" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -1105,6 +1111,7 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="monthDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="yearDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="exportAttendance" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                                   <Component id="jScrollPane3" min="-2" pref="417" max="-2" attributes="0"/>
@@ -1130,16 +1137,28 @@
                                   <Font name="Century Gothic" size="14" style="0"/>
                                 </Property>
                                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                  <Table columnCount="4" rowCount="4">
+                                  <Table columnCount="6" rowCount="4">
                                     <Column editable="true" title="Date" type="java.lang.Object"/>
+                                    <Column editable="true" title="Day" type="java.lang.Object"/>
                                     <Column editable="true" title="Time-in" type="java.lang.Object"/>
                                     <Column editable="true" title="Time-out" type="java.lang.Object"/>
                                     <Column editable="true" title="Total Hours" type="java.lang.Object"/>
+                                    <Column editable="true" title="Remarks" type="java.lang.Object"/>
                                   </Table>
                                 </Property>
                                 <Property name="autoResizeMode" type="int" value="4"/>
                                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                                   <TableColumnModel selectionModel="0">
+                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                      <Title/>
+                                      <Editor/>
+                                      <Renderer/>
+                                    </Column>
+                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                      <Title/>
+                                      <Editor/>
+                                      <Renderer/>
+                                    </Column>
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                       <Title/>
                                       <Editor/>
@@ -1230,6 +1249,14 @@
                               <Font name="Century Gothic" size="14" style="0"/>
                             </Property>
                           </Properties>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="exportAttendance">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Export"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportAttendanceActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -1460,7 +1487,7 @@
                                                   </Group>
                                               </Group>
                                           </Group>
-                                          <EmptySpace pref="26" max="32767" attributes="0"/>
+                                          <EmptySpace pref="28" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace max="32767" attributes="0"/>
@@ -1473,14 +1500,16 @@
                                       </Group>
                                   </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                                          <Component id="viewAllButton" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="528" max="-2" attributes="0"/>
-                                      </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="jScrollPane2" min="-2" pref="688" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                                          <Component id="viewAllButton" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace pref="437" max="32767" attributes="0"/>
+                                          <Component id="printAllEmployees" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -1497,6 +1526,7 @@
                                       <Component id="employeeIDTField" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="clearButton" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="viewAllButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="printAllEmployees" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -2010,6 +2040,17 @@
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewAllButtonActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="printAllEmployees">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Century Gothic" size="12" style="1"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Print"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printAllEmployeesActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>

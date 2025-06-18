@@ -24,10 +24,26 @@
             <version>5.5.13.2</version>
         </dependency>
         <dependency>
-            <groupId>com.rpiaggio</groupId>
-            <artifactId>scalajs-react-datepicker_sjs1_2.13</artifactId>
-            <version>0.1.0</version>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>7.0.3</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.icepdf.os</groupId>
+            <artifactId>icepdf-viewer</artifactId>
+            <version>6.2.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.media</groupId>
+                    <artifactId>jai_core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>7.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
