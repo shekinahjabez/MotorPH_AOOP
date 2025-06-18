@@ -20,8 +20,20 @@ public class SalaryCalculation {
         this.connection = connection;  
     }
     
+ //CORRECTED
+    public static double calculatePhilHealthContribution(double empSalary) {
+        // 1. Calculate the raw contribution
+        double rawContribution = empSalary * 0.015;
+
+        // 2. Round the result to two decimal places
+        double roundedContribution = Math.round(rawContribution * 100.0) / 100.0;
+
+        // 3. Return the rounded result
+        return roundedContribution;
+    }  
     
-    public static double calculatePhilHealthContribution(double empSalary)  {
+    //BUG
+    /*public static double calculatePhilHealthContribution(double empSalary)  {
         double contribution = empSalary * 0.015;
         contribution = Math.round(contribution * 100) / 100.0;
         if (empSalary <= 10000) {
@@ -32,9 +44,9 @@ public class SalaryCalculation {
             return empSalary * 0.015;
         }
         return contribution;
-    }
+    }*/
     
-     public static double calculatePagibigContribution(double empSalary)  {
+    public static double calculatePagibigContribution(double empSalary)  {
         double pagibig;
         if (empSalary <= 1499.99) {
             pagibig = empSalary * 0.01;
@@ -47,7 +59,7 @@ public class SalaryCalculation {
         return Math.min(pagibig, maxPagibig);
     }
 
-     public static double calculateWithholdingTax(double taxableIncome) {
+    public static double calculateWithholdingTax(double taxableIncome) {
         double tax;
         if (taxableIncome <= 20832) {
             tax = 0;
@@ -84,26 +96,30 @@ public class SalaryCalculation {
         return totalHoursWorked/3600;
     }
     
-     public static String getFormattedTotalHoursWorked(List<Employee> empHours){
+    public static String getFormattedTotalHoursWorked(List<Employee> empHours){
         long totalHoursWorked = 0;
         for (Employee employeeHours: empHours){
             totalHoursWorked += employeeHours.getHoursWorked();
         }
         return String.format("%d:%02d", totalHoursWorked / 3600, (totalHoursWorked % 3600) / 60);
     }
-    //total hrs worked * hourly rate 
-    public static double getBasicSalary(List<Employee> empHours,IT empAccount){
+     
+    public static double getBasicSalary(List<Employee> empHours, IT empAccount) {
+        return empAccount.getEmpDetails().getEmpBasicSalary(); // fixed monthly basic salary
+    } 
+     
+    public static double getComputedSalary(List<Employee> empHours, IT empAccount) {
         double totalHoursWorked = SalaryCalculation.getTotalHoursWorked(empHours);
         double hourlyRate = empAccount.getEmpDetails().getEmpHourlyRate();
         return totalHoursWorked * hourlyRate;
     }
-    //total hrs worked * hourly rate + allowance
+    
     public static double getGrossSalary(List<Employee> empHours,IT empAccount){
         double basicSalary = getBasicSalary(empHours, empAccount);
         return basicSalary + getTotalAllowance(empAccount.getEmpDetails());
                 
     }
-    //total contri
+    
     public static double getTotalDeductions(double empSalary, double sssContri){
         double philhealthContri = calculatePhilHealthContribution(empSalary);
         double pagibigContri = calculatePagibigContribution(empSalary);
@@ -115,8 +131,8 @@ public class SalaryCalculation {
         return empSalary - totalDeductions;
     }
     
-    public static double getNetPay(double empSalary,double sssContri){
-       double netPay = getTaxableIncome(empSalary, sssContri) - calculateWithholdingTax(empSalary);
-       return netPay;
+    public static double getNetPay(double empSalary, double sssContri) {
+        double taxableIncome = getTaxableIncome(empSalary, sssContri);
+        return taxableIncome - calculateWithholdingTax(taxableIncome);
     }
 }   
