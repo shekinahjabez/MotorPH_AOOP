@@ -37,9 +37,9 @@ public class HRServiceTest {
     @BeforeAll
     public static void setup() throws SQLException {
         System.out.println("--- Starting HRServiceTest: Setting up database connection and service. ---");
-        String url = "jdbc:postgresql://localhost:5432/AOOP";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "martin27";
+        String password = "postgres";
         connection = DriverManager.getConnection(url, user, password);
         hrService = new HRService(connection);
         System.out.println("Database connection and service initialized.");

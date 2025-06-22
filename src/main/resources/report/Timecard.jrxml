@@ -106,50 +106,50 @@ WHERE
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</title>
-	<pageHeader height="90">
-		<element kind="textField" uuid="1181d8fc-ca96-4709-81d5-bb85d2358e23" x="20" y="24" width="193" height="15" fontSize="11.0" bold="true">
+	<pageHeader height="75">
+		<element kind="textField" uuid="1181d8fc-ca96-4709-81d5-bb85d2358e23" x="20" y="13" width="193" height="15" fontSize="11.0" bold="true">
 			<expression><![CDATA["EMPLOYEE ID"]]></expression>
 		</element>
-		<element kind="textField" uuid="e45231b8-1c19-46ed-a5e8-741c9ebf007d" x="213" y="24" width="200" height="15" fontSize="11.0">
+		<element kind="textField" uuid="e45231b8-1c19-46ed-a5e8-741c9ebf007d" x="213" y="13" width="200" height="15" fontSize="11.0">
 			<expression><![CDATA[$F{employee_id}]]></expression>
 		</element>
-		<element kind="textField" uuid="35c3c6df-3091-424d-a614-6d7cc8a7d932" x="20" y="39" width="193" height="15" fontSize="11.0" bold="true">
+		<element kind="textField" uuid="35c3c6df-3091-424d-a614-6d7cc8a7d932" x="20" y="28" width="193" height="15" fontSize="11.0" bold="true">
 			<expression><![CDATA["EMPLOYEE NAME"]]></expression>
 		</element>
-		<element kind="textField" uuid="9a6444d5-c23c-4bc6-b317-83ea4b67071a" x="213" y="39" width="345" height="15" fontSize="11.0">
+		<element kind="textField" uuid="9a6444d5-c23c-4bc6-b317-83ea4b67071a" x="213" y="28" width="345" height="15" fontSize="11.0">
 			<expression><![CDATA[$F{full_name}]]></expression>
 		</element>
-		<element kind="textField" uuid="c6435a46-8258-4379-aa01-9d699237f2c9" x="20" y="54" width="193" height="15" bold="true">
+		<element kind="textField" uuid="c6435a46-8258-4379-aa01-9d699237f2c9" x="20" y="43" width="193" height="15" bold="true">
 			<expression><![CDATA["EMPLOYEE POSITION"]]></expression>
 		</element>
-		<element kind="textField" uuid="59ca3009-0f83-42bd-b08a-cf7ee4b4f005" x="213" y="54" width="345" height="15" fontSize="11.0">
+		<element kind="textField" uuid="59ca3009-0f83-42bd-b08a-cf7ee4b4f005" x="213" y="43" width="345" height="15" fontSize="11.0">
 			<expression><![CDATA[$F{position}]]></expression>
 		</element>
-		<element kind="textField" uuid="4d247873-f5ce-4593-b3fb-64313e854267" x="20" y="68" width="193" height="15" bold="true">
+		<element kind="textField" uuid="4d247873-f5ce-4593-b3fb-64313e854267" x="20" y="57" width="193" height="15" bold="true">
 			<expression><![CDATA["MONTH"]]></expression>
 		</element>
-		<element kind="textField" uuid="03c9ea1a-baf3-4e79-be0b-a5f6a8e4589b" x="212" y="68" width="345" height="15" fontSize="11.0">
+		<element kind="textField" uuid="03c9ea1a-baf3-4e79-be0b-a5f6a8e4589b" x="212" y="57" width="345" height="15" fontSize="11.0">
 			<expression><![CDATA[new java.text.DateFormatSymbols().getMonths()[$P{month} - 1] + " " + $P{year}]]></expression>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</pageHeader>
 	<columnHeader height="55">
-		<element kind="staticText" uuid="b7c03b8a-c2e1-4d29-b772-0a2f8650f965" x="13" y="25" width="80" height="20" bold="true" hTextAlign="Center">
+		<element kind="staticText" uuid="b7c03b8a-c2e1-4d29-b772-0a2f8650f965" mode="Opaque" x="13" y="25" width="80" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Date]]></text>
 		</element>
-		<element kind="staticText" uuid="181530e2-742d-4568-b8a6-117e33f78fd9" x="93" y="25" width="80" height="20" bold="true" hTextAlign="Center">
+		<element kind="staticText" uuid="181530e2-742d-4568-b8a6-117e33f78fd9" mode="Opaque" x="93" y="25" width="80" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Day]]></text>
 		</element>
-		<element kind="staticText" uuid="9a455db3-40bb-4fee-b174-2d003dd59d4c" x="173" y="25" width="100" height="20" bold="true" hTextAlign="Center">
+		<element kind="staticText" uuid="9a455db3-40bb-4fee-b174-2d003dd59d4c" mode="Opaque" x="173" y="25" width="100" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Time In]]></text>
 		</element>
-		<element kind="staticText" uuid="b43e04c5-9749-46dc-a514-b61c8df0c0bd" x="273" y="25" width="100" height="20" bold="true" hTextAlign="Center">
+		<element kind="staticText" uuid="b43e04c5-9749-46dc-a514-b61c8df0c0bd" mode="Opaque" x="273" y="25" width="100" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Time Out]]></text>
 		</element>
-		<element kind="staticText" uuid="20a8da21-3796-4a61-99a9-c87ce5da27b0" x="373" y="25" width="100" height="20" bold="true" hTextAlign="Center">
+		<element kind="staticText" uuid="20a8da21-3796-4a61-99a9-c87ce5da27b0" mode="Opaque" x="373" y="25" width="100" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Total Hrs]]></text>
 		</element>
-		<element kind="staticText" uuid="1cc185ac-6340-4c45-a693-a3627fd4eb80" x="473" y="25" width="85" height="20" bold="true" hTextAlign="Center">
+		<element kind="staticText" uuid="1cc185ac-6340-4c45-a693-a3627fd4eb80" mode="Opaque" x="473" y="25" width="85" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Remarks]]></text>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>

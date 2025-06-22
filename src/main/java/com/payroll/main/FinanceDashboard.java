@@ -24,6 +24,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.payroll.domain.Finance;
+import com.payroll.util.ReportGenerator;
 import java.time.LocalDate;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -45,11 +46,13 @@ public class FinanceDashboard extends javax.swing.JFrame {
     private HRService hrService;
     private FinanceService payrollService;
     private Integer employeeSearchID;
+    private ReportGenerator reportGenerator;
     
     public FinanceDashboard(IT empAccount) {
         initComponents();
         cardLayout = (CardLayout) (mphCards.getLayout());
         this.empAccount = empAccount;
+        this.reportGenerator = new ReportGenerator();
         updateUserLabels(empAccount);
 
         try {
@@ -2230,7 +2233,6 @@ private boolean hasEmptyFields() {
     }
     
     private void savePayrollDetails(){
-    
        try {
              //Header
             // Step 1: Collect required input 
@@ -2310,7 +2312,7 @@ private boolean hasEmptyFields() {
 
     
             Finance saved = payrollService.savePayrollReport(payroll);
-            payrollService.generatePayrollReport(saved.getPayrollId());
+            reportGenerator.generatePayrollReport(saved.getPayrollId());
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid number format in one of the fields. Please review your input.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {

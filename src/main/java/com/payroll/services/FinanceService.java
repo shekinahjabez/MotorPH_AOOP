@@ -219,37 +219,6 @@ public class FinanceService {
         return null;
     }
  
-    public void generatePayrollReport(int payrollId) {
-        try {
-             JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/report/Payslip.jrxml");
-
-             URL logoUrl = getClass().getClassLoader().getResource("report/mph_logo.png");
-             if (logoUrl == null) {
-                 throw new FileNotFoundException("Logo not found at /report/mph_logo.png");
-             }
-
-             Map<String, Object> parameters = new HashMap<>();
-             parameters.put("payroll_id", payrollId);   // Matches parameter in JRXML
-             parameters.put("LogoPath", logoUrl);        // For the image
-
-             Connection connection = DatabaseConnection.getConnection();
-
-             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-
-             if (jasperPrint.getPages().isEmpty()) {
-                 JOptionPane.showMessageDialog(null, "No pages found. Check if data exists for payroll_id: " + payrollId, "No Data", JOptionPane.INFORMATION_MESSAGE);
-             } else {
-                 JasperViewer.viewReport(jasperPrint, false);
-             }
-
-             connection.close();
-
-             System.out.println("Logo URL: " + logoUrl);
-         } catch (Exception e) {
-             e.printStackTrace();
-             JOptionPane.showMessageDialog(null, "Failed to generate payroll report.\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
-         }        
-    }
      public Finance savePayrollReport(Finance payrollReportDetails) {
         if (connection == null) return null;
 

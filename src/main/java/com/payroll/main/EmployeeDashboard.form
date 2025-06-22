@@ -477,7 +477,6 @@
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="addressLabelValue" min="-2" max="-2" attributes="0"/>
-                                              <Component id="fullNameValue" min="-2" max="-2" attributes="0"/>
                                               <Component id="positionLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="empIDLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="statusLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -516,6 +515,12 @@
                                           <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                                       </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="fullNameValue" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="printProfileButton" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>
@@ -529,8 +534,16 @@
                                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                                          <Component id="fullNameValue" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                                                  <Component id="fullNameValue" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="printProfileButton" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="addressLabelValue" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -886,6 +899,17 @@
                             </Property>
                           </Properties>
                         </Component>
+                        <Component class="javax.swing.JButton" name="printProfileButton">
+                          <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/icons/printer.png"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Print"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printProfileButtonActionPerformed"/>
+                          </Events>
+                        </Component>
                       </SubComponents>
                     </Container>
                     <Component class="javax.swing.JLabel" name="profileLabel">
@@ -1094,32 +1118,13 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="yearDropdown" min="-2" pref="198" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="jScrollPane3" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jScrollPane3" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
+                                      <Component id="exportAttendaceButton" min="-2" pref="93" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="hourlyRatePayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="1" attributes="0">
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="totalHoursPayLabel" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="birthdayPayLabel" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="totalHoursPayLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="statusPayLabelValue" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="basicSalaryPayLabelValue" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="hourlyRatePayLabelValue" alignment="1" max="32767" attributes="0"/>
-                                              <Component id="empIDPayLabelValue" alignment="0" pref="74" max="32767" attributes="0"/>
-                                              <Component id="birthdayPayLabelValue" alignment="0" max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
                                       <Component id="salaryDetailsPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -1133,96 +1138,89 @@
                                           </Group>
                                       </Group>
                                       <Component id="basicSalaryPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="taxPayLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                                              <Component id="taxableIncomePayLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="taxableIncomePayLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="taxPayLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
                                       <Component id="empIDPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="statusPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="sssContriPayLabel" min="-2" pref="138" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="sssContriPayLabelValue" max="32767" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="philhealthContriPayLabel" min="-2" pref="144" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="philhealthContriPayLabelValue" min="-2" pref="99" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                      </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="1" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                                  <Component id="netPayLabel" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="netPayLabelValue" max="32767" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="totalDeductionsPayLabel" min="-2" pref="138" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="totalDeductionsPayLabelValue" max="32767" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="1" attributes="0">
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                              <Group type="102" alignment="0" attributes="0">
-                                                                  <Component id="clothingPayLabel" max="32767" attributes="0"/>
-                                                                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                                                              </Group>
-                                                              <Group type="102" alignment="0" attributes="0">
-                                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                                      <Component id="ricePayLabel" alignment="0" min="-2" pref="113" max="-2" attributes="0"/>
-                                                                      <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                                                          <Component id="totalAllowPayLabel" alignment="0" max="32767" attributes="0"/>
-                                                                          <Component id="deductionsPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                                          <Component id="phonePayLabel" alignment="0" max="32767" attributes="0"/>
-                                                                      </Group>
-                                                                  </Group>
-                                                                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                                                              </Group>
-                                                          </Group>
-                                                          <Group type="103" groupAlignment="0" attributes="0">
-                                                              <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                                                                  <Component id="totalAllowPayLabelValue" alignment="1" min="-2" max="-2" attributes="0"/>
-                                                                  <Component id="clothingPayLabelValue" alignment="1" min="-2" max="-2" attributes="0"/>
-                                                                  <Component id="phonePayLabelValue" alignment="1" min="-2" max="-2" attributes="0"/>
-                                                              </Group>
-                                                              <Component id="ricePayLabelValue" alignment="1" min="-2" max="-2" attributes="0"/>
-                                                          </Group>
-                                                      </Group>
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Component id="pagibigContriPayLabel" min="-2" pref="144" max="-2" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="pagibigContriPayLabelValue" min="-2" pref="91" max="-2" attributes="0"/>
-                                                      </Group>
-                                                  </Group>
-                                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                              </Group>
+                                              <Component id="taxableIncomePayLabel" min="-2" max="-2" attributes="0"/>
+                                              <Component id="taxPayLabel" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="taxPayLabelValue" pref="83" max="32767" attributes="0"/>
+                                              <Component id="taxableIncomePayLabelValue" max="32767" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="allowPayLabel" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="totalHoursPayLabel" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Component id="birthdayPayLabel" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="totalHoursPayLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="statusPayLabelValue" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="basicSalaryPayLabelValue" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="hourlyRatePayLabelValue" alignment="1" max="32767" attributes="0"/>
+                                              <Component id="empIDPayLabelValue" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="birthdayPayLabelValue" alignment="0" min="-2" pref="105" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                   </Group>
+                                  <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="totalDeductionsPayLabel" min="-2" pref="138" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="totalDeductionsPayLabelValue" min="-2" pref="91" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="ricePayLabel" min="-2" pref="113" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="ricePayLabelValue" min="-2" pref="68" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="allowPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="netPayLabel" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                                          <Component id="netPayLabelValue" min="-2" pref="133" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="PayrollButtonGenerator" alignment="0" min="-2" pref="207" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                              <Component id="clothingPayLabel" max="32767" attributes="0"/>
+                                              <Component id="totalAllowPayLabel" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="deductionsPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="phonePayLabel" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="phonePayLabelValue" min="-2" pref="68" max="-2" attributes="0"/>
+                                              <Component id="clothingPayLabelValue" min="-2" pref="62" max="-2" attributes="0"/>
+                                              <Component id="totalAllowPayLabelValue" min="-2" pref="61" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="philhealthContriPayLabel" alignment="0" min="-2" pref="119" max="-2" attributes="0"/>
+                                              <Component id="sssContriPayLabel" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
+                                              <Component id="pagibigContriPayLabel" alignment="0" min="-2" pref="144" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="pagibigContriPayLabelValue" min="-2" pref="91" max="-2" attributes="0"/>
+                                              <Component id="sssContriPayLabelValue" min="-2" pref="99" max="-2" attributes="0"/>
+                                              <Component id="philhealthContriPayLabelValue" min="-2" pref="93" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1251,42 +1249,36 @@
                                       <Component id="positionPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="empIDPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="empIDPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="ricePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="ricePayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Group type="102" alignment="1" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="birthdayPayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="birthdayPayLabelValue" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                                                  <Component id="phonePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="phonePayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="empIDPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="empIDPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="ricePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Component id="ricePayLabelValue" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="birthdayPayLabelValue" alignment="1" max="32767" attributes="0"/>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <EmptySpace min="0" pref="3" max="32767" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="phonePayLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="birthdayPayLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="phonePayLabelValue" alignment="1" min="-2" pref="19" max="-2" attributes="0"/>
+                                                  </Group>
                                               </Group>
                                           </Group>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="monthDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="yearDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="statusPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="statusPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="clothingPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="clothingPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="clothingPayLabelValue" alignment="0" min="-2" pref="19" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                                                   <Component id="basicSalaryPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1294,67 +1286,77 @@
                                               </Group>
                                               <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                                                   <Component id="totalAllowPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="totalAllowPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="totalAllowPayLabelValue" alignment="0" min="-2" pref="19" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="deductionsPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="salaryDetailsPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="sssContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="sssContriPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="totalHoursPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="totalHoursPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="philhealthContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="philhealthContriPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="hourlyRatePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="hourlyRatePayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="pagibigContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="pagibigContriPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="computedSalaryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="computedSalaryLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="totalDeductionsPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="totalDeductionsPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="grossSalaryPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="grossSalaryPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Group type="102" attributes="0">
                                                   <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="taxableIncomePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="taxableIncomePayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="sssContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="totalHoursPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="totalHoursPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="sssContriPayLabelValue" alignment="0" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="philhealthContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="philhealthContriPayLabelValue" alignment="0" min="-2" pref="19" max="-2" attributes="0"/>
+                                                      <Component id="hourlyRatePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="hourlyRatePayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="taxPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="taxPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="pagibigContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="computedSalaryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="computedSalaryLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="pagibigContriPayLabelValue" alignment="0" max="32767" attributes="0"/>
                                                   </Group>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="netPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="netPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="totalDeductionsPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="totalDeductionsPayLabelValue" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+                                                      <Component id="grossSalaryPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="grossSalaryPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="1" attributes="0">
+                                                      <Component id="netPayLabelValue" min="-2" pref="27" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="3" attributes="0">
+                                                          <Component id="netPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="taxableIncomePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
                                               </Group>
+                                              <Component id="taxableIncomePayLabelValue" min="-2" pref="20" max="-2" attributes="0"/>
                                           </Group>
+                                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="taxPayLabelValue" min="-2" pref="19" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="PayrollButtonGenerator" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
+                                                  <Component id="exportAttendaceButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Component id="taxPayLabel" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="jScrollPane3" alignment="0" min="-2" pref="417" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="monthDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="yearDropdown" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="jScrollPane3" min="-2" pref="377" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1546,7 +1548,7 @@
                         <Component class="javax.swing.JLabel" name="netPayLabel">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Century Gothic" size="18" style="1"/>
+                              <Font name="Century Gothic" size="14" style="1"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="Net Pay:"/>
                           </Properties>
@@ -1781,6 +1783,34 @@
                             </Property>
                           </Properties>
                         </Component>
+                        <Component class="javax.swing.JButton" name="exportAttendaceButton">
+                          <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/icons/export.png"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Export"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportAttendaceButtonActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="PayrollButtonGenerator">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="66" red="33" type="rgb"/>
+                            </Property>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Century Gothic" size="14" style="1"/>
+                            </Property>
+                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Generate Payroll Report"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PayrollButtonGeneratorActionPerformed"/>
+                          </Events>
+                        </Component>
                       </SubComponents>
                     </Container>
                   </SubComponents>
@@ -1844,37 +1874,42 @@
                                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <Component id="applyLeaveButton" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="leaveSubjectLabel" min="-2" max="-2" attributes="0"/>
+                                              <Component id="leaveTypeLabel" min="-2" max="-2" attributes="0"/>
+                                              <Component id="applyLabel" min="-2" max="-2" attributes="0"/>
+                                              <Component id="leaveDatesLabel" min="-2" pref="331" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="0" pref="121" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="reasonTFieldValue" max="32767" attributes="0"/>
                                               <Component id="leaveSubjectTFieldValue" alignment="0" max="32767" attributes="0"/>
                                               <Component id="leaveTypeDropdown" alignment="0" pref="402" max="32767" attributes="0"/>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="leaveDateFromLabel" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="leaveDateFromTFieldValue" min="-2" pref="163" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="leaveDateToLabel" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="leaveDateToTFieldValue" max="32767" attributes="0"/>
-                                                  </Group>
-                                              </Group>
                                               <Group type="102" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="reasonLabel" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="leaveSubjectLabel" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="leaveTypeLabel" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="applyLabel" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="leaveDatesLabel" min="-2" pref="331" max="-2" attributes="0"/>
-                                                  </Group>
+                                                  <Component id="reasonLabel" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
                                           <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="applyLeaveButton" min="-2" max="-2" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="leaveDateFromLabel" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="leaveDateFromChooser" min="-2" pref="180" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="leaveDateToLabel" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="leaveDateToChooser" min="-2" pref="180" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                          <EmptySpace max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -1902,10 +1937,10 @@
                                   </Group>
                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="leaveDateToTFieldValue" max="32767" attributes="0"/>
-                                      <Component id="leaveDateFromTFieldValue" pref="38" max="32767" attributes="0"/>
+                                      <Component id="leaveDateToChooser" pref="38" max="32767" attributes="0"/>
+                                      <Component id="leaveDateFromChooser" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="reasonLabel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="reasonTFieldValue" min="-2" pref="112" max="-2" attributes="0"/>
@@ -1964,11 +1999,6 @@
                             <Property name="text" type="java.lang.String" value="Leave Dates (YYYY-MM-DD)"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="leaveDateFromTFieldValue">
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="leaveDateFromTFieldValueActionPerformed"/>
-                          </Events>
-                        </Component>
                         <Component class="javax.swing.JLabel" name="leaveDateFromLabel">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -2012,7 +2042,9 @@
                             <Property name="text" type="java.lang.String" value="Date To"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="leaveDateToTFieldValue">
+                        <Component class="com.toedter.calendar.JDateChooser" name="leaveDateFromChooser">
+                        </Component>
+                        <Component class="com.toedter.calendar.JDateChooser" name="leaveDateToChooser">
                         </Component>
                       </SubComponents>
                     </Container>

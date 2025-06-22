@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import com.toedter.calendar.JDateChooser;
+import java.util.Date;
 
 
 /**
@@ -45,6 +47,9 @@ public class SignUp extends javax.swing.JFrame {
     private ITService empAccountService;
     private HRService hrService;
     private EmployeeService leaveDetailsService;
+    private com.toedter.calendar.JDateChooser birthdayChooser;
+    private long validatedPagibig;
+    private long validatedPhilhealth;
 
     
 
@@ -89,9 +94,9 @@ public class SignUp extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         addressTField = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        birthdayTField = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         phoneTField = new javax.swing.JTextField();
+        dateChooser = new com.toedter.calendar.JDateChooser();
         jPanel1 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -168,12 +173,6 @@ public class SignUp extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jLabel16.setText("Birthday");
 
-        birthdayTField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                birthdayTFieldActionPerformed(evt);
-            }
-        });
-
         jLabel15.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jLabel15.setText("Phone #");
 
@@ -185,38 +184,35 @@ public class SignUp extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lastNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(passwordTField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(usernameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel16))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lastNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(addressTField)
+                                .addGap(1, 1, 1))
+                            .addComponent(firstNameTField)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(passwordTField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(usernameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel15))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(phoneTField, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(addressTField)
-                                        .addGap(1, 1, 1))
-                                    .addComponent(firstNameTField)
-                                    .addComponent(birthdayTField))))
-                        .addContainerGap(12, Short.MAX_VALUE))))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(dateChooser, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(phoneTField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,10 +238,10 @@ public class SignUp extends javax.swing.JFrame {
                     .addComponent(jLabel9)
                     .addComponent(addressTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel16)
-                    .addComponent(birthdayTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(phoneTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -421,7 +417,7 @@ public class SignUp extends javax.swing.JFrame {
                 .addComponent(signUp, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
                 .addComponent(backtoLoginButton)
                 .addGap(23, 23, 23))
         );
@@ -459,10 +455,6 @@ public class SignUp extends javax.swing.JFrame {
     private void philhealthTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_philhealthTFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_philhealthTFieldActionPerformed
-
-    private void birthdayTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_birthdayTFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_birthdayTFieldActionPerformed
 
     private void backtoLoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backtoLoginButtonActionPerformed
         LogIn newClassInstance = new LogIn ();
@@ -508,29 +500,7 @@ public class SignUp extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "A database error occurred while creating the account.\n" + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
-        /*Person empDetails = updateEmpDetailValues();
-        IT empAccount = updateEmpAccountValues();
-        if (!validateRequiredFields(empAccount,empDetails)) {
-            return; // Stop execution if validation fails
-        }
-        if (hrService.isDuplicateEmployee(empDetails)) {
-            JOptionPane.showMessageDialog(null, "Employee already exists. Account cannot be created.");
-        } else {
-            // Only save if it's a new employee
-            hrService.addEmployeeDetails(empDetails);
-            empAccountService.saveUserAccount(empAccount, empDetails);
-
-            LeaveBalance leaveBalance = new LeaveBalance();
-            leaveBalance.setEmpID(empDetails.getEmpID());
-            leaveDetailsService.saveLeaveBalance(leaveBalance);
-
-            JOptionPane.showMessageDialog(null, "Account created successfully! Please log in.");
-        }
-        
-        LogIn info = new LogIn();
-        info.setVisible(true);
-        this.dispose();*/
+       
     }//GEN-LAST:event_signUpActionPerformed
 
     private void passwordTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFieldActionPerformed
@@ -571,8 +541,7 @@ public class SignUp extends javax.swing.JFrame {
         return empAccount;
     }
     
-    private long validatedPagibig;
-    private long validatedPhilhealth;
+    
        
     private boolean validateRequiredFields(IT empAccount, Person empDetails){
         List<String> errors = new ArrayList<>();
@@ -613,7 +582,7 @@ public class SignUp extends javax.swing.JFrame {
 
             // Birthday - required and must be at least 18 years old
             if (empDetails.getEmpBirthday() == null) {
-                errors.add("Birthday is required (Format: YYYY-MM-DD).");
+                errors.add("Birthday is required.");
             } else {
                 Calendar dob = Calendar.getInstance();
                 dob.setTime(empDetails.getEmpBirthday());
@@ -731,13 +700,9 @@ public class SignUp extends javax.swing.JFrame {
         
         empDetails.setLastName(lastname);
         empDetails.setFirstName(firstname);
-        try {
-            java.util.Date utilDate = new SimpleDateFormat("yyyy-MM-dd").parse(birthdayTField.getText().trim());
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-
-            // Setting the sqlDate to empDetails
-            empDetails.setEmpBirthday(sqlDate);
-        } catch (ParseException ex) {
+        if (dateChooser != null && dateChooser.getDate() != null) {
+            Date selectedDate = dateChooser.getDate();
+            empDetails.setEmpBirthday(new java.sql.Date(selectedDate.getTime())); // ← direct assignment
         }
         
         empDetails.setEmpAddress(address);
@@ -805,7 +770,7 @@ public class SignUp extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressTField;
     private javax.swing.JButton backtoLoginButton;
-    private javax.swing.JTextField birthdayTField;
+    private com.toedter.calendar.JDateChooser dateChooser;
     private javax.swing.JTextField firstNameTField;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
