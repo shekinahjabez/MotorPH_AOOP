@@ -1272,11 +1272,13 @@
                                               </Group>
                                           </Group>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="statusPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="statusPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="clothingPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="clothingPayLabelValue" alignment="0" min="-2" pref="19" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="statusPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="statusPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="clothingPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -1284,10 +1286,8 @@
                                                   <Component id="basicSalaryPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   <Component id="basicSalaryPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                                  <Component id="totalAllowPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="totalAllowPayLabelValue" alignment="0" min="-2" pref="19" max="-2" attributes="0"/>
-                                              </Group>
+                                              <Component id="totalAllowPayLabelValue" alignment="0" min="-2" pref="19" max="-2" attributes="0"/>
+                                              <Component id="totalAllowPayLabel" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
@@ -1297,25 +1297,31 @@
                                           <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="1" attributes="0">
                                               <Group type="102" attributes="0">
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="sssContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="totalHoursPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="totalHoursPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="sssContriPayLabelValue" alignment="0" max="32767" attributes="0"/>
+                                                      <Group type="103" groupAlignment="3" attributes="0">
+                                                          <Component id="sssContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="totalHoursPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="totalHoursPayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
                                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="philhealthContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="philhealthContriPayLabelValue" alignment="0" min="-2" pref="19" max="-2" attributes="0"/>
-                                                      <Component id="hourlyRatePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="hourlyRatePayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="3" attributes="0">
+                                                          <Component id="philhealthContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="hourlyRatePayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="hourlyRatePayLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
                                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="pagibigContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="computedSalaryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="computedSalaryLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="pagibigContriPayLabelValue" alignment="0" max="32767" attributes="0"/>
+                                                      <Group type="103" groupAlignment="3" attributes="0">
+                                                          <Component id="pagibigContriPayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="computedSalaryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="computedSalaryLabelValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
                                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="3" attributes="0">

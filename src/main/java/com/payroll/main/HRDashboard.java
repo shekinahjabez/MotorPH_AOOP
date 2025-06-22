@@ -2217,6 +2217,7 @@ public class HRDashboard extends javax.swing.JFrame {
             try{
                 leaveDetailsService.deleteLeaveBalance(empID);
                 leaveDetailsService.deleteLeaveRequestbyEmpID(empID);
+                leaveDetailsService.deleteAttendanceRecords(empID);
                 empAccountService.deleteEmpAccount(empID);
                 hrService.deleteEmployeeDetails(empID);
                 

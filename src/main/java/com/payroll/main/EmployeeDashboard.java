@@ -1254,19 +1254,19 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                                     .addComponent(birthdayPayLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(phonePayLabelValue, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(statusPayLabel)
-                            .addComponent(statusPayLabelValue)
-                            .addComponent(clothingPayLabel)
-                            .addComponent(clothingPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(clothingPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(statusPayLabel)
+                                .addComponent(statusPayLabelValue)
+                                .addComponent(clothingPayLabel)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(basicSalaryPayLabel)
                                 .addComponent(basicSalaryPayLabelValue))
-                            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(totalAllowPayLabel)
-                                .addComponent(totalAllowPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(totalAllowPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(totalAllowPayLabel))
                         .addGap(61, 61, 61)
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(deductionsPayLabel)
@@ -1274,23 +1274,26 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(sssContriPayLabel)
-                                    .addComponent(totalHoursPayLabel)
-                                    .addComponent(totalHoursPayLabelValue)
-                                    .addComponent(sssContriPayLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(sssContriPayLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(sssContriPayLabel)
+                                        .addComponent(totalHoursPayLabel)
+                                        .addComponent(totalHoursPayLabelValue)))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(philhealthContriPayLabel)
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(philhealthContriPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(hourlyRatePayLabel)
-                                    .addComponent(hourlyRatePayLabelValue))
+                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(philhealthContriPayLabel)
+                                        .addComponent(hourlyRatePayLabel)
+                                        .addComponent(hourlyRatePayLabelValue)))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(pagibigContriPayLabel)
-                                    .addComponent(computedSalaryLabel)
-                                    .addComponent(computedSalaryLabelValue)
-                                    .addComponent(pagibigContriPayLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(pagibigContriPayLabelValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(pagibigContriPayLabel)
+                                        .addComponent(computedSalaryLabel)
+                                        .addComponent(computedSalaryLabelValue)))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(totalDeductionsPayLabel)
@@ -1692,12 +1695,42 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             }
         } 
     }//GEN-LAST:event_changePasswordActionPerformed
-    private void validateAttendanceData(List<Employee> empHours) {
+    private void validateAttendanceData(List<Employee> empHours, int selectedMonth, int selectedYear) {
+        // Get current system month and year
+        Calendar currentCal = Calendar.getInstance();
+        int currentMonth = currentCal.get(Calendar.MONTH); // Calendar.MONTH is 0-based (Jan = 0)
+
+        int currentYear = currentCal.get(Calendar.YEAR);
+
+        // DEBUGGING (optional – remove in production)
+        //System.out.println("Selected: " + selectedMonth + "/" + selectedYear);
+        //System.out.println("Current: " + currentMonth + "/" + currentYear);
+
+        // Disallow current month or future months
+        if ((selectedYear > currentYear) ||
+            (selectedYear == currentYear && selectedMonth > currentMonth) ||
+            (selectedYear == currentYear && selectedMonth == currentMonth)) {
+
+            System.out.println("BLOCKED — current/future month selected"); // Debug
+            JOptionPane.showMessageDialog(null,
+                "Attendance and payroll details for the selected period are not yet available.",
+                "Unavailable Data",
+                JOptionPane.WARNING_MESSAGE);
+            clearAttendanceTable();
+            clearPayrollLabels();
+            return;
+        }
+
+        // If no records are found
         if (empHours.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No attendance records found for the selected month and year.", "No Attendance", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                "No attendance records found for the selected month and year.",
+                "No Attendance",
+                JOptionPane.ERROR_MESSAGE);
             clearAttendanceTable();
             clearPayrollLabels();
         } else {
+            // Load data
             populateAttendanceTable(empHours);
             updatePayrollLabels(empHours);
         }
@@ -1721,26 +1754,26 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     
     private void monthDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthDropdownActionPerformed
         if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
-          Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-          Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
+            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+            Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
 
-          if (monthValue != null && year != null) {
-              List<Employee> empHours = getEmployeeHours(monthValue, year);
-              validateAttendanceData(empHours);
-          }
-      }
+            if (monthValue != null && year != null) {
+                List<Employee> empHours = getEmployeeHours(monthValue, year);
+                validateAttendanceData(empHours, monthValue, year);
+            }
+        }
     }//GEN-LAST:event_monthDropdownActionPerformed
 
     private void yearDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearDropdownActionPerformed
         if (monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null) {
-                Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-                Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
+            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+            Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
 
-                if (monthValue != null && year != null) {
-                    List<Employee> empHours = getEmployeeHours(monthValue, year);
-                    validateAttendanceData(empHours);
-                }
-            } 
+            if (monthValue != null && year != null) {
+                List<Employee> empHours = getEmployeeHours(monthValue, year);
+                validateAttendanceData(empHours, monthValue, year);
+            }
+        }
     }//GEN-LAST:event_yearDropdownActionPerformed
 
     private void populateAttendanceTable(List<Employee> empHours){
