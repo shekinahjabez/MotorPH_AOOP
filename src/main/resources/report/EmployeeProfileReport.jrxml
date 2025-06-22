@@ -76,7 +76,7 @@
 	</title>
 	<detail>
 		<band height="566">
-			<element kind="staticText" uuid="2159cc5b-ebcc-47c8-b819-dc4f8058bf46" mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true">
+			<element kind="staticText" uuid="2159cc5b-ebcc-47c8-b819-dc4f8058bf46" mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" vTextAlign="Middle">
 				<text><![CDATA[Personal Information]]></text>
 			</element>
 			<element kind="staticText" uuid="36bd5906-8fb5-4ba6-87d4-04e7b06b971e" x="0" y="25" width="100" height="20">
@@ -109,7 +109,7 @@
 			<element kind="textField" uuid="06a6b3f3-8a7e-4e9b-95fe-098b09429868" x="100" y="105" width="300" height="20">
 				<expression><![CDATA[$F{address}]]></expression>
 			</element>
-			<element kind="staticText" uuid="b766fa91-3c8a-4b85-a505-825b1227e5ae" mode="Opaque" x="0" y="135" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true">
+			<element kind="staticText" uuid="b766fa91-3c8a-4b85-a505-825b1227e5ae" mode="Opaque" x="0" y="135" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" vTextAlign="Middle">
 				<text><![CDATA[Job Information]]></text>
 			</element>
 			<element kind="staticText" uuid="ae176bf1-3e7c-45a5-8549-45e9dbe8ae9b" x="0" y="160" width="100" height="20">
@@ -130,7 +130,7 @@
 			<element kind="textField" uuid="f49a191d-d15b-421d-9a7d-0f8a6463c13c" x="100" y="200" width="250" height="20">
 				<expression><![CDATA[$F{supervisor_name}]]></expression>
 			</element>
-			<element kind="staticText" uuid="35a536dd-3f60-46b8-8d14-88d971c2062e" mode="Opaque" x="0" y="230" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true">
+			<element kind="staticText" uuid="35a536dd-3f60-46b8-8d14-88d971c2062e" mode="Opaque" x="0" y="230" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" vTextAlign="Middle">
 				<text><![CDATA[Government Identification Numbers]]></text>
 			</element>
 			<element kind="staticText" uuid="8dd315fa-ebb8-4ba5-b359-3f4504719c73" x="0" y="255" width="100" height="20">
@@ -157,7 +157,7 @@
 			<element kind="textField" uuid="6b382ae4-45ab-4574-9b3c-5467612e636c" x="100" y="315" width="200" height="20">
 				<expression><![CDATA[$F{philhealth}]]></expression>
 			</element>
-			<element kind="staticText" uuid="d8dabf13-bd4f-43bc-88ce-bbcb1360d1c7" mode="Opaque" x="0" y="345" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true">
+			<element kind="staticText" uuid="d8dabf13-bd4f-43bc-88ce-bbcb1360d1c7" mode="Opaque" x="0" y="345" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" vTextAlign="Middle">
 				<text><![CDATA[Benefits]]></text>
 			</element>
 			<element kind="staticText" uuid="bd13c544-6cd3-4886-84e2-e19b7f4adb2a" x="0" y="369" width="150" height="20">
@@ -178,7 +178,7 @@
 			<element kind="textField" uuid="3d1dafe2-9c6a-461a-9c1b-29df6998f0c5" x="160" y="409" width="200" height="20">
 				<expression><![CDATA[$F{clothing_allowance}]]></expression>
 			</element>
-			<element kind="staticText" uuid="ae22fb75-bc00-4d8f-89b0-1449f5988e52" mode="Opaque" x="0" y="438" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true">
+			<element kind="staticText" uuid="ae22fb75-bc00-4d8f-89b0-1449f5988e52" mode="Opaque" x="0" y="438" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" vTextAlign="Middle">
 				<text><![CDATA[Compensation Details]]></text>
 			</element>
 			<element kind="staticText" uuid="1a3b6da7-2c9b-4d4a-92e0-99ae2163377a" x="0" y="463" width="150" height="20">
