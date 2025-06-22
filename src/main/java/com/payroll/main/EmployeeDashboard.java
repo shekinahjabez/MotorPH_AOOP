@@ -1364,7 +1364,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         leaveSubjectLabel.setText("Leave Subject");
 
         leaveDatesLabel.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        leaveDatesLabel.setText("Leave Dates (YYYY-MM-DD)");
+        leaveDatesLabel.setText("Leave Dates");
 
         leaveDateFromLabel.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         leaveDateFromLabel.setText("Date From");

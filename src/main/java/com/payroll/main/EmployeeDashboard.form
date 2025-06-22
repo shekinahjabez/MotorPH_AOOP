@@ -2002,7 +2002,7 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Century Gothic" size="18" style="1"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="Leave Dates (YYYY-MM-DD)"/>
+                            <Property name="text" type="java.lang.String" value="Leave Dates"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="leaveDateFromLabel">
