@@ -1,18 +1,55 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
 <jasperReport name="EmployeeReport" language="java" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b8f6b33b-87cc-4c64-865f-bf4748c07a1f">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MotorPH_AOOP"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="LogoPath" class="java.net.URL"/>
-	<query language="SQL"><![CDATA[SELECT e.*, CONCAT(e.firstname, ' ', e.lastname) AS full_name FROM employee e ORDER BY employee_id ASC;
-]]></query>
-	<field name="employee_id" class="java.lang.Long"/>
-	<field name="full_name" class="java.lang.String"/>
-	<field name="sss" class="java.lang.String"/>
-	<field name="philhealth" class="java.lang.Long"/>
-	<field name="tin" class="java.lang.String"/>
-	<field name="pag_ibig" class="java.lang.Long"/>
+	<query language="SQL"><![CDATA[SELECT 
+    e.employee_id,
+    CONCAT(e.firstname, ' ', e.lastname) AS full_name,
+    e.birthday,
+    e.phone_number,
+    es.status AS status,
+    ep.position AS position
+FROM 
+    employee e
+JOIN 
+    employee_status es ON e.status = es.id
+JOIN 
+    employee_position ep ON e.position = ep.id
+ORDER BY 
+    e.employee_id ASC;]]></query>
+	<field name="employee_id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="employee_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="employee_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="full_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="full_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="full_name"/>
+	</field>
+	<field name="birthday" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="birthday"/>
+		<property name="com.jaspersoft.studio.field.label" value="birthday"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="phone_number" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="phone_number"/>
+		<property name="com.jaspersoft.studio.field.label" value="phone_number"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="status" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="status"/>
+		<property name="com.jaspersoft.studio.field.label" value="status"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee_status"/>
+	</field>
+	<field name="position" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="position"/>
+		<property name="com.jaspersoft.studio.field.label" value="position"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee_position"/>
+	</field>
 	<title height="125">
 		<element kind="staticText" uuid="7707e69e-6f99-4d54-ad4f-8acebe39eafa" x="0" y="87" width="558" height="30" fontSize="16.0" bold="true" hTextAlign="Center">
-			<text><![CDATA[MOTORPH EMPLOYEES]]></text>
+			<text><![CDATA[MOTORPH EMPLOYEES MASTERLIST]]></text>
 		</element>
 		<element kind="staticText" uuid="74efdb69-a64f-46af-bf7b-897435e8f37e" x="411" y="53" width="50" height="20" hTextAlign="Right">
 			<text><![CDATA[Date:]]></text>
@@ -41,23 +78,23 @@
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</title>
 	<columnHeader height="20">
-		<element kind="staticText" uuid="43be7913-4b69-4ecb-b624-986e484d50f1" x="0" y="0" width="50" height="20" bold="true" hTextAlign="Center">
+		<element kind="staticText" uuid="43be7913-4b69-4ecb-b624-986e484d50f1" mode="Opaque" x="0" y="0" width="50" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[EMP ID]]></text>
 		</element>
-		<element kind="staticText" uuid="9650d897-8744-4e89-a590-32a0ff847737" x="50" y="0" width="120" height="20" bold="true" hTextAlign="Center">
+		<element kind="staticText" uuid="9650d897-8744-4e89-a590-32a0ff847737" mode="Opaque" x="50" y="0" width="120" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[NAME]]></text>
 		</element>
-		<element kind="staticText" uuid="6e15dd0e-5a5f-4d3a-9a47-d16625bf5204" x="170" y="0" width="90" height="20" bold="true" hTextAlign="Center">
-			<text><![CDATA[SSS]]></text>
+		<element kind="staticText" uuid="6e15dd0e-5a5f-4d3a-9a47-d16625bf5204" mode="Opaque" x="170" y="0" width="90" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[BIRTHDAY]]></text>
 		</element>
-		<element kind="staticText" uuid="7cf889ac-94f5-4837-932b-7ae9015c86f2" x="260" y="0" width="90" height="20" bold="true" hTextAlign="Center">
-			<text><![CDATA[PHILHEALTH]]></text>
+		<element kind="staticText" uuid="7cf889ac-94f5-4837-932b-7ae9015c86f2" mode="Opaque" x="260" y="0" width="90" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[PHONE NUMBER]]></text>
 		</element>
-		<element kind="staticText" uuid="38654fc1-c01f-43cb-b7c8-369b2e3d6211" x="350" y="0" width="90" height="20" bold="true" hTextAlign="Center">
-			<text><![CDATA[TIN]]></text>
+		<element kind="staticText" uuid="38654fc1-c01f-43cb-b7c8-369b2e3d6211" mode="Opaque" x="350" y="0" width="90" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[STATUS]]></text>
 		</element>
-		<element kind="staticText" uuid="77d32e57-0ad1-4144-84b9-74ef5511b982" x="440" y="0" width="115" height="20" bold="true" hTextAlign="Center">
-			<text><![CDATA[PAG-IBIG]]></text>
+		<element kind="staticText" uuid="77d32e57-0ad1-4144-84b9-74ef5511b982" mode="Opaque" x="440" y="0" width="115" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[POSITION]]></text>
 		</element>
 	</columnHeader>
 	<detail>
@@ -69,16 +106,16 @@
 				<expression><![CDATA[$F{full_name}]]></expression>
 			</element>
 			<element kind="textField" uuid="1ce260c9-5509-490e-99cf-6aad8fd87489" x="170" y="0" width="90" height="18" hTextAlign="Center">
-				<expression><![CDATA[$F{sss}]]></expression>
+				<expression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{birthday})]]></expression>
 			</element>
 			<element kind="textField" uuid="7eacfd7f-0952-4a44-aa71-12437b294fc1" x="260" y="0" width="90" height="18" hTextAlign="Center">
-				<expression><![CDATA[$F{philhealth}]]></expression>
+				<expression><![CDATA[$F{phone_number}]]></expression>
 			</element>
 			<element kind="textField" uuid="3c547b05-2d2a-4da1-9c84-6980267ba14a" x="350" y="0" width="90" height="18" hTextAlign="Center">
-				<expression><![CDATA[$F{tin}]]></expression>
+				<expression><![CDATA[$F{status}]]></expression>
 			</element>
 			<element kind="textField" uuid="a041a885-3c78-4b54-97b7-f40a45ecc09e" x="440" y="0" width="115" height="18" hTextAlign="Center">
-				<expression><![CDATA[$F{pag_ibig}]]></expression>
+				<expression><![CDATA[$F{position}]]></expression>
 			</element>
 		</band>
 	</detail>

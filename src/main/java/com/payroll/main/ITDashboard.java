@@ -11,6 +11,7 @@ import com.payroll.subdomain.UserRole;
 import com.payroll.services.HRService;
 import com.payroll.services.ITService;
 import com.payroll.util.DatabaseConnection;
+import com.payroll.util.ReportGenerator;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.sql.Connection;
@@ -38,11 +39,13 @@ public class ITDashboard extends javax.swing.JFrame {
     private IT empAccount;
     private ITService itService;
     private HRService hrService;
+    private ReportGenerator reportGenerator;
     
     public ITDashboard(IT empAccount) {
         initComponents();
         cardLayout = (CardLayout)(mphCards.getLayout());
         this.empAccount = empAccount;
+        this.reportGenerator = new ReportGenerator();
         updateUserLabels(empAccount);
 
         try {

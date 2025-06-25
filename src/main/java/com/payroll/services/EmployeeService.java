@@ -269,6 +269,27 @@ public class EmployeeService {
         return attendanceDetails; 
     }
     
+    public void deleteAttendanceRecords(int empID) {
+        if (connection == null) {
+            throw new IllegalStateException("Database connection is not initialized.");
+        }
+
+        String query = "DELETE FROM public.employee_hours WHERE employee_id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, empID);
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+               // System.out.println("Successfully deleted " + rowsDeleted + " attendance record(s) for employee ID: " + empID);
+            } else {
+              //  System.out.println("No attendance records found for employee ID: " + empID);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // ✅ Log the error, but don't rethrow
+        }
+    }
+    
     
     public HR addLeaveRequest(HR leaveDetails){
         //java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;

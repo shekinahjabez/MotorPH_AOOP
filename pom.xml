@@ -5,14 +5,15 @@
     <artifactId>MotorPH</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
         <exec.mainClass>com.payroll.motorph.MotorPH</exec.mainClass>
     </properties>
+
     <dependencies>
-    <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -53,25 +54,32 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.10.0</version> <!-- Use the latest stable version -->
+            <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.0</version> <!-- Must match jupiter-api version -->
+            <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.toedter</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.4</version>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.2</version> <!-- Use a recent version -->
+                <version>3.2.2</version>
             </plugin>
         </plugins>
     </build>
+
     <repositories>
         <repository>
             <id>java.net</id>
@@ -79,5 +87,6 @@
             <url>https://download.java.net/maven/2/</url>
         </repository>
     </repositories>
+
     <name>MotorPH_AOOP</name>
 </project>

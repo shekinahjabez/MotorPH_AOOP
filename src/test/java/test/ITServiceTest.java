@@ -41,9 +41,9 @@ public class ITServiceTest {
     @BeforeAll
     public static void setup() throws SQLException {
         System.out.println("--- Starting ITServiceTest: Setting up database connection and services. ---");
-        String url = "jdbc:postgresql://localhost:5432/AOOP";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "martin27";
+        String password = "postgres";
         connection = DriverManager.getConnection(url, user, password);
         
         // Initialize BOTH services

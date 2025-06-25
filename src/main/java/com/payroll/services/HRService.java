@@ -346,52 +346,7 @@ public class HRService {
         }
         return empDetails;
     }
-    /*public Person addEmployeeDetails(Person empDetails){
-            if (connection == null)return null; 
-            
-            
-            String Query = "INSERT into public.employee (lastname, firstname,birthday,address,phone_number,sss,philhealth,tin,pag_ibig,status,position,immediate_supervisor,basic_salary, rice_subsidy, phone_allowance, clothing_allowance, gross_semi_monthly_rate, hourly_rate)"
-                    + "values(?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query,Statement.RETURN_GENERATED_KEYS);
-                java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
-                Integer superVisorId = empDetails.getEmpImmediateSupervisor() != null ? empDetails.getEmpImmediateSupervisor().getEmpID() : null;
-                Integer positionId = empDetails.getEmpPosition() != null ? empDetails.getEmpPosition().getId() : null;
-                Integer statusId = empDetails.getEmpStatus() != null ? empDetails.getEmpStatus().getId() : null;
-                preparedStatement.setString(1,empDetails.getLastName());
-                preparedStatement.setString(2,empDetails.getFirstName());
-                preparedStatement.setDate(3,birthDate);
-                preparedStatement.setString(4,empDetails.getEmpAddress());
-                preparedStatement.setString(5,empDetails.getEmpPhoneNumber());
-                preparedStatement.setString(6,empDetails.getEmpSSS());
-                preparedStatement.setLong(7,empDetails.getEmpPhilHealth());
-                preparedStatement.setString(8,empDetails.getEmpTIN());
-                preparedStatement.setLong(9,empDetails.getEmpPagibig());
-                preparedStatement.setObject(10, statusId, Types.INTEGER);
-                preparedStatement.setObject(11, positionId,Types.INTEGER);
-                preparedStatement.setObject(12, superVisorId,Types.INTEGER);
-                preparedStatement.setDouble(13, empDetails.getEmpBasicSalary());
-                preparedStatement.setDouble(14, empDetails.getEmpRice());
-                preparedStatement.setDouble(15, empDetails.getEmpPhone());
-                preparedStatement.setDouble(16, empDetails.getEmpClothing());
-                preparedStatement.setDouble(17, empDetails.getEmpMonthlyRate());
-                preparedStatement.setDouble(18, empDetails.getEmpHourlyRate());
-  
-                int affectedrows = preparedStatement.executeUpdate();
-                if(affectedrows > 0){
-                    try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            empDetails.setEmpID(generatedKeys.getInt(1));
-                        } else {
-                            throw new SQLException("Updating user failed, no ID obtained.");
-                         }
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }                              
-        return empDetails;
-    }*/
+
     
     public boolean deleteEmployeeDetails(int empID) {
         boolean isDeleted = false;
@@ -510,81 +465,6 @@ public class HRService {
         }
 
         return empHours;
-    }
-    
-    public void generateTimecardReport(int employeeId, int month, int year) {
-        try {
-            // Compile the JRXML file from classpath
-            InputStream reportStream = getClass().getClassLoader().getResourceAsStream("report/Timecard.jrxml");
-            if (reportStream == null) {
-                throw new FileNotFoundException("Report file not found in classpath: report/Timecard.jrxml");
-            }
-            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
-
-            // Load logo (optional)
-            URL logoUrl = getClass().getClassLoader().getResource("report/mph_logo.png");
-            if (logoUrl == null) {
-                throw new FileNotFoundException("Logo not found at /report/mph_logo.png");
-            }
-
-            // Prepare parameters
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("employee_id", employeeId);
-            parameters.put("month", month);
-            parameters.put("year", year); // ✅ convert String to Integer
-            parameters.put("LogoPath", logoUrl);
-
-            // Connect to DB
-            Connection connection = DatabaseConnection.getConnection();
-
-            // Fill and view report
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-
-            if (jasperPrint.getPages().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No data available for Employee ID: " + employeeId, "Empty Report", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JasperViewer.viewReport(jasperPrint, false);
-            }
-
-            connection.close();
-            System.out.println("✅ Timecard report generated for Employee ID: " + employeeId);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to generate timecard report.\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    public void generateEmployeeReport() {
-        try {
-              // Load and compile the report file
-              InputStream reportStream = getClass().getClassLoader().getResourceAsStream("report/EmployeeReport.jrxml");
-              if (reportStream == null) {
-                  throw new FileNotFoundException("Report file not found in classpath: report/EmployeeReport.jrxml");
-              }
-              JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
-
-              // Load the logo from resources
-              URL logoUrl = getClass().getClassLoader().getResource("report/mph_logo.png");
-              if (logoUrl == null) {
-                  throw new FileNotFoundException("Logo not found at: report/mph_logo.png");
-              }
-
-              // Prepare report parameters
-              Map<String, Object> parameters = new HashMap<>();
-              parameters.put("LogoPath", logoUrl);  // Pass the logo URL to the report
-
-              // Fill the report with DB connection
-              Connection connection = DatabaseConnection.getConnection();
-              JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-
-              JasperViewer.viewReport(jasperPrint, false);
-              connection.close();
-
-          } catch (Exception e) {
-              e.printStackTrace();
-              JOptionPane.showMessageDialog(null, "Failed to generate employee report.\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
-          }
     }
     
     private Person toEmployeeDetails(ResultSet resultSet, boolean fetchSupervisor) 

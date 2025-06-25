@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -22,33 +23,101 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author leniejoice
  */
 public class ReportGenerator {
-    
-public void generatePayslipReport() {
-//financeservice  
-}
 
-public void generateEmployeeReport() {
-        try {
-            // Compile the JRXML file
-            JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/report/EmployeeReport.jrxml");
+    public void generatePayrollReport(int payrollId) {
+         try (Connection connection = DatabaseConnection.getConnection()) {
+            Map<String, Object> parameters = getCommonParameters();
+            parameters.put("payroll_id", payrollId);
 
-            // Prepare parameters map (empty for now since we're not using any)
-            Map<String, Object> parameters = new HashMap<>();
-
-            // Get database connection
-            Connection connection = DatabaseConnection.getConnection();
-
-            // Fill the report with the parameters and connection
+            JasperReport jasperReport = compileReport("report/Payslip.jrxml");
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
 
-            // Display the report
-            JasperViewer.viewReport(jasperPrint, false);
-
-            // Close connection
-            connection.close();
+            if (jasperPrint.getPages().isEmpty()) {
+                showMessage("No pages found for payroll ID: " + payrollId, "No Data");
+            } else {
+                JasperViewer.viewReport(jasperPrint, false);
+            }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            showError("Failed to generate payroll report", e);
         }
+    }
+
+    public void generateTimecardReport(int employeeId, int month, int year) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            Map<String, Object> parameters = getCommonParameters();
+            parameters.put("employee_id", employeeId);
+            parameters.put("month", month);
+            parameters.put("year", year);
+
+            JasperReport jasperReport = compileReport("report/Timecard.jrxml");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+            if (jasperPrint.getPages().isEmpty()) {
+                showMessage("No data available for Employee ID: " + employeeId, "Empty Report");
+            } else {
+                JasperViewer.viewReport(jasperPrint, false);
+            }
+
+        } catch (Exception e) {
+            showError("Failed to generate timecard report", e);
+        }
+    }
+
+    public void generateEmployeeReport() {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            Map<String, Object> parameters = getCommonParameters();
+
+            JasperReport jasperReport = compileReport("report/EmployeeReport.jrxml");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            showError("Failed to generate employee report", e);
+        }
+    }
+    
+    public void generateEmployeeProfileReport(Integer employeeID) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            Map<String, Object> parameters = getCommonParameters();
+            
+            parameters.put("employee_id", employeeID); 
+
+            JasperReport jasperReport = compileReport("report/EmployeeProfileReport.jrxml");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            showError("Failed to generate employee report", e);
+        }
+    }
+
+    // ---------------- Helper Methods ----------------
+
+    private JasperReport compileReport(String resourcePath) throws FileNotFoundException, JRException {
+        InputStream reportStream = getClass().getClassLoader().getResourceAsStream(resourcePath);
+        if (reportStream == null) {
+            throw new FileNotFoundException("Report file not found in classpath: " + resourcePath);
+        }
+        return JasperCompileManager.compileReport(reportStream);
+    }
+
+    private Map<String, Object> getCommonParameters() throws FileNotFoundException {
+        Map<String, Object> parameters = new HashMap<>();
+        URL logoUrl = getClass().getClassLoader().getResource("report/mph_logo.png");
+        if (logoUrl == null) {
+            throw new FileNotFoundException("Logo not found at /report/mph_logo.png");
+        }
+        parameters.put("LogoPath", logoUrl);
+        return parameters;
+    }
+
+    private void showMessage(String message, String title) {
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showError(String title, Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, title + ":\n" + e.getMessage(), "Report Error", JOptionPane.ERROR_MESSAGE);
     }
 }
