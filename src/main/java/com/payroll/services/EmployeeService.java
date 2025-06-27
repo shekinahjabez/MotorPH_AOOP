@@ -229,6 +229,30 @@ public class EmployeeService {
         }
         return false;
     }
+    
+    public void autoFillLastUnclosedTimeOut(int empID) throws SQLException {
+        if (connection == null) {
+            throw new IllegalStateException("Database connection is not initialized.");
+        }
+
+        String query = "UPDATE public.employee_hours " +
+                       "SET time_out = ? " +
+                       "WHERE employee_id = ? AND time_out IS NULL " +
+                       "ORDER BY date DESC LIMIT 1";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            LocalTime fallbackTimeOut = LocalTime.of(17, 0); // 5 PM
+            java.sql.Time sqlTimeOut = java.sql.Time.valueOf(fallbackTimeOut);
+
+            preparedStatement.setTime(1, sqlTimeOut);
+            preparedStatement.setInt(2, empID);
+
+            int updated = preparedStatement.executeUpdate();
+            if (updated > 0) {
+                System.out.println("Auto-filled last missing time-out for employee " + empID);
+            }
+        }
+    }
 
     
     public Employee timeOut(Employee attendanceDetails) {
@@ -286,21 +310,20 @@ public class EmployeeService {
               //  System.out.println("No attendance records found for employee ID: " + empID);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // ✅ Log the error, but don't rethrow
+            e.printStackTrace(); 
         }
     }
     
     
     public HR addLeaveRequest(HR leaveDetails){
-        //java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
         java.sql.Date dateFrom = leaveDetails.getDateFrom()!=null? new java.sql.Date(leaveDetails.getDateFrom().getTime()):null;
         java.sql.Date dateTo = leaveDetails.getDateTo()!=null? new java.sql.Date(leaveDetails.getDateTo().getTime()):null;
         Integer leaveTypeId = leaveDetails.getLeaveType() != null ? leaveDetails.getLeaveType().getId() : null;
        
  
         if (connection != null) {
-        String Query = "INSERT into public.leave_details (subject, type,date_from,date_to,total_days,reason,status, employee_id)"
-                + "values(?, ?, ?, ?,?, ?, ?,?)";
+        String Query = "INSERT into public.leave_details (subject, type,date_from,date_to,total_days,reason,status, employee_id,approver_id)"
+                + "values(?, ?, ?, ?,?, ?, ?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(Query,Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1,leaveDetails.getSubject());
@@ -311,6 +334,7 @@ public class EmployeeService {
             preparedStatement.setString(6,leaveDetails.getReason());
             preparedStatement.setString(7,leaveDetails.getStatus().name());
             preparedStatement.setInt(8,leaveDetails.getEmpID());
+            preparedStatement.setInt(9, leaveDetails.getApproverId());
 
 
             int affectedrows = preparedStatement.executeUpdate();
@@ -406,6 +430,7 @@ public class EmployeeService {
         return allLeaveRequest;
     }
     
+    /*
     public void updateLeaveRequestStatus(LeaveStatus leaveStatus, int id){
         if (connection != null) {
             String Query = "UPDATE public.leave_details set status = ? where id = ?";
@@ -421,7 +446,23 @@ public class EmployeeService {
             }         
         }                          
     }
-    
+    */
+      public void updateLeaveRequestStatus(LeaveStatus leaveStatus, int id, int approverId){
+        if (connection != null) {
+            String Query = "UPDATE public.leave_details SET status = ?, approver_id = ? WHERE id = ?";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(Query);
+                preparedStatement.setString(1, leaveStatus.name());
+                preparedStatement.setInt(2, approverId);         // ✅ set approver ID
+                preparedStatement.setInt(3, id);
+
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }         
+        }                          
+    }
     
     private HR toLeaveDetails(ResultSet resultSet) 
         throws SQLException {
@@ -434,6 +475,7 @@ public class EmployeeService {
             leaveDetails.setTotalDays(resultSet.getInt("total_days"));
             leaveDetails.setReason(resultSet.getString("reason"));
             leaveDetails.setStatus(LeaveStatus.valueOf(resultSet.getString("status")));
+            leaveDetails.setApproverId(resultSet.getInt("approver_id"));
             
             int leaveTypeId  = resultSet.getInt("type");
             if (leaveTypeId > 0){

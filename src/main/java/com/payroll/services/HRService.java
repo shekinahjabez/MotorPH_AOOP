@@ -5,13 +5,11 @@
 package com.payroll.services;
 import com.payroll.domain.Person;
 import com.payroll.domain.Employee;
+import com.payroll.domain.HR.LeaveStatus;
 import com.payroll.domain.IT;
 import com.payroll.subdomain.EmployeePosition;
 import com.payroll.subdomain.EmployeeStatus;
 import com.payroll.util.DatabaseConnection;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,16 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.view.JasperViewer;
-
 /**
  *
  * @author leniejoice
@@ -276,7 +265,9 @@ public class HRService {
         }
 
         return null;
-    }    
+    }
+
+    
     public Person addEmployeeDetails(Person empDetails) {
         if (connection == null) return null;
 
@@ -487,22 +478,23 @@ public class HRService {
             employeeDetails.setEmpMonthlyRate(resultSet.getDouble("gross_semi_monthly_rate"));
             employeeDetails.setEmpHourlyRate(resultSet.getDouble("hourly_rate"));
             int superVisorId  = resultSet.getInt("immediate_supervisor");
-            if (superVisorId > 0 && fetchSupervisor){
-                Person superVisor = getByEmpID(superVisorId, false);
-                employeeDetails.setEmpImmediateSupervisor(superVisor);
-            }       
+                if (superVisorId > 0 && fetchSupervisor){
+                    Person superVisor = getByEmpID(superVisorId, false);
+                    employeeDetails.setEmpImmediateSupervisor(superVisor);
+                }       
             int positionId  = resultSet.getInt("position");
-            if (positionId > 0){
-                EmployeePosition position = getPositionById(positionId);
-                employeeDetails.setEmpPosition(position);
-            }    
-            int statusId  = resultSet.getInt("status");
-            if (statusId > 0){
-                EmployeeStatus status = getStatusById(statusId);
-                employeeDetails.setEmpStatus(status);
-            }
+                if (positionId > 0){
+                    EmployeePosition position = getPositionById(positionId);
+                    employeeDetails.setEmpPosition(position);
+                }    
+           int statusId  = resultSet.getInt("status");
+                if (statusId > 0){
+                    EmployeeStatus status = getStatusById(statusId);
+                    employeeDetails.setEmpStatus(status);
+                }
         return employeeDetails;
     }
+    
     private Person toEmployeeDetails(ResultSet resultSet) 
         throws SQLException {
         return toEmployeeDetails(resultSet, true);

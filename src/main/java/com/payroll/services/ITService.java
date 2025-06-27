@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,15 +23,11 @@ import javax.swing.JOptionPane;
 public class ITService {
     private Connection connection;
     private HRService hrService;
-    private FinanceService financeService;
-    private EmployeeService leaveDetailsService;
 
     public ITService(Connection connection) {
         try {
             this.connection = DatabaseConnection.getConnection();
             this.hrService = new HRService(connection);
-            this.financeService = new FinanceService(connection);
-            this.leaveDetailsService = new EmployeeService(connection);
         } catch (SQLException e) {
             e.printStackTrace(); // Consider using a logger in real applications
         }
@@ -316,41 +311,6 @@ public class ITService {
 
         return empDetails;
     }
-   
-    
-    /*public Person saveUserAccount(IT empAccount,Person empDetails){
-        if (connection != null) {
-            
-        }
-       
-        String query = "INSERT INTO public.employee_account (employee_id, username, password, role_id) VALUES (?, ?, ?, ?)";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, empDetails.getEmpID());                
-            preparedStatement.setString(2, empAccount.getEmpUserName());
-            preparedStatement.setString(3, empAccount.getEmpPassword());
-            preparedStatement.setInt(4, 2); // Default role_id = 2
-
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                         empAccount.setAccountID(generatedKeys.getInt(1));
-                    } else {
-                         throw new SQLException("Creating user failed, no ID obtained.");
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, 
-                "An error occurred while saving the user account.\n" + e.getMessage(), 
-                "Database Error", 
-                JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-
-        return empDetails;
-    }*/
     
     public void deleteEmpAccount(int empID){
         if (connection != null) {
@@ -372,7 +332,6 @@ public class ITService {
     public void changePassword(IT empAccount){
         if(connection !=null){
             String Query = "UPDATE public.employee_account SET password = ? where employee_id = ?";
-        
             try{
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setString(1,empAccount.getEmpPassword());

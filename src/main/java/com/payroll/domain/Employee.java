@@ -78,7 +78,6 @@ public class Employee extends Person{
         this.timeOut = timeOut;
     }
 
-
     public int getAttendanceId() {
         return attendanceId;
     }

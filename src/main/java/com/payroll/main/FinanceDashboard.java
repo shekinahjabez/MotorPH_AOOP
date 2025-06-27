@@ -178,47 +178,6 @@ public class FinanceDashboard extends javax.swing.JFrame {
         totalAllowPayLabelValue.setText(String.valueOf(SalaryCalculation.getTotalAllowance(empAccount.getEmpDetails())));
         basicSalaryPayLabelValue.setText(String.valueOf(empAccount.getEmpDetails().getEmpBasicSalary()));
     }
-   
-    /*this method is for itext
-    private void updatePayrollLabelsDraft(List<Employee> employeeHours){
-        if (employeeHours.isEmpty()) {
-            resetPayrollLabels();
-        } else {
-            // 1. Calculate total hours
-            String totalHoursStr = SalaryCalculation.getFormattedTotalHoursWorked(employeeHours);
-            totalHoursPayLabelValue.setText(totalHoursStr);
-            double totalHoursWorked = convertHoursStringToDecimal(totalHoursStr);
-
-            // 2. Hourly rate
-            double hourlyRate = empAccount.getEmpHourlyRate();
-
-            // 3. Computed salary (based on hours)
-            computedSalary = totalHoursWorked * hourlyRate;
-            computedSalaryLabelValue.setText(String.format("%.2f", computedSalary));
-
-            // 4. Basic salary (fixed monthly)
-            double basicSalary = empAccount.getEmpBasicSalary();
-            basicSalaryPayLabelValue.setText(String.format("%.2f", basicSalary));
-
-            // 5. Gross pay = computedSalary + allowance
-            double grossPay = SalaryCalculation.getGrossSalary(employeeHours, empAccount);
-            grossSalaryPayLabelValue.setText(String.format("%.2f", grossPay));
-
-            // 6. SSS contribution (based on basic salary)
-            double sssContri = payrollService.calculateSssContribution(basicSalary);
-
-            // 7. Contributions
-            philhealthContriPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculatePhilHealthContribution(grossPay)));
-            pagibigContriPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculatePagibigContribution(grossPay)));
-            sssContriPayLabelValue.setText(String.format("%.2f", sssContri));
-
-            // 8. Totals
-            totalDeductionsPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTotalDeductions(grossPay, sssContri)));
-            taxableIncomePayLabelValue.setText(String.format("%.2f", SalaryCalculation.getTaxableIncome(grossPay, sssContri)));
-            taxPayLabelValue.setText(String.format("%.2f", SalaryCalculation.calculateWithholdingTax(grossPay)));
-            netPayLabelValue.setText(String.format("%.2f", SalaryCalculation.getNetPay(grossPay, sssContri)));
-        }
-    }*/
     
     private void updatePayrollLabels(List<Employee> employeeHours){
         if(employeeHours.isEmpty()){
@@ -261,8 +220,6 @@ public class FinanceDashboard extends javax.swing.JFrame {
 
     }
     
- 
- 
  
     /**
      * This method is called from within the constructor to initialize the form.
@@ -2174,18 +2131,19 @@ public class FinanceDashboard extends javax.swing.JFrame {
         biMonthlyTField.setText("");
         employeeIDTField.setText("");
     }//GEN-LAST:event_clearButtonActionPerformed
-private boolean hasEmptyFields() {
-    return salaryTField.getText().trim().isEmpty() ||
-           riceTField.getText().trim().isEmpty() ||
-           phoneAllowTField.getText().trim().isEmpty() ||
-           clothingTField.getText().trim().isEmpty() ||
-           tinTField.getText().trim().isEmpty() ||
-           pagibigTField.getText().trim().isEmpty() ||
-           sssTField.getText().trim().isEmpty() ||
-           philhealthTField.getText().trim().isEmpty() ||
-           biMonthlyTField.getText().trim().isEmpty() ||
-           hourlyTField.getText().trim().isEmpty();
-}
+    
+    private boolean hasEmptyFields() {
+        return salaryTField.getText().trim().isEmpty() ||
+               riceTField.getText().trim().isEmpty() ||
+               phoneAllowTField.getText().trim().isEmpty() ||
+               clothingTField.getText().trim().isEmpty() ||
+               tinTField.getText().trim().isEmpty() ||
+               pagibigTField.getText().trim().isEmpty() ||
+               sssTField.getText().trim().isEmpty() ||
+               philhealthTField.getText().trim().isEmpty() ||
+               biMonthlyTField.getText().trim().isEmpty() ||
+               hourlyTField.getText().trim().isEmpty();
+    }
 
   
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed

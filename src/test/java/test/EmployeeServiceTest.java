@@ -132,13 +132,17 @@ public class EmployeeServiceTest {
 
         // --- 4. UPDATE (using updateLeaveRequestStatus) ---
         System.out.println("Step 4: Updating leave request status to APPROVED...");
-        employeeService.updateLeaveRequestStatus(HR.LeaveStatus.APPROVED, savedRequest.getLeaveId());
+        int testApproverId = 10005; 
+        employeeService.updateLeaveRequestStatus(HR.LeaveStatus.APPROVED, savedRequest.getLeaveId(), testApproverId);
         // Verify update by fetching all APPROVED requests
         List<HR> approvedRequests = employeeService.getAllLeaveRequestByStatus(HR.LeaveStatus.APPROVED);
-        boolean foundUpdated = approvedRequests.stream().anyMatch(r -> r.getLeaveId() == savedRequest.getLeaveId());
-        assertTrue(foundUpdated, "Updated request should be found in the APPROVED list.");
+        boolean foundUpdated = approvedRequests.stream().anyMatch(r -> 
+            r.getLeaveId() == savedRequest.getLeaveId() &&
+            r.getApproverId() == testApproverId
+        );
+        assertTrue(foundUpdated, "Updated request should be found in the APPROVED list with correct approver ID.");
         System.out.println("...Update operation verified successfully.");
-
+        
         // --- 5. DELETE (using deleteLeaveRequest) ---
         System.out.println("Step 5: Deleting the test leave request...");
         employeeService.deleteLeaveRequest(savedRequest.getLeaveId());
