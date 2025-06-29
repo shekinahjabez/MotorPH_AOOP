@@ -430,30 +430,13 @@ public class EmployeeService {
         return allLeaveRequest;
     }
     
-    /*
-    public void updateLeaveRequestStatus(LeaveStatus leaveStatus, int id){
-        if (connection != null) {
-            String Query = "UPDATE public.leave_details set status = ? where id = ?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setString(1,leaveStatus.name());
-                preparedStatement.setInt(2,id);
-                
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }         
-        }                          
-    }
-    */
       public void updateLeaveRequestStatus(LeaveStatus leaveStatus, int id, int approverId){
         if (connection != null) {
             String Query = "UPDATE public.leave_details SET status = ?, approver_id = ? WHERE id = ?";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setString(1, leaveStatus.name());
-                preparedStatement.setInt(2, approverId);         // ✅ set approver ID
+                preparedStatement.setInt(2, approverId);       
                 preparedStatement.setInt(3, id);
 
                 preparedStatement.executeUpdate();
