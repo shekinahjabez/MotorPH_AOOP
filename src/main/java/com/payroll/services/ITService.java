@@ -377,7 +377,6 @@ public class ITService {
             throw new SQLException("Creating user account failed, no rows affected.");
         }
 
-        // Don't forget to close the preparedStatement
         preparedStatement.close();
 
         return empDetails;
