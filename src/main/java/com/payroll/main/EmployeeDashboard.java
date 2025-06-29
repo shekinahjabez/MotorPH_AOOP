@@ -2139,8 +2139,8 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         return 0.0;
     }
     
-    private LocalDate[] getStartAndEndOfMonth(int year, int oneBasedMonth) {
-        LocalDate start = LocalDate.of(year, oneBasedMonth, 1); // No +1
+    private LocalDate[] getStartAndEndOfMonth(int year, int zeroBasedMonth) {
+        LocalDate start = LocalDate.of(year, zeroBasedMonth + 1, 1); // Add 1 if your months are 0-based
         LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
         return new LocalDate[]{start, end};
     }
