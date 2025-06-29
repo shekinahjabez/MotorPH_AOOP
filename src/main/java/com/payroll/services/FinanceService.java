@@ -7,6 +7,8 @@ import com.payroll.domain.Employee;
 import com.payroll.domain.Finance;
 import com.payroll.domain.Person;
 import com.payroll.util.DatabaseConnection;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -193,7 +195,7 @@ public class FinanceService {
     return empDetails;
     
     }
-    public LocalDate[] getPayrollPeriodFromEmployeeHours(int empId, int month, int year) {
+    /*public LocalDate[] getPayrollPeriodFromEmployeeHours(int empId, int month, int year) {
         String query = """
             SELECT MIN(date) AS start_date, MAX(date) AS end_date
             FROM employee_hours
@@ -217,7 +219,7 @@ public class FinanceService {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
  
      public Finance savePayrollReport(Finance payrollReportDetails) {
         if (connection == null) return null;
@@ -243,20 +245,20 @@ public class FinanceService {
             preparedStatement.setDate(2, payrollPeriodStart);
             preparedStatement.setDate(3, payrollPeriodEnd);
             preparedStatement.setDouble(4, payrollReportDetails.getPayNumberOfHoursWorked());
-            preparedStatement.setDouble(5, payrollReportDetails.getPayComputedSalary());
-            preparedStatement.setDouble(6, payrollReportDetails.getPayTotalContributions());
-            preparedStatement.setDouble(7, payrollReportDetails.getPayNetPay());
-            preparedStatement.setDouble(8, payrollReportDetails.getPayTotalAllowance());
-            preparedStatement.setDouble(9, payrollReportDetails.getPaySssContri());
-            preparedStatement.setDouble(10, payrollReportDetails.getPayPhealthContri());
-            preparedStatement.setDouble(11, payrollReportDetails.getPayPagibigContri());
-            preparedStatement.setDouble(12, payrollReportDetails.getPayWithholdingTax());
-            preparedStatement.setDouble(13, payrollReportDetails.getPayHourlyRate());
+            preparedStatement.setBigDecimal(5, BigDecimal.valueOf(payrollReportDetails.getPayComputedSalary()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(6, BigDecimal.valueOf(payrollReportDetails.getPayTotalContributions()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(7, BigDecimal.valueOf(payrollReportDetails.getPayNetPay()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(8, BigDecimal.valueOf(payrollReportDetails.getPayTotalAllowance()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(9, BigDecimal.valueOf(payrollReportDetails.getPaySssContri()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(10, BigDecimal.valueOf(payrollReportDetails.getPayPhealthContri()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(11, BigDecimal.valueOf(payrollReportDetails.getPayPagibigContri()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(12, BigDecimal.valueOf(payrollReportDetails.getPayWithholdingTax()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(13, BigDecimal.valueOf(payrollReportDetails.getPayHourlyRate()).setScale(2, RoundingMode.HALF_UP));
             preparedStatement.setString(14,payrollReportDetails.getPayFullName());
             preparedStatement.setString(15,payrollReportDetails.getPayPosition());
-            preparedStatement.setDouble(16, payrollReportDetails.getPayRiceAllowance());
-            preparedStatement.setDouble(17, payrollReportDetails.getPayPhoneAllowance());
-            preparedStatement.setDouble(18, payrollReportDetails.getPayClothingAllowance());
+            preparedStatement.setBigDecimal(16, BigDecimal.valueOf(payrollReportDetails.getPayRiceAllowance()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(17, BigDecimal.valueOf(payrollReportDetails.getPayPhoneAllowance()).setScale(2, RoundingMode.HALF_UP));
+            preparedStatement.setBigDecimal(18, BigDecimal.valueOf(payrollReportDetails.getPayClothingAllowance()).setScale(2, RoundingMode.HALF_UP));
             
 
             // Execute and retrieve the generated payroll_id

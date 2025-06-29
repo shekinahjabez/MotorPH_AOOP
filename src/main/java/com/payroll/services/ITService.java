@@ -14,7 +14,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -69,6 +74,40 @@ public class ITService {
         }                          
         return employeeAccount;
     }
+    public List<IT> getAllUserAccount() {
+    List<IT> userAccounts = new ArrayList<>();
+
+    if (connection != null) {
+        String query = "SELECT * FROM employee_account";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                IT employeeAccount = new IT();
+                employeeAccount.setAccountID(resultSet.getInt("account_id"));
+                employeeAccount.setEmpUserName(resultSet.getString("username"));
+                employeeAccount.setEmpPassword(resultSet.getString("password"));
+
+                int roleID = resultSet.getInt("role_id");
+                UserRole role = getByRolesId(roleID); // same as in getUserAccount
+                employeeAccount.setUserRole(role);
+
+                int empID = resultSet.getInt("employee_id");
+                Person employeeDetails = hrService.getByEmpID(empID); // full employee info
+                employeeAccount.setEmpDetails(employeeDetails);
+                employeeAccount.setEmpID(empID);
+
+                userAccounts.add(employeeAccount);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return userAccounts;
+}
     
     //CORRECTED
     public IT getByEmpID(int empID){
@@ -136,6 +175,7 @@ public class ITService {
         return employeeAccount;
     }*/
     
+    
     public void updateEmployeeCredentials(IT empAccount){
         if(connection !=null){
             String Query = "UPDATE public.employee_account SET username = ?, password = ? WHERE employee_id = ?";
@@ -153,6 +193,66 @@ public class ITService {
                 e.printStackTrace();
             }                                   
         }
+    }
+    
+    public List<String> getMissingRolesAfterUpdate(int empId, String newRoleName) {
+        List<String> requiredRoles = Arrays.asList("HR", "Finance", "IT");
+        Map<String, Integer> roleCounts = new HashMap<>();
+
+        String query = """
+            SELECT ur.role, COUNT(ea.employee_id) AS assigned_count
+            FROM user_roles ur
+            LEFT JOIN employee_account ea ON ea.role_id = ur.id
+            GROUP BY ur.role
+        """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String role = resultSet.getString("role");
+                int count = resultSet.getInt("assigned_count");
+                roleCounts.put(role, count);
+            }
+
+            // Step 2: Get the current role of the employee being updated
+            String currentRoleQuery = """
+                SELECT ur.role
+                FROM employee_account ea
+                JOIN user_roles ur ON ea.role_id = ur.id
+                WHERE ea.employee_id = ?
+            """;
+
+            try (PreparedStatement roleStmt = connection.prepareStatement(currentRoleQuery)) {
+                roleStmt.setInt(1, empId);
+                ResultSet roleRs = roleStmt.executeQuery();
+
+                if (roleRs.next()) {
+                    String currentRole = roleRs.getString("role");
+
+                    // If changing to a new role and that role is different
+                    if (!newRoleName.equalsIgnoreCase(currentRole)) {
+                        // Decrease the count of the current role by 1 (as if the change happened)
+                        roleCounts.put(currentRole, roleCounts.getOrDefault(currentRole, 0) - 1);
+                        // Increase the new role count
+                        roleCounts.put(newRoleName, roleCounts.getOrDefault(newRoleName, 0) + 1);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Step 3: Check if any required role has 0 or less
+        List<String> missingRoles = new ArrayList<>();
+        for (String role : requiredRoles) {
+            if (roleCounts.getOrDefault(role, 0) < 1) {
+                missingRoles.add(role);
+            }
+        }
+
+        return missingRoles;
     }
     
     public void updateEmployeeAccountWithRole(IT empAccount) {
@@ -182,36 +282,7 @@ public class ITService {
     }
     
      
-    public List<IT> getAllUserAccount(){
-        List<IT> allEmployeeAccount = new ArrayList<>();
-            if (connection != null) {
-            String Query = "SELECT * FROM public.employee_account";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()){
-                    IT employeeAccount = new IT();
-                    employeeAccount.setAccountID(resultSet.getInt("account_id"));
-                    employeeAccount.setEmpUserName(resultSet.getString("username"));
-                    employeeAccount.setEmpPassword(resultSet.getString("password"));
-                    
-                    int roleID = resultSet.getInt("role_id");
-                    UserRole role = getByRolesId(roleID);
-                    employeeAccount.setUserRole(role);
 
-                    int empID = resultSet.getInt("employee_id");
-                    Person employeeDetails = hrService.getByEmpID(empID);
-                    employeeAccount.setEmpDetails(employeeDetails);
-                    allEmployeeAccount.add(employeeAccount);
-                }
-                resultSet.close();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }   
-        }                          
-        return allEmployeeAccount;
-    }
     
     public List<UserRole> getAllUserRole(){
         List<UserRole> userRoles = new ArrayList<>();

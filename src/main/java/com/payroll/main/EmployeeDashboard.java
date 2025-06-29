@@ -18,6 +18,7 @@ import com.payroll.services.FinanceService;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.domain.SalaryCalculation;
 import com.payroll.util.ReportGenerator;
+import com.toedter.calendar.JDateChooser;
 import java.awt.CardLayout;
 import java.sql.Connection;
 import java.sql.Date;
@@ -36,6 +37,11 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.lang3.StringUtils;
+import com.toedter.calendar.IDateEvaluator;
+import com.toedter.calendar.JDateChooser;
+
+import java.awt.Color;
+import java.util.Calendar;
 
 /**
  *
@@ -76,6 +82,10 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         loadAllYears();
         loadAllMonths();
         loadAllLeaveTypes();
+        disableWeekendSelection(leaveDateFromChooser);
+        disableWeekendSelection(leaveDateToChooser);
+        
+        
     }
     public EmployeeDashboard(){
         
@@ -91,6 +101,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     public void setEmpAccount(IT empAccount) {
         this.empAccount = empAccount;
     }
+    
     
     
     private void updateUserLabels(IT empAccount) {
@@ -321,7 +332,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         birthdayPayLabelValue = new javax.swing.JLabel();
         computedSalaryLabel = new javax.swing.JLabel();
         computedSalaryLabelValue = new javax.swing.JLabel();
-        exportAttendaceButton = new javax.swing.JButton();
+        exportAttendanceButton = new javax.swing.JButton();
         PayrollButtonGenerator = new javax.swing.JButton();
         leaveRequest = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
@@ -1096,11 +1107,11 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
         computedSalaryLabelValue.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
 
-        exportAttendaceButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/export.png"))); // NOI18N
-        exportAttendaceButton.setText("Export");
-        exportAttendaceButton.addActionListener(new java.awt.event.ActionListener() {
+        exportAttendanceButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/export.png"))); // NOI18N
+        exportAttendanceButton.setText("Export");
+        exportAttendanceButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportAttendaceButtonActionPerformed(evt);
+                exportAttendanceButtonActionPerformed(evt);
             }
         });
 
@@ -1137,7 +1148,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(yearDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(exportAttendaceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(exportAttendanceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(hourlyRatePayLabel)
@@ -1311,7 +1322,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                             .addComponent(taxPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(PayrollButtonGenerator, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(exportAttendaceButton))
+                                .addComponent(exportAttendanceButton))
                             .addComponent(taxPayLabel))
                         .addGap(21, 21, 21))
                     .addGroup(jPanel9Layout.createSequentialGroup()
@@ -1697,7 +1708,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     
     private boolean isPayrollPeriodValid = false;
     
-    private void validateAttendanceData(List<Employee> empHours, int selectedMonth, int selectedYear) {
+    private void validatePayrollData(List<Employee> empHours, int selectedMonth, int selectedYear) {
         // Get current system month and year
         Calendar currentCal = Calendar.getInstance();
         int currentMonth = currentCal.get(Calendar.MONTH); // 0-based (Jan = 0)
@@ -1759,7 +1770,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
             if (monthValue != null && year != null) {
                 List<Employee> empHours = getEmployeeHours(monthValue, year);
-                validateAttendanceData(empHours, monthValue, year);
+                validatePayrollData(empHours, monthValue, year);
             }
         }
     }//GEN-LAST:event_monthDropdownActionPerformed
@@ -1771,7 +1782,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
             if (monthValue != null && year != null) {
                 List<Employee> empHours = getEmployeeHours(monthValue, year);
-                validateAttendanceData(empHours, monthValue, year);
+                validatePayrollData(empHours, monthValue, year);
             }
         }
     }//GEN-LAST:event_yearDropdownActionPerformed
@@ -2128,6 +2139,12 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         return 0.0;
     }
     
+    private LocalDate[] getStartAndEndOfMonth(int year, int oneBasedMonth) {
+        LocalDate start = LocalDate.of(year, oneBasedMonth, 1); // No +1
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+        return new LocalDate[]{start, end};
+    }
+    
     
     private void savePayrollDetails(){
         if (!isPayrollPeriodValid) {
@@ -2147,7 +2164,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                 return;
             }
             
-            LocalDate[] period = payrollService.getPayrollPeriodFromEmployeeHours(empId, monthValue, year);
+            LocalDate[] period = getStartAndEndOfMonth(year, monthValue); 
             if (period == null) {
                 JOptionPane.showMessageDialog(this, "No attendance records found for the selected period.");
                 return;
@@ -2214,7 +2231,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         savePayrollDetails();
     }//GEN-LAST:event_PayrollButtonGeneratorActionPerformed
 
-    private void exportAttendaceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAttendaceButtonActionPerformed
+    private void exportAttendanceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAttendanceButtonActionPerformed
         try {
             if (currentEmployeeId == 0 && empAccount == null) {
                 JOptionPane.showMessageDialog(this, "Please search for a valid employee first.", "Missing Info", JOptionPane.WARNING_MESSAGE);
@@ -2259,7 +2276,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Something went wrong when exporting the attendance report.\n" + ex.getMessage(), "Export Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_exportAttendaceButtonActionPerformed
+    }//GEN-LAST:event_exportAttendanceButtonActionPerformed
 
     private void updateLeaveBalance(){
         List<HR> leaveDetails =  empService.getLeavesByEmployee(empAccount.getEmpID());
@@ -2295,6 +2312,32 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             model.addRow(rowData);
         }
     }
+    
+    private void disableWeekendSelection(JDateChooser dateChooser) {
+      dateChooser.getJCalendar().getDayChooser().addDateEvaluator(new IDateEvaluator() {
+          @Override
+          public boolean isInvalid(java.util.Date date) {
+              Calendar cal = Calendar.getInstance();
+              cal.setTime(date);
+              int day = cal.get(Calendar.DAY_OF_WEEK);
+              return (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
+          }
+
+          @Override public Color getInvalidForegroundColor() { return Color.GRAY; }
+
+          @Override public Color getInvalidBackroundColor() { return Color.LIGHT_GRAY; }
+
+          @Override public String getInvalidTooltip() { return "Weekends are not allowed for leave."; }
+
+          @Override public boolean isSpecial(java.util.Date date) { return false; }
+
+          @Override public Color getSpecialForegroundColor() { return null; }
+
+          @Override public Color getSpecialBackroundColor() { return null; }
+
+          @Override public String getSpecialTooltip() { return null; }
+      });
+  }
     
     /**
      * @param args the command line arguments
@@ -2361,7 +2404,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel empIDPayLabelValue;
     private javax.swing.JLabel empNumValue;
     private javax.swing.JPasswordField existingPasswordTField;
-    private javax.swing.JButton exportAttendaceButton;
+    private javax.swing.JButton exportAttendanceButton;
     private javax.swing.JLabel fullNameValue;
     private javax.swing.JLabel fullNameValue2;
     private javax.swing.JLabel grossSalaryPayLabel;

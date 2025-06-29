@@ -76,6 +76,19 @@ public class ReportGenerator {
         }
     }
     
+    public void generateRoleReport() {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            Map<String, Object> parameters = getCommonParameters();
+
+            JasperReport jasperReport = compileReport("report/RoleReport.jrxml");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            showError("Failed to generate role report", e);
+        }
+    }
+    
     public void generateEmployeeProfileReport(Integer employeeID) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             Map<String, Object> parameters = getCommonParameters();

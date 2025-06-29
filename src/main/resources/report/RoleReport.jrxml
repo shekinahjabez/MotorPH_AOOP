@@ -1,0 +1,102 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="RoleReport" language="java" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b8f6b33b-87cc-4c64-865f-bf4748c07a1f">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MotorPH_AOOP"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="LogoPath" class="java.net.URL"/>
+	<query language="SQL"><![CDATA[SELECT 
+    e.employee_id,
+    CONCAT(e.firstname, ' ', e.lastname) AS full_name,
+    ur.role AS role,
+    ep.position AS position
+FROM 
+    employee e
+JOIN 
+    employee_account ea ON e.employee_id = ea.employee_id
+JOIN 
+    user_roles ur ON ea.role_id = ur.id
+JOIN 
+    employee_position ep ON e.position = ep.id
+ORDER BY 
+    e.employee_id ASC;
+]]></query>
+	<field name="employee_id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="employee_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="employee_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="full_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="full_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="full_name"/>
+	</field>
+	<field name="role" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="role"/>
+		<property name="com.jaspersoft.studio.field.label" value="role"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="user_roles"/>
+	</field>
+	<field name="position" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="position"/>
+		<property name="com.jaspersoft.studio.field.label" value="position"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee_position"/>
+	</field>
+	<title height="125">
+		<element kind="staticText" uuid="7707e69e-6f99-4d54-ad4f-8acebe39eafa" x="0" y="87" width="558" height="30" fontSize="16.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[MOTORPH EMPLOYEE ROLES MASTERLIST]]></text>
+		</element>
+		<element kind="staticText" uuid="74efdb69-a64f-46af-bf7b-897435e8f37e" x="411" y="53" width="50" height="20" hTextAlign="Right">
+			<text><![CDATA[Date:]]></text>
+			<box rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="2ec3a83c-8f52-46e6-8cac-5c226363647c" x="461" y="53" width="84" height="20" pattern="EEEEE dd MMMMM yyyy">
+			<expression><![CDATA[new java.util.Date()]]></expression>
+		</element>
+		<element kind="staticText" uuid="2b6fcdd4-9006-4744-8f17-9811f352af96" x="140" y="1" width="184" height="25" fontSize="19.0" bold="true">
+			<text><![CDATA[MotorPH]]></text>
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="216fc34d-de27-4118-b600-2b35accf0778" x="140" y="56" width="181" height="15">
+			<text><![CDATA[Email: corporate@motorph.com]]></text>
+		</element>
+		<element kind="staticText" uuid="511803a1-6d53-4bde-8796-e33c1fada985" x="140" y="26" width="260" height="15">
+			<text><![CDATA[Bagong Nayon, Quezon City]]></text>
+		</element>
+		<element kind="staticText" uuid="c57abb65-b67f-4b09-9ee8-2f75d0dd8a94" x="140" y="41" width="180" height="15">
+			<text><![CDATA[Phone: (028) 911-5071]]></text>
+		</element>
+		<element kind="image" uuid="aa7eb8f0-584a-4e7e-9aa5-1fc8cbd25058" x="2" y="-7" width="100" height="80">
+			<expression><![CDATA[$P{LogoPath}]]></expression>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</title>
+	<columnHeader height="20">
+		<element kind="staticText" uuid="43be7913-4b69-4ecb-b624-986e484d50f1" mode="Opaque" x="0" y="0" width="80" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[EMP ID]]></text>
+		</element>
+		<element kind="staticText" uuid="9650d897-8744-4e89-a590-32a0ff847737" mode="Opaque" x="80" y="0" width="160" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[NAME]]></text>
+		</element>
+		<element kind="staticText" uuid="38654fc1-c01f-43cb-b7c8-369b2e3d6211" mode="Opaque" x="240" y="0" width="200" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[POSITION]]></text>
+		</element>
+		<element kind="staticText" uuid="77d32e57-0ad1-4144-84b9-74ef5511b982" mode="Opaque" x="440" y="0" width="115" height="20" forecolor="#FFFFFF" backcolor="#333F4F" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[ROLE ACCESS]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="18">
+			<element kind="textField" uuid="2250f045-6158-422b-a8b3-491c3e336e9d" x="0" y="0" width="80" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{employee_id}]]></expression>
+			</element>
+			<element kind="textField" uuid="06d469b2-df20-4752-a23b-1db191ba0761" x="80" y="0" width="160" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{full_name}]]></expression>
+			</element>
+			<element kind="textField" uuid="3c547b05-2d2a-4da1-9c84-6980267ba14a" x="240" y="0" width="200" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{position}]]></expression>
+			</element>
+			<element kind="textField" uuid="a041a885-3c78-4b54-97b7-f40a45ecc09e" x="440" y="0" width="115" height="18" hTextAlign="Center">
+				<expression><![CDATA[$F{role}]]></expression>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="20"/>
+</jasperReport>
