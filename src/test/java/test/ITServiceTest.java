@@ -63,7 +63,7 @@ public class ITServiceTest {
         
         
         String validUsername = "christian";
-        String validPassword = "123";
+        String validPassword = "1987c";
 
         // Act
         IT userAccount = itService.getUserAccount(validUsername, validPassword);
