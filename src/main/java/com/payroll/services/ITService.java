@@ -285,7 +285,7 @@ public class ITService {
         return userRole;
     }
 
-    public boolean employeeExistsByName(Person empDetails) {
+   /* public boolean employeeExistsByName(Person empDetails) {
         if (connection == null) {
         }
         String query = "SELECT COUNT(*) FROM public.employee WHERE firstname = ? AND lastname = ?";
@@ -304,7 +304,7 @@ public class ITService {
         }
 
         return false; // Employee does not exist
-    }
+    }*/
     
     public Person saveUserAccount(IT empAccount, Person empDetails) throws SQLException {
         if (connection == null) {

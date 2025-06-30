@@ -4,7 +4,7 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="LogoPath" class="java.net.URL"/>
 	<query language="SQL"><![CDATA[ 
-        SELECT * FROM public.vw_employee_roles
+        SELECT * FROM public.vw_employee_roles_report
         ORDER BY employee_id ASC;
         ]]></query>
 	<field name="employee_id" class="java.lang.Long">
