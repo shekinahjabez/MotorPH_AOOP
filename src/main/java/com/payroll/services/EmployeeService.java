@@ -61,7 +61,7 @@ public class EmployeeService {
     public LeaveType getLeaveTypeById(int id){
         LeaveType leaveType = null ;
         if (connection != null) {
-            String Query = "SELECT * FROM public.leave_types where id = ?";
+            String Query = "SELECT * FROM public.leave_types WHERE id = ?";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setInt(1,id);
@@ -137,7 +137,7 @@ public class EmployeeService {
     public LeaveBalance getLeaveBalance(int empID){
         LeaveBalance leaveBalance = new LeaveBalance();
         if (connection != null) {
-            String Query = "select * from public.employee_leave where employee_id =?";
+            String Query = "SELECT * FROM public.employee_leave WHERE employee_id = ?";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setInt(1,empID);
@@ -157,7 +157,6 @@ public class EmployeeService {
         }
         
         return leaveBalance;
-        
     }
     
     
@@ -201,7 +200,7 @@ public class EmployeeService {
     }
     
     public boolean hasTimeInToday(int empID) throws SQLException {
-        String query = "SELECT COUNT(*) FROM public.employee_hours WHERE employee_id = ? AND date = CURRENT_DATE";
+        String query = "SELECT COUNT(*) FROM public.vw_employee_timein_today WHERE employee_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);
@@ -216,7 +215,7 @@ public class EmployeeService {
     }
     
     public boolean hasTimeOutToday(int empID) throws SQLException {
-        String query = "SELECT COUNT(*) FROM public.employee_hours WHERE employee_id = ? AND date = CURRENT_DATE AND time_out IS NOT NULL";
+        String query = "SELECT COUNT(*) FROM public.vw_employee_hours_today WHERE employee_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);
@@ -390,7 +389,7 @@ public class EmployeeService {
     public List<HR> getLeavesByEmployee(int empID){
         List<HR> allLeaves = new ArrayList<>();
             if (connection != null) {
-            String Query = "SELECT * FROM public.leave_details where employee_id = ? order by id ASC";
+            String Query = "SELECT * FROM public.employee_leave WHERE employee_id = ? ORDER BY id ASC";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setInt(1,empID);
@@ -412,7 +411,7 @@ public class EmployeeService {
     public List<HR> getAllLeaveRequestByStatus(LeaveStatus leaveStatus){
         List<HR> allLeaveRequest = new ArrayList<>();
             if (connection != null) {
-            String Query = "SELECT * FROM public.leave_details  where status = ? order by id ASC";
+            String Query = "SELECT * FROM public.employee_leave WHERE status = ? ORDER BY id ASC";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setString(1,leaveStatus.name());

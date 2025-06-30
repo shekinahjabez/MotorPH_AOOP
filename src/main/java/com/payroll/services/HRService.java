@@ -435,7 +435,7 @@ public class HRService {
             return empHours;
         }
 
-        String query = "SELECT * FROM employee_hours WHERE employee_id = ?";
+        String query = "SELECT * FROM public.vw_employee_hours WHERE employee_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);

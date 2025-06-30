@@ -16,10 +16,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -143,39 +141,6 @@ public class ITService {
         return employeeAccount;
     }
     
-    //ERROR
-    /*public IT getByEmpID(int empID){
-        IT employeeAccount = null ;
-            if (connection != null) {
-            String Query = "SELECT * FROM public.employee_account where employee_id = ?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setInt(1,empID);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()){
-                    employeeAccount = new IT();
-                    employeeAccount.setAccountID(resultSet.getInt("account_id"));
-                    employeeAccount.setEmpUserName(resultSet.getString("username"));
-                    employeeAccount.setEmpPassword(resultSet.getString("password"));
-                    
-                    int roleID = resultSet.getInt("role_id");
-                    UserRole role = getByRolesId(roleID);
-                    employeeAccount.setUserRole(role);
-
-                    Person employeeDetails = hrService.getByEmpID(empID);
-                    employeeAccount.setEmpDetails(employeeDetails);
-                }
-                
-                resultSet.close();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }        
-        }                          
-        return employeeAccount;
-    }*/
-    
-    
     public void updateEmployeeCredentials(IT empAccount){
         if(connection !=null){
             String Query = "UPDATE public.employee_account SET username = ?, password = ? WHERE employee_id = ?";
@@ -199,12 +164,8 @@ public class ITService {
         List<String> requiredRoles = Arrays.asList("HR", "Finance", "IT");
         Map<String, Integer> roleCounts = new HashMap<>();
 
-        String query = """
-            SELECT ur.role, COUNT(ea.employee_id) AS assigned_count
-            FROM user_roles ur
-            LEFT JOIN employee_account ea ON ea.role_id = ur.id
-            GROUP BY ur.role
-        """;
+        String query = "SELECT role, assigned_count FROM vw_role_assignment_count";
+
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -216,12 +177,8 @@ public class ITService {
             }
 
             // Step 2: Get the current role of the employee being updated
-            String currentRoleQuery = """
-                SELECT ur.role
-                FROM employee_account ea
-                JOIN user_roles ur ON ea.role_id = ur.id
-                WHERE ea.employee_id = ?
-            """;
+            String currentRoleQuery = "SELECT role FROM vw_employee_roles WHERE employee_id = ?";
+    
 
             try (PreparedStatement roleStmt = connection.prepareStatement(currentRoleQuery)) {
                 roleStmt.setInt(1, empId);

@@ -42,7 +42,7 @@ public class FinanceService {
     }
     
     public Person getByEmpID(int empID) throws SQLException {
-        String query = "SELECT * FROM employee WHERE employee_id = ?";
+        String query = "SELECT * FROM public.vw_employee_profile WHERE employee_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);
@@ -61,7 +61,7 @@ public class FinanceService {
 
         if (connection != null) {
             try {
-                String Query = "SELECT * FROM public.employee_hours WHERE employee_id = ? AND date BETWEEN ? AND ?";
+                String Query = "SELECT * FROM public.vw_employee_hours WHERE employee_id = ? AND date BETWEEN ? AND ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setInt(1, empID);
                 preparedStatement.setDate(2, new java.sql.Date(from.getTime()));
@@ -97,44 +97,8 @@ public class FinanceService {
 
         return empHours;
     }
-   
-    
-    /*public List<Employee> getEmployeeHours(int empID, Date from, Date to){
-        List<Employee> empHours = new ArrayList<>();
-        if (connection != null){
-            try {
-                String Query = "SELECT * FROM public.employee_hours where employee_id = ? and date between ? and ?";
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setInt(1,empID);
-                preparedStatement.setDate(2,new java.sql.Date(from.getTime()));
-                preparedStatement.setDate(3,new java.sql.Date(to.getTime()));
-                
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()){
-                   Timestamp timeInDate = resultSet.getTimestamp("time_in");
-                   LocalTime timeIn = LocalDateTime.ofInstant(timeInDate.toInstant(),ZoneId.systemDefault()).toLocalTime();
-                   Timestamp timeOutDate = resultSet.getTimestamp("time_out");
-                   LocalTime timeOut = LocalDateTime.ofInstant(timeOutDate.toInstant(),ZoneId.systemDefault()).toLocalTime();
-                    
-                   if (!timeIn.equals(LocalTime.MIDNIGHT) || !timeOut.equals(LocalTime.MIDNIGHT)) {
-                    Employee attendance = new Employee();
-                    attendance.setEmpID(resultSet.getInt("employee_id"));
-                    attendance.setDate(resultSet.getDate("date"));
-                    attendance.setTimeIn(timeIn);
-                    attendance.setTimeOut(timeOut);
-                    
-                   
-                   empHours.add(attendance);
-                    }
-                }     
-            } catch (SQLException ex) {
-                Logger.getLogger(FinanceService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return empHours;   
-    }
-    */
-    public float  calculateSssContribution(double empSalary){
+
+    /*public float  calculateSssContribution(double empSalary){
         String sssContributionQuery = """
                 select contribution from sss
                 where (cr_above is null or ? > cr_above)
@@ -154,7 +118,27 @@ public class FinanceService {
             throw new RuntimeException(e);
         }
         return contribution;
+    }*/
+    public float calculateSssContribution(double empSalary) {
+        String query = "SELECT public.get_sss_contribution(CAST(? AS NUMERIC)) AS contribution";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setDouble(1, empSalary);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getFloat("contribution");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error calling get_sss_contribution: " + e.getMessage());
+            throw new RuntimeException("Failed to calculate SSS contribution", e);
+        }
+
+        return 0f;
     }
+
+
     
     public Person updatePayrollDetails(Person empDetails){
         if (connection != null) {

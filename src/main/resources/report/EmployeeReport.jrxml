@@ -3,21 +3,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MotorPH_AOOP"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="LogoPath" class="java.net.URL"/>
-	<query language="SQL"><![CDATA[SELECT 
-    e.employee_id,
-    CONCAT(e.firstname, ' ', e.lastname) AS full_name,
-    e.birthday,
-    e.phone_number,
-    es.status AS status,
-    ep.position AS position
-FROM 
-    employee e
-JOIN 
-    employee_status es ON e.status = es.id
-JOIN 
-    employee_position ep ON e.position = ep.id
-ORDER BY 
-    e.employee_id ASC;]]></query>
+	<query language="SQL"><![CDATA[SELECT * FROM public.vw_employee_masterlist_report ORDER BY employee_id ASC;]]></query>
 	<field name="employee_id" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="employee_id"/>
 		<property name="com.jaspersoft.studio.field.label" value="employee_id"/>

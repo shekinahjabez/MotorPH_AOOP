@@ -6,28 +6,10 @@
 	<parameter name="LogoPath" class="java.net.URL">
 		<defaultValueExpression><![CDATA[$P{LogoPath}]]></defaultValueExpression>
 	</parameter>
-	<query language="SQL"><![CDATA[SELECT payroll_id,
-    payroll_period_start_date,
-    payroll_period_end_date,
-	number_of_hours_worked,
-	computed_salary,
-	total_contributions,
-	net_pay,
-	employee_id,
-	total_allowance,
-	sss_contribution,
-	phealth_contribution,
-	pagibig_contribution,
-	tax,
-	hourly_rate,
-	full_name,
-	position,
-	rice_subsidy,
-	phone_allowance,
-	cloth_allowance
-FROM report.payroll
-WHERE 
-    payroll_id = $P{payroll_id}]]></query>
+	<query language="SQL"><![CDATA[
+        SELECT * FROM report.vw_employee_payslip
+        WHERE payroll_id = $P{payroll_id}
+        ]]></query>
 	<field name="payroll_id" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="payroll_id"/>
 		<property name="com.jaspersoft.studio.field.label" value="payroll_id"/>
