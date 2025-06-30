@@ -334,12 +334,18 @@ public class HRService {
         boolean isDeleted = false;
 
         if (connection != null) {
-            String sql = "CALL delete_employee_details(?)";
+            String sql = "Call delete_employee_details(?, ?)";
 
             try (CallableStatement stmt = connection.prepareCall(sql)) {
-                stmt.setInt(1, empID);
+                stmt.setInt(1, empID); // IN param
+                stmt.registerOutParameter(2, java.sql.Types.INTEGER); // OUT param
+
                 stmt.execute();
-                isDeleted = true; // If no exception, assume success
+
+                int deletedCount = stmt.getInt(2); // Get OUT param
+                System.out.println("Deleted count from procedure: " + deletedCount); // Debug
+                isDeleted = deletedCount > 0;
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
