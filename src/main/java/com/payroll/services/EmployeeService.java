@@ -389,7 +389,7 @@ public class EmployeeService {
     public List<HR> getLeavesByEmployee(int empID){
         List<HR> allLeaves = new ArrayList<>();
             if (connection != null) {
-            String Query = "SELECT * FROM public.employee_leave WHERE employee_id = ? ORDER BY id ASC";
+            String Query = "SELECT * FROM public.leave_details WHERE employee_id = ? ORDER BY id ASC";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setInt(1,empID);
@@ -411,7 +411,7 @@ public class EmployeeService {
     public List<HR> getAllLeaveRequestByStatus(LeaveStatus leaveStatus){
         List<HR> allLeaveRequest = new ArrayList<>();
             if (connection != null) {
-            String Query = "SELECT * FROM public.employee_leave WHERE status = ? ORDER BY id ASC";
+            String Query = "SELECT * FROM public.leave_details WHERE status = ? ORDER BY id ASC";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setString(1,leaveStatus.name());

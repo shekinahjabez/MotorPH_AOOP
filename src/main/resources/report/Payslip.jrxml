@@ -7,7 +7,7 @@
 		<defaultValueExpression><![CDATA[$P{LogoPath}]]></defaultValueExpression>
 	</parameter>
 	<query language="SQL"><![CDATA[
-        SELECT * FROM report.vw_employee_payslip
+        SELECT * FROM report.vw_employee_payslip_report
         WHERE payroll_id = $P{payroll_id}
         ]]></query>
 	<field name="payroll_id" class="java.lang.Long">
