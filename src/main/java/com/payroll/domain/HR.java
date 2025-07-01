@@ -29,6 +29,7 @@ public class HR extends Person {
     private int totalDays;
     private String reason;
     private LeaveStatus status;
+    private int approverId;
     
     
     public HR() {
@@ -76,6 +77,9 @@ public class HR extends Person {
 
     public String getSubject() {
         return subject;
+    }
+    public int getApproverId() {
+        return approverId;
     }
 
     public void setSubject(String subject) {
@@ -130,5 +134,8 @@ public class HR extends Person {
         this.status = status;
     }
     
+    public void setApproverId(int approverId) {
+        this.approverId = approverId;
+    }
     
 }

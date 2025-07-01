@@ -10,6 +10,7 @@ import com.payroll.domain.HR;
 import com.payroll.domain.HR.LeaveStatus;
 import com.payroll.subdomain.LeaveType;
 import com.payroll.util.DatabaseConnection;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,7 +62,7 @@ public class EmployeeService {
     public LeaveType getLeaveTypeById(int id){
         LeaveType leaveType = null ;
         if (connection != null) {
-            String Query = "SELECT * FROM public.leave_types where id = ?";
+            String Query = "SELECT * FROM public.leave_types WHERE id = ?";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setInt(1,id);
@@ -137,7 +138,7 @@ public class EmployeeService {
     public LeaveBalance getLeaveBalance(int empID){
         LeaveBalance leaveBalance = new LeaveBalance();
         if (connection != null) {
-            String Query = "select * from public.employee_leave where employee_id =?";
+            String Query = "SELECT * FROM public.employee_leave WHERE employee_id = ?";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setInt(1,empID);
@@ -157,7 +158,6 @@ public class EmployeeService {
         }
         
         return leaveBalance;
-        
     }
     
     
@@ -201,7 +201,7 @@ public class EmployeeService {
     }
     
     public boolean hasTimeInToday(int empID) throws SQLException {
-        String query = "SELECT COUNT(*) FROM public.employee_hours WHERE employee_id = ? AND date = CURRENT_DATE";
+        String query = "SELECT COUNT(*) FROM public.vw_employee_timein_today WHERE employee_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);
@@ -216,7 +216,7 @@ public class EmployeeService {
     }
     
     public boolean hasTimeOutToday(int empID) throws SQLException {
-        String query = "SELECT COUNT(*) FROM public.employee_hours WHERE employee_id = ? AND date = CURRENT_DATE AND time_out IS NOT NULL";
+        String query = "SELECT COUNT(*) FROM public.vw_employee_hours_today WHERE employee_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);
@@ -229,144 +229,155 @@ public class EmployeeService {
         }
         return false;
     }
+    
+    public void autoFillLastUnclosedTimeOut(int empID) throws SQLException {
+        if (connection == null) {
+            throw new IllegalStateException("Database connection is not initialized.");
+        }
+
+        String call = "CALL auto_fill_last_unclosed_timeout(?)";
+
+        try (CallableStatement callableStatement = connection.prepareCall(call)) {
+            callableStatement.setInt(1, empID);
+            callableStatement.execute();
+            System.out.println("Auto-filled last missing time-out for employee " + empID);
+        }
+    }
 
     
     public Employee timeOut(Employee attendanceDetails) {
         if (connection == null) {
-            throw new IllegalStateException("Database connection is not initialized.");
-        }
+              throw new IllegalStateException("Database connection is not initialized.");
+          }
 
-        String query = "UPDATE public.employee_hours " +
-                       "SET time_out = ? " +
-                       "WHERE employee_id = ? AND date = ?";
+          String call = "CALL record_employee_timeout(?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+          try (CallableStatement callableStatement = connection.prepareCall(call)) {
+              callableStatement.setInt(1, attendanceDetails.getEmpID());
+              callableStatement.execute();
 
-            LocalTime currentTime = LocalTime.now();
-            java.sql.Time sqlTimeOut = java.sql.Time.valueOf(currentTime);  
+              System.out.println("Procedure executed for time-out: Employee ID " + attendanceDetails.getEmpID());
 
-            LocalDate currentDate = LocalDate.now();
-            java.sql.Date sqlDate = java.sql.Date.valueOf(currentDate);
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }
 
-            preparedStatement.setTime(1, sqlTimeOut);                       
-            preparedStatement.setInt(2, attendanceDetails.getEmpID());      
-            preparedStatement.setDate(3, sqlDate);                         
-
-            int affectedRows = preparedStatement.executeUpdate();
-
-            if (affectedRows == 0) {
-                System.err.println("No time-in record found for Employee ID " 
-                    + attendanceDetails.getEmpID() + " on " + currentDate);
-            } else {
-                System.out.println("Time-out recorded for Employee ID " 
-                    + attendanceDetails.getEmpID() + " at " + currentTime);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace(); 
-        }
-
-        return attendanceDetails; 
-    }
+          return attendanceDetails;
+      }
     
     public void deleteAttendanceRecords(int empID) {
         if (connection == null) {
-            throw new IllegalStateException("Database connection is not initialized.");
-        }
+              throw new IllegalStateException("Database connection is not initialized.");
+          }
 
-        String query = "DELETE FROM public.employee_hours WHERE employee_id = ?";
+          String call = "CALL delete_attendance_records(?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, empID);
-            int rowsDeleted = preparedStatement.executeUpdate();
-
-            if (rowsDeleted > 0) {
-               // System.out.println("Successfully deleted " + rowsDeleted + " attendance record(s) for employee ID: " + empID);
-            } else {
-              //  System.out.println("No attendance records found for employee ID: " + empID);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(); // ✅ Log the error, but don't rethrow
-        }
-    }
+          try (CallableStatement callableStatement = connection.prepareCall(call)) {
+              callableStatement.setInt(1, empID);
+              callableStatement.execute();
+              System.out.println("Deletion procedure executed for employee ID: " + empID);
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }
+      }
     
     
     public HR addLeaveRequest(HR leaveDetails){
-        //java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
-        java.sql.Date dateFrom = leaveDetails.getDateFrom()!=null? new java.sql.Date(leaveDetails.getDateFrom().getTime()):null;
-        java.sql.Date dateTo = leaveDetails.getDateTo()!=null? new java.sql.Date(leaveDetails.getDateTo().getTime()):null;
-        Integer leaveTypeId = leaveDetails.getLeaveType() != null ? leaveDetails.getLeaveType().getId() : null;
-       
- 
-        if (connection != null) {
-        String Query = "INSERT into public.leave_details (subject, type,date_from,date_to,total_days,reason,status, employee_id)"
-                + "values(?, ?, ?, ?,?, ?, ?,?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(Query,Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,leaveDetails.getSubject());
-            preparedStatement.setObject(2,leaveTypeId, Types.INTEGER);
-            preparedStatement.setDate(3,dateFrom);
-            preparedStatement.setDate(4,dateTo);
-            preparedStatement.setInt(5,leaveDetails.getTotalDays());
-            preparedStatement.setString(6,leaveDetails.getReason());
-            preparedStatement.setString(7,leaveDetails.getStatus().name());
-            preparedStatement.setInt(8,leaveDetails.getEmpID());
+        if (connection == null) {
+            System.err.println("Database connection is not initialized.");
+            return leaveDetails;
+        }
+
+        java.sql.Date dateFrom = leaveDetails.getDateFrom() != null
+                ? new java.sql.Date(leaveDetails.getDateFrom().getTime())
+                : null;
+        java.sql.Date dateTo = leaveDetails.getDateTo() != null
+                ? new java.sql.Date(leaveDetails.getDateTo().getTime())
+                : null;
+        Integer leaveTypeId = (leaveDetails.getLeaveType() != null)
+                ? leaveDetails.getLeaveType().getId()
+                : null;
+
+        String call = "CALL add_leave_request(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
-            int affectedrows = preparedStatement.executeUpdate();
-                if(affectedrows > 0){
-                 try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        leaveDetails.setLeaveId(generatedKeys.getInt(1));
-                    } else {
-                        throw new SQLException("Leave request failed, no ID obtained.");
-                     }
-                }
-        };
-            preparedStatement.close();
+        try (CallableStatement stmt = connection.prepareCall(call)) {
+            stmt.setString(1, leaveDetails.getSubject());
+            if (leaveTypeId != null) {
+                stmt.setInt(2, leaveTypeId);
+            } else {
+                stmt.setNull(2, Types.INTEGER);
+            }
+            stmt.setDate(3, dateFrom);
+            stmt.setDate(4, dateTo);
+            stmt.setInt(5, leaveDetails.getTotalDays());
+            stmt.setString(6, leaveDetails.getReason());
+            stmt.setString(7, leaveDetails.getStatus().name());
+            stmt.setInt(8, leaveDetails.getEmpID());
+            stmt.setInt(9, leaveDetails.getApproverId());
+
+            // Register the OUT parameter (10th) for leave_id
+            stmt.registerOutParameter(10, Types.INTEGER);
+            /*System.out.println("Calling procedure with values: " + leaveDetails);
+            System.out.println("Prepared statement class: " + stmt.getClass().getName());
+            System.out.println("Calling add_leave_request with parameters:");
+            System.out.println("Subject: " + leaveDetails.getSubject());
+            System.out.println("Type ID: " + leaveTypeId);
+            System.out.println("Date From: " + dateFrom);
+            System.out.println("Date To: " + dateTo);
+            System.out.println("Total Days: " + leaveDetails.getTotalDays());
+            System.out.println("Reason: " + leaveDetails.getReason());
+            System.out.println("Status: " + leaveDetails.getStatus().name());
+            System.out.println("Employee ID: " + leaveDetails.getEmpID());
+            System.out.println("Approver ID: " + leaveDetails.getApproverId());*/
+            stmt.execute();
+
+            int generatedId = stmt.getInt(10);
+            if (generatedId > 0) {
+                leaveDetails.setLeaveId(generatedId);
+                System.out.println("Leave request created with ID: " + generatedId);
+            } else {
+                System.err.println("Leave request was inserted, but no ID was returned.");
+            }
+
         } catch (SQLException e) {
+            System.err.println("Error creating leave request:");
             e.printStackTrace();
-        }         
-    }                          
-    return leaveDetails;
+        }
 
-}
+        return leaveDetails;
+    }
+    
     public void deleteLeaveRequest(int id){
         if (connection != null) {
-            String Query = "delete from public.leave_details where id =?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setInt(1,id);    
-                
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }           
-        }                              
-    }   
+                String call = "CALL delete_leave_request(?)";
+                 try (CallableStatement stmt = connection.prepareCall(call)) {
+                   stmt.setInt(1, id);
+                   stmt.execute();
+                   System.out.println("Leave request with ID " + id + " has been deleted.");
+                } catch (SQLException e) {
+                   e.printStackTrace();
+                }
+        }
+    }  
     
     public void deleteLeaveRequestbyEmpID(int empID){
         if (connection != null) {
-            String Query = "delete from public.leave_details where employee_id =?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setInt(1,empID);    
-                
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-
+            String call = "CALL delete_leave_requests_by_emp_id(?)";
+            try (CallableStatement stmt = connection.prepareCall(call)) {
+                 stmt.setInt(1, empID);
+                 stmt.execute();
+                 System.out.println("Leave requests for employee ID " + empID + " have been deleted.");
             } catch (SQLException e) {
-                e.printStackTrace();
-            }           
-        }                              
-    }   
+                 e.printStackTrace();
+            }
+        }
+    } 
     
     public List<HR> getLeavesByEmployee(int empID){
         List<HR> allLeaves = new ArrayList<>();
             if (connection != null) {
-            String Query = "SELECT * FROM public.leave_details where employee_id = ? order by id ASC";
+            String Query = "SELECT * FROM vw_leave_requests WHERE employee_id = ? ORDER BY id ASC";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setInt(1,empID);
@@ -388,7 +399,7 @@ public class EmployeeService {
     public List<HR> getAllLeaveRequestByStatus(LeaveStatus leaveStatus){
         List<HR> allLeaveRequest = new ArrayList<>();
             if (connection != null) {
-            String Query = "SELECT * FROM public.leave_details  where status = ? order by id ASC";
+            String Query = "SELECT * FROM vw_leave_requests WHERE status = ? ORDER BY id ASC";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
                 preparedStatement.setString(1,leaveStatus.name());
@@ -406,22 +417,20 @@ public class EmployeeService {
         return allLeaveRequest;
     }
     
-    public void updateLeaveRequestStatus(LeaveStatus leaveStatus, int id){
+    public void updateLeaveRequestStatus(LeaveStatus leaveStatus, int id, int approverId){
         if (connection != null) {
-            String Query = "UPDATE public.leave_details set status = ? where id = ?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setString(1,leaveStatus.name());
-                preparedStatement.setInt(2,id);
-                
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
+            String call = "CALL update_leave_request_status(?, ?, ?)";
+            try (CallableStatement stmt = connection.prepareCall(call)) {
+                stmt.setString(1, leaveStatus.name());
+                stmt.setInt(2, approverId);
+                stmt.setInt(3, id);
+                stmt.execute();
+                System.out.println("Leave request ID " + id + " updated to " + leaveStatus.name());
             } catch (SQLException e) {
                 e.printStackTrace();
-            }         
-        }                          
+            }
+        }
     }
-    
     
     private HR toLeaveDetails(ResultSet resultSet) 
         throws SQLException {
@@ -434,6 +443,7 @@ public class EmployeeService {
             leaveDetails.setTotalDays(resultSet.getInt("total_days"));
             leaveDetails.setReason(resultSet.getString("reason"));
             leaveDetails.setStatus(LeaveStatus.valueOf(resultSet.getString("status")));
+            leaveDetails.setApproverId(resultSet.getInt("approver_id"));
             
             int leaveTypeId  = resultSet.getInt("type");
             if (leaveTypeId > 0){

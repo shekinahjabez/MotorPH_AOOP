@@ -7,33 +7,24 @@ import com.payroll.domain.Employee;
 import com.payroll.domain.Finance;
 import com.payroll.domain.Person;
 import com.payroll.util.DatabaseConnection;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URL;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -52,7 +43,7 @@ public class FinanceService {
     }
     
     public Person getByEmpID(int empID) throws SQLException {
-        String query = "SELECT * FROM employee WHERE employee_id = ?";
+        String query = "SELECT * FROM public.vw_employee_profile WHERE employee_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);
@@ -65,275 +56,164 @@ public class FinanceService {
         }
         return null; // ✅ Return null if no employee found
     }
-   
     
-    public List<Employee> getEmployeeHours(int empID, Date from, Date to){
+    public List<Employee> getEmployeeHours(int empID, Date from, Date to) {
         List<Employee> empHours = new ArrayList<>();
-        if (connection != null){
+
+        if (connection != null) {
             try {
-                String Query = "SELECT * FROM public.employee_hours where employee_id = ? and date between ? and ?";
+                String Query = "SELECT * FROM public.vw_employee_hours WHERE employee_id = ? AND date BETWEEN ? AND ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setInt(1,empID);
-                preparedStatement.setDate(2,new java.sql.Date(from.getTime()));
-                preparedStatement.setDate(3,new java.sql.Date(to.getTime()));
-                
+                preparedStatement.setInt(1, empID);
+                preparedStatement.setDate(2, new java.sql.Date(from.getTime()));
+                preparedStatement.setDate(3, new java.sql.Date(to.getTime()));
+
                 ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()){
-                   Timestamp timeInDate = resultSet.getTimestamp("time_in");
-                   LocalTime timeIn = LocalDateTime.ofInstant(timeInDate.toInstant(),ZoneId.systemDefault()).toLocalTime();
-                   Timestamp timeOutDate = resultSet.getTimestamp("time_out");
-                   LocalTime timeOut = LocalDateTime.ofInstant(timeOutDate.toInstant(),ZoneId.systemDefault()).toLocalTime();
-                    
-                   if (!timeIn.equals(LocalTime.MIDNIGHT) || !timeOut.equals(LocalTime.MIDNIGHT)) {
-                    Employee attendance = new Employee();
-                    attendance.setEmpID(resultSet.getInt("employee_id"));
-                    attendance.setDate(resultSet.getDate("date"));
-                    attendance.setTimeIn(timeIn);
-                    attendance.setTimeOut(timeOut);
-                    
-                   
-                   empHours.add(attendance);
+                while (resultSet.next()) {
+                    Timestamp timeInDate = resultSet.getTimestamp("time_in");
+                    Timestamp timeOutDate = resultSet.getTimestamp("time_out");
+
+                    // Skip if either time is null
+                    if (timeInDate == null || timeOutDate == null) {
+                        //System.out.println("Null time_in or time_out for employee_id " + empID + " on " + resultSet.getDate("date"));
+                        continue;
                     }
-                }     
+
+                    LocalTime timeIn = LocalDateTime.ofInstant(timeInDate.toInstant(), ZoneId.systemDefault()).toLocalTime();
+                    LocalTime timeOut = LocalDateTime.ofInstant(timeOutDate.toInstant(), ZoneId.systemDefault()).toLocalTime();
+
+                    if (!timeIn.equals(LocalTime.MIDNIGHT) || !timeOut.equals(LocalTime.MIDNIGHT)) {
+                        Employee attendance = new Employee();
+                        attendance.setEmpID(resultSet.getInt("employee_id"));
+                        attendance.setDate(resultSet.getDate("date"));
+                        attendance.setTimeIn(timeIn);
+                        attendance.setTimeOut(timeOut);
+                        empHours.add(attendance);
+                    }
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(FinanceService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return empHours;   
+
+        return empHours;
     }
-    
-    /*public void generateEmployeePayslipReport(int payrollId) {
-        try {
-            // Load the JRXML file from the classpath
-            InputStream input = getClass().getResourceAsStream("/report/Invoice.jrxml");
-            if (input == null) {
-                throw new RuntimeException("JRXML file not found. Make sure it's in src/main/resources/report/");
+
+    public float calculateSssContribution(double empSalary) {
+        String query = "SELECT public.get_sss_contribution(CAST(? AS NUMERIC)) AS contribution";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setDouble(1, empSalary);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getFloat("contribution");
+                }
             }
-
-            // Compile the report
-            JasperReport report = JasperCompileManager.compileReport(input);
-
-            // Parameters for the report
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("employee_id", employeeId);
-            parameters.put("report_month", selectedMonth + 1); // Java Calendar is 0-based, SQL is 1-based
-            parameters.put("report_year", selectedYear);
-
-            // Get JDBC connection
-            Connection conn = DatabaseConnection.getConnection();
-
-            // Fill and view the report
-            JasperPrint print = JasperFillManager.fillReport(report, parameters, conn);
-            JasperViewer.viewReport(print, false);
-
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    
-    public float  calculateSssContribution(double empSalary){
-        String sssContributionQuery = """
-                select contribution from sss
-                where (cr_above is null or ? > cr_above)
-                and (cr_below is null or ? < cr_below)  
-                """;
-        float contribution = 0f;
-        try (PreparedStatement sssContributionStatement = connection.prepareStatement(sssContributionQuery)) {
-            sssContributionStatement.setDouble(1, empSalary);
-            sssContributionStatement.setDouble(2, empSalary);
-
-            ResultSet sssContributionResult = sssContributionStatement.executeQuery();
-                if (!sssContributionResult.next()) return 0f;
-                contribution = sssContributionResult.getFloat("contribution");
-            sssContributionResult.close();
         } catch (SQLException e) {
-            System.err.println("An error occurred: " + e.getMessage());
-            throw new RuntimeException(e);
+            System.err.println("Error calling get_sss_contribution: " + e.getMessage());
+            throw new RuntimeException("Failed to calculate SSS contribution", e);
         }
-        return contribution;
+
+        return 0f;
     }
     
     public Person updatePayrollDetails(Person empDetails){
-            if (connection != null) {
-            String Query = "UPDATE public.employee \n"
-                    + "SET \n"
-                    + "    sss = ?,\n"
-                    + "    philhealth = ?,\n"
-                    + "    tin = ?,\n"
-                    + "    pag_ibig = ?,\n"
-                    + "    basic_salary = ?,\n"
-                    + "    rice_subsidy = ?,\n"
-                    + "    phone_allowance = ?,\n"
-                    + "    clothing_allowance = ?,\n"
-                    + "    gross_semi_monthly_rate = ?,\n"
-                    + "    hourly_rate = ?\n"
-                    + "WHERE employee_id = ?";
-            
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setString(1,empDetails.getEmpSSS());
-                preparedStatement.setLong(2,empDetails.getEmpPhilHealth());
-                preparedStatement.setString(3,empDetails.getEmpTIN());
-                preparedStatement.setLong(4,empDetails.getEmpPagibig());
-                preparedStatement.setDouble(5,empDetails.getEmpBasicSalary());
-                preparedStatement.setDouble(6,empDetails.getEmpRice());
-                preparedStatement.setDouble(7,empDetails.getEmpPhone());
-                preparedStatement.setDouble(8,empDetails.getEmpClothing());
-                preparedStatement.setDouble(9,empDetails.getEmpMonthlyRate());
-                preparedStatement.setDouble(10,empDetails.getEmpHourlyRate());
-                preparedStatement.setInt(11, empDetails.getEmpID());
-                
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
+        if (connection == null) {
+              System.err.println("Database connection not established.");
+              return null;
+            }
+
+            String call = "CALL update_payroll_details(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try (CallableStatement stmt = connection.prepareCall(call)) {
+                stmt.setString(1, empDetails.getEmpSSS());
+                stmt.setLong(2, empDetails.getEmpPhilHealth());
+                stmt.setString(3, empDetails.getEmpTIN());
+                stmt.setLong(4, empDetails.getEmpPagibig());
+                stmt.setBigDecimal(5, BigDecimal.valueOf(empDetails.getEmpBasicSalary()));
+                stmt.setBigDecimal(6, BigDecimal.valueOf(empDetails.getEmpRice()));
+                stmt.setBigDecimal(7, BigDecimal.valueOf(empDetails.getEmpPhone()));
+                stmt.setBigDecimal(8, BigDecimal.valueOf(empDetails.getEmpClothing()));
+                stmt.setBigDecimal(9, BigDecimal.valueOf(empDetails.getEmpMonthlyRate()));
+                stmt.setBigDecimal(10, BigDecimal.valueOf(empDetails.getEmpHourlyRate()));
+                stmt.setInt(11, empDetails.getEmpID());
+
+                /* Debug
+                System.out.println("Calling stored procedure with the following values:");
+                System.out.println("SSS: " + empDetails.getEmpSSS());
+                System.out.println("PhilHealth: " + empDetails.getEmpPhilHealth());
+                System.out.println("TIN: " + empDetails.getEmpTIN());
+                System.out.println("Pag-ibig: " + empDetails.getEmpPagibig());
+                System.out.println("Basic Salary: " + empDetails.getEmpBasicSalary());
+                System.out.println("Rice Subsidy: " + empDetails.getEmpRice());
+                System.out.println("Phone Allowance: " + empDetails.getEmpPhone());
+                System.out.println("Clothing Allowance: " + empDetails.getEmpClothing());
+                System.out.println("Gross Semi-Monthly Rate: " + empDetails.getEmpMonthlyRate());
+                System.out.println("Hourly Rate: " + empDetails.getEmpHourlyRate());
+                System.out.println("Employee ID: " + empDetails.getEmpID());*/
+
+                stmt.execute();
+                System.out.println("Payroll details updated successfully.");
+
             } catch (SQLException e) {
+                System.err.println("Error calling stored procedure update_payroll_details:");
                 e.printStackTrace();
-            }         
-        }                          
+            }
         return empDetails;
     }
-    public LocalDate[] getPayrollPeriodFromEmployeeHours(int empId, int month, int year) {
-        String query = """
-            SELECT MIN(date) AS start_date, MAX(date) AS end_date
-            FROM employee_hours
-            WHERE employee_id = ?
-              AND EXTRACT(MONTH FROM date) = ?
-              AND EXTRACT(YEAR FROM date) = ?
-        """;
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, empId);
-            preparedStatement.setInt(2, month + 1); // Calendar.JANUARY = 0
-            preparedStatement.setInt(3, year);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next() && resultSet.getDate("start_date") != null) {
-                LocalDate start = resultSet.getDate("start_date").toLocalDate();
-                LocalDate end = resultSet.getDate("end_date").toLocalDate();
-                return new LocalDate[]{start, end};
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
  
-     public Finance savePayrollReport(Finance payrollReportDetails) {
-        if (connection == null) return null;
-
-        String query = """
-            INSERT INTO report.payroll 
-            (employee_id, payroll_period_start_date, payroll_period_end_date, number_of_hours_worked, 
-             computed_salary, total_contributions, net_pay, total_allowance, sss_contribution, phealth_contribution, 
-             pagibig_contribution, tax, hourly_rate,full_name,position, rice_subsidy,phone_allowance,cloth_allowance)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-
-            // Convert dates
-            java.sql.Date payrollPeriodStart = payrollReportDetails.getPayrollPeriodStart() != null 
-                    ? new java.sql.Date(payrollReportDetails.getPayrollPeriodStart().getTime()) : null;
-            java.sql.Date payrollPeriodEnd = payrollReportDetails.getPayrollPeriodEnd() != null 
-                    ? new java.sql.Date(payrollReportDetails.getPayrollPeriodEnd().getTime()) : null;
-
-            // Set parameters
-            preparedStatement.setInt(1, payrollReportDetails.getPayEmpId());
-            preparedStatement.setDate(2, payrollPeriodStart);
-            preparedStatement.setDate(3, payrollPeriodEnd);
-            preparedStatement.setDouble(4, payrollReportDetails.getPayNumberOfHoursWorked());
-            preparedStatement.setDouble(5, payrollReportDetails.getPayComputedSalary());
-            preparedStatement.setDouble(6, payrollReportDetails.getPayTotalContributions());
-            preparedStatement.setDouble(7, payrollReportDetails.getPayNetPay());
-            preparedStatement.setDouble(8, payrollReportDetails.getPayTotalAllowance());
-            preparedStatement.setDouble(9, payrollReportDetails.getPaySssContri());
-            preparedStatement.setDouble(10, payrollReportDetails.getPayPhealthContri());
-            preparedStatement.setDouble(11, payrollReportDetails.getPayPagibigContri());
-            preparedStatement.setDouble(12, payrollReportDetails.getPayWithholdingTax());
-            preparedStatement.setDouble(13, payrollReportDetails.getPayHourlyRate());
-            preparedStatement.setString(14,payrollReportDetails.getPayFullName());
-            preparedStatement.setString(15,payrollReportDetails.getPayPosition());
-            preparedStatement.setDouble(16, payrollReportDetails.getPayRiceAllowance());
-            preparedStatement.setDouble(17, payrollReportDetails.getPayPhoneAllowance());
-            preparedStatement.setDouble(18, payrollReportDetails.getPayClothingAllowance());
-            
-
-            // Execute and retrieve the generated payroll_id
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        payrollReportDetails.setPayrollId(generatedKeys.getInt(1));
-                    } else {
-                        throw new SQLException("Inserting payroll record failed, no ID returned.");
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return payrollReportDetails;    
-     }
-    
-    
-    
-    /* old - for itext
     public Finance savePayrollReport(Finance payrollReportDetails) {
         if (connection == null) return null;
 
-        String query = """
-            INSERT INTO public.payroll 
-            (employee_id, payroll_period_start_date, payroll_period_end_date, number_of_hours_worked, 
-             gross_pay, deduction, net_pay, total_allowance, sss_contribution, phealth_contribution, 
-             pagibig_contribution, tax)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+        String call = "CALL report.save_payroll_report(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (CallableStatement stmt = connection.prepareCall(call)) {
 
-            // Convert dates
-            java.sql.Date payrollPeriodStart = payrollReportDetails.getPayrollPeriodStart() != null 
+            java.sql.Date startDate = payrollReportDetails.getPayrollPeriodStart() != null
                     ? new java.sql.Date(payrollReportDetails.getPayrollPeriodStart().getTime()) : null;
-            java.sql.Date payrollPeriodEnd = payrollReportDetails.getPayrollPeriodEnd() != null 
+
+            java.sql.Date endDate = payrollReportDetails.getPayrollPeriodEnd() != null
                     ? new java.sql.Date(payrollReportDetails.getPayrollPeriodEnd().getTime()) : null;
 
-            // Set parameters
-            preparedStatement.setInt(1, payrollReportDetails.getEmpID());
-            preparedStatement.setDate(2, payrollPeriodStart);
-            preparedStatement.setDate(3, payrollPeriodEnd);
-            preparedStatement.setDouble(4, payrollReportDetails.getNumberOfHoursWorked());
-            preparedStatement.setDouble(5, payrollReportDetails.getGrossPay());
-            preparedStatement.setDouble(6, payrollReportDetails.getDeduction());
-            preparedStatement.setDouble(7, payrollReportDetails.getNetPay());
-            preparedStatement.setDouble(8, payrollReportDetails.getTotalAllowance());
-            preparedStatement.setDouble(9, payrollReportDetails.getSssContribution());
-            preparedStatement.setDouble(10, payrollReportDetails.getPhealthContribution());
-            preparedStatement.setDouble(11, payrollReportDetails.getPagibigContribution());
-            preparedStatement.setDouble(12, payrollReportDetails.getWithholdingTax());
+            stmt.setInt(1, payrollReportDetails.getPayEmpId());
+            stmt.setDate(2, startDate);
+            stmt.setDate(3, endDate);
+            stmt.setDouble(4, payrollReportDetails.getPayNumberOfHoursWorked());
+            stmt.setBigDecimal(5, BigDecimal.valueOf(payrollReportDetails.getPayComputedSalary()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(6, BigDecimal.valueOf(payrollReportDetails.getPayTotalContributions()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(7, BigDecimal.valueOf(payrollReportDetails.getPayNetPay()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(8, BigDecimal.valueOf(payrollReportDetails.getPayTotalAllowance()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(9, BigDecimal.valueOf(payrollReportDetails.getPaySssContri()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(10, BigDecimal.valueOf(payrollReportDetails.getPayPhealthContri()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(11, BigDecimal.valueOf(payrollReportDetails.getPayPagibigContri()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(12, BigDecimal.valueOf(payrollReportDetails.getPayWithholdingTax()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(13, BigDecimal.valueOf(payrollReportDetails.getPayHourlyRate()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setString(14, payrollReportDetails.getPayFullName());
+            stmt.setString(15, payrollReportDetails.getPayPosition());
+            stmt.setBigDecimal(16, BigDecimal.valueOf(payrollReportDetails.getPayRiceAllowance()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(17, BigDecimal.valueOf(payrollReportDetails.getPayPhoneAllowance()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(18, BigDecimal.valueOf(payrollReportDetails.getPayClothingAllowance()).setScale(2, RoundingMode.HALF_UP));
 
-            // Execute and retrieve the generated payroll_id
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        payrollReportDetails.setPayrollId(generatedKeys.getInt(1));
-                    } else {
-                        throw new SQLException("Inserting payroll record failed, no ID returned.");
-                    }
-                }
-            }
+            stmt.registerOutParameter(19, java.sql.Types.INTEGER);
+
+            // Debugging log
+            //System.out.println("Executing payroll report procedure for employee ID: " + payrollReportDetails.getPayEmpId());
+
+            stmt.execute();
+
+            int generatedPayrollId = stmt.getInt(19);
+            payrollReportDetails.setPayrollId(generatedPayrollId);
+
+            //System.out.println("Generated payroll ID: " + generatedPayrollId);
 
         } catch (SQLException e) {
+            System.err.println("Error calling stored procedure report.save_payroll_report:");
             e.printStackTrace();
         }
 
-        return payrollReportDetails;    
-    }*/
-    
-    
+        return payrollReportDetails;
+    }
     
     private Person toPayrollDetails(ResultSet resultSet) 
         throws SQLException {

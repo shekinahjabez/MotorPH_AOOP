@@ -18,14 +18,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -230,6 +228,7 @@ public class ITDashboard extends javax.swing.JFrame {
         roleDropdown = new javax.swing.JComboBox<>();
         firstNameTField = new javax.swing.JLabel();
         lastNameTField = new javax.swing.JLabel();
+        viewPDFButton = new javax.swing.JButton();
         searchButton = new javax.swing.JButton();
         searchTextField = new javax.swing.JTextField();
 
@@ -805,13 +804,13 @@ public class ITDashboard extends javax.swing.JFrame {
         RoleTable.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         RoleTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Emp. ID", "Last Name", "First Name"
+                "Emp. ID", "Last Name", "First Name", "Position", "Role Access"
             }
         ));
         RoleTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -835,6 +834,17 @@ public class ITDashboard extends javax.swing.JFrame {
 
         lastNameTField.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
 
+        viewPDFButton.setBackground(new java.awt.Color(255, 153, 51));
+        viewPDFButton.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        viewPDFButton.setForeground(new java.awt.Color(255, 255, 255));
+        viewPDFButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/download 16.png"))); // NOI18N
+        viewPDFButton.setText("Download Full List");
+        viewPDFButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewPDFButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -852,8 +862,8 @@ public class ITDashboard extends javax.swing.JFrame {
                     .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(roleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -866,47 +876,54 @@ public class ITDashboard extends javax.swing.JFrame {
                             .addComponent(firstNameTField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lastNameTField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 689, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+                    .addComponent(viewPDFButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(43, 43, 43))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(empDetailsLabel)
-                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(employeeIDTField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(empFirstNameLabel)
-                    .addComponent(firstNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(empLastNameLabel)
-                    .addComponent(lastNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(empDetailsLabel)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(viewPDFButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(usernameTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(roleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addComponent(updateButton)
-                .addGap(18, 18, 18)
-                .addComponent(clearButton)
-                .addGap(272, 272, 272))
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(employeeIDTField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(empFirstNameLabel)
+                            .addComponent(firstNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(empLastNameLabel)
+                            .addComponent(lastNameTField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(usernameTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(passwordTField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(roleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)
+                        .addComponent(updateButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(clearButton)
+                        .addGap(275, 275, 275))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
 
         searchButton.setBackground(new java.awt.Color(0, 0, 153));
@@ -945,7 +962,7 @@ public class ITDashboard extends javax.swing.JFrame {
                 .addGroup(roleManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(roleManagementLayout.createSequentialGroup()
                         .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(139, Short.MAX_VALUE))
+                        .addGap(139, 139, 139))
                     .addGroup(roleManagementLayout.createSequentialGroup()
                         .addComponent(empSectionLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -963,7 +980,7 @@ public class ITDashboard extends javax.swing.JFrame {
                     .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchButton))
                 .addGap(20, 20, 20)
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -1079,24 +1096,6 @@ public class ITDashboard extends javax.swing.JFrame {
         if (!found) {
             JOptionPane.showMessageDialog(this, "Employee Not Found!");
             clearButtonActionPerformed(evt); 
-
-    /*    int empID = Integer.parseInt(searchTextField.getText().trim());
-        loadEmployeeValues(empID); 
-        refreshTable(); 
-        
-        DefaultTableModel model = (DefaultTableModel) RoleTable.getModel();
-        boolean found = false;
-        for (int i = 0; i < model.getRowCount(); i++) {
-            if (empID == Integer.parseInt(model.getValueAt(i, 0).toString())) {
-                RoleTable.setRowSelectionInterval(i, i);
-                RoleTable.scrollRectToVisible(RoleTable.getCellRect(i, 0, true));
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            JOptionPane.showMessageDialog(this, "Employee Not Found!");
-            clearButtonActionPerformed(evt); */
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -1163,7 +1162,7 @@ public class ITDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_changePasswordButtonActionPerformed
 
     private void viewAllEmployees(){
-        List<Person> allEmployee = hrService.getAllEmployee();
+    List<Person> allEmployee = hrService.getAllEmployee();
         List<IT> allAccount = itService.getAllUserAccount();
         DefaultTableModel model = (DefaultTableModel) RoleTable.getModel();
         model.setRowCount(0);
@@ -1176,13 +1175,26 @@ public class ITDashboard extends javax.swing.JFrame {
         for (Person empDetails : allEmployee) {
             IT empAccount = accountMap.get(empDetails.getEmpID()); // O(1) lookup time
 
+            /*String roleName = "N/A";
+            if (empAccount != null && empAccount.getUserRole() != null && empAccount.getUserRole().getRole() != null) {
+                roleName = empAccount.getUserRole().getRole();
+            }*/
+
             Vector<Object> rowData = new Vector<>();
             rowData.add(empDetails.getEmpID());
             rowData.add(empDetails.getLastName());
             rowData.add(empDetails.getFirstName());
+            rowData.add(empDetails.getEmpPosition().getPosition());
+            rowData.add(empAccount.getUserRole().getRole());
 
             model.addRow(rowData);
-        }        
+            
+            RoleTable.getColumnModel().getColumn(0).setPreferredWidth(60);  // Emp ID
+            RoleTable.getColumnModel().getColumn(1).setPreferredWidth(120); // Last Name
+            RoleTable.getColumnModel().getColumn(2).setPreferredWidth(120); // First Name
+            RoleTable.getColumnModel().getColumn(3).setPreferredWidth(220); // Position
+            RoleTable.getColumnModel().getColumn(4).setPreferredWidth(90); // Role Access
+        }
     }
     private void RoleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RoleTableMouseClicked
 
@@ -1209,57 +1221,54 @@ public class ITDashboard extends javax.swing.JFrame {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
-           if (employeeIDTField.getText().trim().isEmpty()) {
-               JOptionPane.showMessageDialog(null, "Please select an employee to update.", "Update Error", JOptionPane.ERROR_MESSAGE);
-               return;
-           }
-
-           // Validate all required fields are filled
-           if (usernameTField.getText().trim().isEmpty() ||
-               passwordTField.getText().trim().isEmpty()) {
-               JOptionPane.showMessageDialog(null, "All fields must be filled before updating.", "Validation Error", JOptionPane.WARNING_MESSAGE);
-               return;
-           }
-
-           int empID = Integer.parseInt(employeeIDTField.getText().trim());
-
-           IT empAccount = updateEmpAccountValues();
-           empAccount.setEmpID(empID);  // Set the employee ID for updating
-           itService.updateEmployeeAccountWithRole(empAccount);
-
-           refreshTable();
-           clearButtonActionPerformed(evt);
-           JOptionPane.showMessageDialog(null, "Employee has been successfully updated.", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
-
-       } catch (NumberFormatException e) {
-           JOptionPane.showMessageDialog(null, "Invalid Employee ID. Please enter a valid number.", "Update Error", JOptionPane.ERROR_MESSAGE);
-       } catch (Exception e) {
-           JOptionPane.showMessageDialog(null, "Error updating employee: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
-       }
-        /*    try {
             if (employeeIDTField.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please select an employee to update.", "Update Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            int empID = Integer.parseInt(employeeIDTField.getText().trim());
 
-            IT empAccount = updateEmpAccountValues();
-            empAccount.setEmpID(empID);  // Set the employee ID for updating
+            if (usernameTField.getText().trim().isEmpty() ||
+                passwordTField.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "All fields must be filled before updating.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int empID = Integer.parseInt(employeeIDTField.getText().trim());
+            IT empAccount = updateEmpAccountValues(); // new role and values
+            empAccount.setEmpID(empID);
+
+            String newRoleName = (empAccount.getUserRole() != null) ? empAccount.getUserRole().getRole() : "";
+
+            // ✅ Check if the update would leave any required roles empty
+            List<String> missingRolesAfterUpdate = itService.getMissingRolesAfterUpdate(empID, newRoleName);
+            if (!missingRolesAfterUpdate.isEmpty()) {
+                String missingMsg = String.join(", ", missingRolesAfterUpdate);
+                JOptionPane.showMessageDialog(null,
+                    "Update failed. The system requires at least one employee to remain assigned to each critical role. This update would leave the following role(s) unassigned: " + missingMsg,
+                    "Critical Role Protection",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             itService.updateEmployeeAccountWithRole(empAccount);
             refreshTable();
             clearButtonActionPerformed(evt);
+
             JOptionPane.showMessageDialog(null, "Employee has been successfully updated.", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid Employee ID. Please enter a valid number.", "Update Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error updating employee: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
-        }*/
+        }
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void roleDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roleDropdownActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_roleDropdownActionPerformed
+
+    private void viewPDFButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPDFButtonActionPerformed
+        reportGenerator.generateRoleReport();
+    }//GEN-LAST:event_viewPDFButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1385,5 +1394,6 @@ public class ITDashboard extends javax.swing.JFrame {
     private javax.swing.JButton updateButton;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTField;
+    private javax.swing.JButton viewPDFButton;
     // End of variables declaration//GEN-END:variables
 }

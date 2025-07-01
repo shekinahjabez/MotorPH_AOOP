@@ -5,13 +5,14 @@
 package com.payroll.services;
 import com.payroll.domain.Person;
 import com.payroll.domain.Employee;
+import com.payroll.domain.HR.LeaveStatus;
 import com.payroll.domain.IT;
 import com.payroll.subdomain.EmployeePosition;
 import com.payroll.subdomain.EmployeeStatus;
 import com.payroll.util.DatabaseConnection;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URL;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,16 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.view.JasperViewer;
-
 /**
  *
  * @author leniejoice
@@ -98,21 +90,25 @@ public class HRService {
     }
     
     public void updateEmployeeCredentials(IT empAccount){
-        if(connection !=null){
-            String Query = "UPDATE public.employee_account SET username = ?, password = ? WHERE employee_id = ?";
-        
-            try{
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setString(1,empAccount.getEmpUserName());
-                preparedStatement.setString(2,empAccount.getEmpPassword());
-                preparedStatement.setInt(3,empAccount.getEmpID());
-                
+        if (connection == null) return;
 
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }                                   
+        String call = "CALL update_employee_credentials(?, ?, ?)";
+
+        try (CallableStatement stmt = connection.prepareCall(call)) {
+            stmt.setString(1, empAccount.getEmpUserName());
+            stmt.setString(2, empAccount.getEmpPassword());
+            stmt.setInt(3, empAccount.getEmpID());
+
+            // Debugging output
+            //System.out.println("Executing update_employee_credentials for employee ID: " + empAccount.getEmpID());
+
+            stmt.execute();
+
+            System.out.println("Credentials updated successfully.");
+
+        } catch (SQLException e) {
+            System.err.println("Error updating employee credentials:");
+            e.printStackTrace();
         }
     }
     
@@ -144,73 +140,72 @@ public class HRService {
     }
     
     public Person updateEmployeeDetails(Person empDetails){
-        java.sql.Date birthDate = empDetails.getEmpBirthday()!=null? new java.sql.Date(empDetails.getEmpBirthday().getTime()):null;
-        Integer superVisorId = empDetails.getEmpImmediateSupervisor() != null ? empDetails.getEmpImmediateSupervisor().getEmpID() : null;
-        Integer positionId = empDetails.getEmpPosition() != null ? empDetails.getEmpPosition().getId() : null;
-        Integer statusId = empDetails.getEmpStatus() != null ? empDetails.getEmpStatus().getId() : null;
+        if (connection == null) return null;
 
-            if (connection != null) {
-            String Query = "UPDATE public.employee \n"
-                    + "SET \n"
-                    + "    lastname = ?,\n"
-                    + "    firstname = ?,\n"
-                    + "    birthday = ?,\n"
-                    + "    address = ?,\n"
-                    + "    phone_number = ?,\n"
-                    + "    sss = ?,\n"
-                    + "    philhealth = ?,\n"
-                    + "    tin = ?,\n"
-                    + "    pag_ibig = ?,\n"
-                    + "    status = ?,\n"
-                    + "    position = ?,\n"
-                    + "    immediate_supervisor = ?,\n"
-                    + "    basic_salary = ?,\n"
-                    + "    rice_subsidy = ?,\n"
-                    + "    phone_allowance = ?,\n"
-                    + "    clothing_allowance = ?,\n"
-                    + "    gross_semi_monthly_rate = ?,\n"
-                    + "    hourly_rate = ?\n"
-                    + "WHERE employee_id = ?";
-            
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setString(1,empDetails.getLastName());
-                preparedStatement.setString(2,empDetails.getFirstName());
-                preparedStatement.setDate(3,birthDate); 
-                preparedStatement.setString(4,empDetails.getEmpAddress());
-                preparedStatement.setString(5,empDetails.getEmpPhoneNumber());
-                preparedStatement.setString(6,empDetails.getEmpSSS());
-                preparedStatement.setLong(7,empDetails.getEmpPhilHealth());
-                preparedStatement.setString(8,empDetails.getEmpTIN());
-                preparedStatement.setLong(9,empDetails.getEmpPagibig());
-                preparedStatement.setInt(10, statusId);
-                preparedStatement.setInt(11, positionId);
-                
-                //BUG
-                /*preparedStatement.setInt(12, superVisorId);*/
-                
-                // THIS IS THE CORRECTED PART
-                if (superVisorId != null) {
-                    preparedStatement.setInt(12, superVisorId);
-                } else {
-                    preparedStatement.setNull(12, java.sql.Types.INTEGER);
-                }
-                
-                
-                preparedStatement.setDouble(13,empDetails.getEmpBasicSalary());
-                preparedStatement.setDouble(14,empDetails.getEmpRice());
-                preparedStatement.setDouble(15,empDetails.getEmpPhone());
-                preparedStatement.setDouble(16,empDetails.getEmpClothing());
-                preparedStatement.setDouble(17,empDetails.getEmpMonthlyRate());
-                preparedStatement.setDouble(18,empDetails.getEmpHourlyRate());
-                preparedStatement.setInt(19, empDetails.getEmpID());
-                
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }         
-        }                          
+        String call = "CALL update_employee_details(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        java.sql.Date birthDate = empDetails.getEmpBirthday() != null
+            ? new java.sql.Date(empDetails.getEmpBirthday().getTime())
+            : null;
+
+        Integer supervisorId = empDetails.getEmpImmediateSupervisor() != null
+            ? empDetails.getEmpImmediateSupervisor().getEmpID()
+            : null;
+
+        Integer positionId = empDetails.getEmpPosition() != null
+            ? empDetails.getEmpPosition().getId()
+            : null;
+
+        Integer statusId = empDetails.getEmpStatus() != null
+            ? empDetails.getEmpStatus().getId()
+            : null;
+
+        try (CallableStatement stmt = connection.prepareCall(call)) {
+
+            stmt.setString(1, empDetails.getLastName());
+            stmt.setString(2, empDetails.getFirstName());
+            stmt.setDate(3, birthDate);
+            stmt.setString(4, empDetails.getEmpAddress());
+            stmt.setString(5, empDetails.getEmpPhoneNumber());
+            stmt.setString(6, empDetails.getEmpSSS());
+            stmt.setLong(7, empDetails.getEmpPhilHealth());
+            stmt.setString(8, empDetails.getEmpTIN());
+            stmt.setLong(9, empDetails.getEmpPagibig());
+
+            if (statusId != null) {
+                stmt.setInt(10, statusId);
+            } else {
+                stmt.setNull(10, java.sql.Types.INTEGER);
+            }
+
+            if (positionId != null) {
+                stmt.setInt(11, positionId);
+            } else {
+                stmt.setNull(11, java.sql.Types.INTEGER);
+            }
+
+            if (supervisorId != null) {
+                stmt.setInt(12, supervisorId);
+            } else {
+                stmt.setNull(12, java.sql.Types.INTEGER);
+            }
+
+            stmt.setBigDecimal(13, BigDecimal.valueOf(empDetails.getEmpBasicSalary()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(14, BigDecimal.valueOf(empDetails.getEmpRice()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(15, BigDecimal.valueOf(empDetails.getEmpPhone()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(16, BigDecimal.valueOf(empDetails.getEmpClothing()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(17, BigDecimal.valueOf(empDetails.getEmpMonthlyRate()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setBigDecimal(18, BigDecimal.valueOf(empDetails.getEmpHourlyRate()).setScale(2, RoundingMode.HALF_UP));
+            stmt.setInt(19, empDetails.getEmpID());
+
+            stmt.execute();
+            System.out.println("Update successful.");
+
+        } catch (SQLException e) {
+            System.err.println("Error calling update_employee_details procedure:");
+            e.printStackTrace();
+        }
+
         return empDetails;
     }
     
@@ -276,97 +271,86 @@ public class HRService {
         }
 
         return null;
-    }    
+    }
+
+    
     public Person addEmployeeDetails(Person empDetails) {
         if (connection == null) return null;
 
-        String query = "INSERT INTO public.employee (lastname, firstname, birthday, address, phone_number, sss, philhealth, tin, pag_ibig, status, position, immediate_supervisor, basic_salary, rice_subsidy, phone_allowance, clothing_allowance, gross_semi_monthly_rate, hourly_rate) " +
-                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "Call add_employee_details(?, ?, ?, ?, ?, ?, ?::bigint, ?, ?::bigint, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (CallableStatement stmt = connection.prepareCall(sql)) {
 
-            preparedStatement.setString(1, empDetails.getLastName());
-            preparedStatement.setString(2, empDetails.getFirstName());
+            stmt.setString(1, empDetails.getLastName());                       // text
+            stmt.setString(2, empDetails.getFirstName());                      // text
 
-            // Safely handle nullable Date
             if (empDetails.getEmpBirthday() != null) {
-                preparedStatement.setDate(3, new java.sql.Date(empDetails.getEmpBirthday().getTime()));
+                stmt.setDate(3, new java.sql.Date(empDetails.getEmpBirthday().getTime())); // date
             } else {
-                preparedStatement.setNull(3, java.sql.Types.DATE);
+                stmt.setNull(3, java.sql.Types.DATE);
             }
 
-            preparedStatement.setString(4, empDetails.getEmpAddress());
-            preparedStatement.setString(5, empDetails.getEmpPhoneNumber());
-            preparedStatement.setString(6, empDetails.getEmpSSS());
-            preparedStatement.setLong(7, empDetails.getEmpPhilHealth());
-            preparedStatement.setString(8, empDetails.getEmpTIN());
-            preparedStatement.setLong(9, empDetails.getEmpPagibig());
+            stmt.setString(4, empDetails.getEmpAddress());                    // text
+            stmt.setString(5, empDetails.getEmpPhoneNumber());                // text
+            stmt.setString(6, empDetails.getEmpSSS());                        // text
+            stmt.setLong(7, empDetails.getEmpPhilHealth());                   // bigint
+            stmt.setString(8, empDetails.getEmpTIN());                        // text
+            stmt.setLong(9, empDetails.getEmpPagibig());                      // bigint
 
-            // Safely handle nullable Integer for status, position, and supervisor
-            if (empDetails.getEmpStatus() != null) {
-                preparedStatement.setInt(10, empDetails.getEmpStatus().getId());
-            } else {
-                preparedStatement.setNull(10, java.sql.Types.INTEGER);
-            }
-
-            if (empDetails.getEmpPosition() != null) {
-                preparedStatement.setInt(11, empDetails.getEmpPosition().getId());
-            } else {
-                preparedStatement.setNull(11, java.sql.Types.INTEGER);
-            }
-
+            stmt.setInt(10, empDetails.getEmpStatus() != null ? empDetails.getEmpStatus().getId() : java.sql.Types.INTEGER);  // integer
+            stmt.setInt(11, empDetails.getEmpPosition() != null ? empDetails.getEmpPosition().getId() : java.sql.Types.INTEGER); // integer
             if (empDetails.getEmpImmediateSupervisor() != null) {
-                preparedStatement.setInt(12, empDetails.getEmpImmediateSupervisor().getEmpID());
+                stmt.setInt(12, empDetails.getEmpImmediateSupervisor().getEmpID()); // integer
             } else {
-                preparedStatement.setNull(12, java.sql.Types.INTEGER);
+                stmt.setNull(12, java.sql.Types.INTEGER);
             }
 
-            preparedStatement.setDouble(13, empDetails.getEmpBasicSalary());
-            preparedStatement.setDouble(14, empDetails.getEmpRice());
-            preparedStatement.setDouble(15, empDetails.getEmpPhone());
-            preparedStatement.setDouble(16, empDetails.getEmpClothing());
-            preparedStatement.setDouble(17, empDetails.getEmpMonthlyRate());
-            preparedStatement.setDouble(18, empDetails.getEmpHourlyRate());
+            // Use BigDecimal for NUMERIC
+            stmt.setBigDecimal(13, BigDecimal.valueOf(empDetails.getEmpBasicSalary()));  // numeric
+            stmt.setBigDecimal(14, BigDecimal.valueOf(empDetails.getEmpRice()));
+            stmt.setBigDecimal(15, BigDecimal.valueOf(empDetails.getEmpPhone()));
+            stmt.setBigDecimal(16, BigDecimal.valueOf(empDetails.getEmpClothing()));
+            stmt.setBigDecimal(17, BigDecimal.valueOf(empDetails.getEmpMonthlyRate()));
+            stmt.setBigDecimal(18, BigDecimal.valueOf(empDetails.getEmpHourlyRate()));
 
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        empDetails.setEmpID(generatedKeys.getInt(1)); // Assuming employee_id is the first column
-                    } else {
-                        throw new SQLException("Creating employee failed, no ID obtained.");
-                    }
-                }
-            }
+            // OUT parameter (employee_id)
+            stmt.registerOutParameter(19, java.sql.Types.INTEGER);           // OUT integer
+
+            stmt.execute();
+
+            int generatedId = stmt.getInt(19);
+            empDetails.setEmpID(generatedId);
+            System.out.println("New employee created with ID: " + generatedId);
+
         } catch (SQLException e) {
+            System.err.println("Error calling add_employee_details:");
             e.printStackTrace();
-            // It's better to not swallow the exception, or to re-throw it
-            // so the calling code knows something went wrong.
-            // For now, let's keep the original behavior of returning the object.
         }
+
         return empDetails;
     }
-
     
     public boolean deleteEmployeeDetails(int empID) {
         boolean isDeleted = false;
 
         if (connection != null) {
-            String query = "DELETE FROM public.employee WHERE employee_id = ?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setInt(1, empID);
+            String sql = "Call delete_employee_details(?, ?)";
 
-                int affectedRows = preparedStatement.executeUpdate();
-                
-                if (affectedRows > 0) {
-                    isDeleted = true;
-                }
-                preparedStatement.close();
+            try (CallableStatement stmt = connection.prepareCall(sql)) {
+                stmt.setInt(1, empID); // IN param
+                stmt.registerOutParameter(2, java.sql.Types.INTEGER); // OUT param
+
+                stmt.execute();
+
+                int deletedCount = stmt.getInt(2); // Get OUT param
+                System.out.println("Deleted count from procedure: " + deletedCount); // Debug
+                isDeleted = deletedCount > 0;
+
             } catch (SQLException e) {
                 e.printStackTrace();
-            }  
+            }
         }
+
         return isDeleted;
     }
     
@@ -444,7 +428,7 @@ public class HRService {
             return empHours;
         }
 
-        String query = "SELECT * FROM employee_hours WHERE employee_id = ?";
+        String query = "SELECT * FROM public.vw_employee_hours WHERE employee_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empID);
@@ -487,22 +471,23 @@ public class HRService {
             employeeDetails.setEmpMonthlyRate(resultSet.getDouble("gross_semi_monthly_rate"));
             employeeDetails.setEmpHourlyRate(resultSet.getDouble("hourly_rate"));
             int superVisorId  = resultSet.getInt("immediate_supervisor");
-            if (superVisorId > 0 && fetchSupervisor){
-                Person superVisor = getByEmpID(superVisorId, false);
-                employeeDetails.setEmpImmediateSupervisor(superVisor);
-            }       
+                if (superVisorId > 0 && fetchSupervisor){
+                    Person superVisor = getByEmpID(superVisorId, false);
+                    employeeDetails.setEmpImmediateSupervisor(superVisor);
+                }       
             int positionId  = resultSet.getInt("position");
-            if (positionId > 0){
-                EmployeePosition position = getPositionById(positionId);
-                employeeDetails.setEmpPosition(position);
-            }    
-            int statusId  = resultSet.getInt("status");
-            if (statusId > 0){
-                EmployeeStatus status = getStatusById(statusId);
-                employeeDetails.setEmpStatus(status);
-            }
+                if (positionId > 0){
+                    EmployeePosition position = getPositionById(positionId);
+                    employeeDetails.setEmpPosition(position);
+                }    
+           int statusId  = resultSet.getInt("status");
+                if (statusId > 0){
+                    EmployeeStatus status = getStatusById(statusId);
+                    employeeDetails.setEmpStatus(status);
+                }
         return employeeDetails;
     }
+    
     private Person toEmployeeDetails(ResultSet resultSet) 
         throws SQLException {
         return toEmployeeDetails(resultSet, true);

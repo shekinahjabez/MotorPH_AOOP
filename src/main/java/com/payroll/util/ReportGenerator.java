@@ -25,7 +25,7 @@ import net.sf.jasperreports.view.JasperViewer;
 public class ReportGenerator {
 
     public void generatePayrollReport(int payrollId) {
-         try (Connection connection = DatabaseConnection.getConnection()) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
             Map<String, Object> parameters = getCommonParameters();
             parameters.put("payroll_id", payrollId);
 
@@ -37,7 +37,6 @@ public class ReportGenerator {
             } else {
                 JasperViewer.viewReport(jasperPrint, false);
             }
-
         } catch (Exception e) {
             showError("Failed to generate payroll report", e);
         }
@@ -74,6 +73,19 @@ public class ReportGenerator {
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception e) {
             showError("Failed to generate employee report", e);
+        }
+    }
+    
+    public void generateRoleReport() {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            Map<String, Object> parameters = getCommonParameters();
+
+            JasperReport jasperReport = compileReport("report/RoleReport.jrxml");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            showError("Failed to generate role report", e);
         }
     }
     

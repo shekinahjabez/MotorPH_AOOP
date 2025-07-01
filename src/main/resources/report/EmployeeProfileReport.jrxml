@@ -3,29 +3,9 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MotorPH_AOOP"/>
 	<parameter name="employee_id" class="java.lang.Integer"/>
 	<parameter name="LogoPath" class="java.net.URL"/>
-	<query language="sql"><![CDATA[SELECT 
-            e.employee_id,
-            CONCAT(e.firstname, ' ', e.lastname) AS full_name,
-            p.position AS position_name,
-            s.status AS employee_status,
-            e.phone_number, 
-            e.birthday, 
-            e.tin, 
-            e.sss, 
-            e.pag_ibig, 
-            e.philhealth,
-            e.basic_salary, 
-            e.hourly_rate, 
-            e.rice_subsidy, 
-            e.phone_allowance, 
-            e.clothing_allowance,
-            e.address,
-            CONCAT(sup.firstname, ' ', sup.lastname) AS supervisor_name
-        FROM employee e
-        JOIN employee_position p ON e.position = p.id
-        JOIN employee_status s ON e.status = s.id
-        LEFT JOIN employee sup ON e.immediate_supervisor = sup.employee_id
-        WHERE e.employee_id = $P{employee_id}]]></query>
+	<query language="sql"><![CDATA[
+        SELECT * FROM public.vw_employee_profile_report
+        WHERE employee_id = $P{employee_id}]]></query>
 	<field name="full_name" class="java.lang.String"/>
 	<field name="position_name" class="java.lang.String"/>
 	<field name="employee_status" class="java.lang.String"/>

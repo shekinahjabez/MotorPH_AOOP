@@ -6,28 +6,10 @@
 	<parameter name="LogoPath" class="java.net.URL">
 		<defaultValueExpression><![CDATA[$P{LogoPath}]]></defaultValueExpression>
 	</parameter>
-	<query language="SQL"><![CDATA[SELECT payroll_id,
-    payroll_period_start_date,
-    payroll_period_end_date,
-	number_of_hours_worked,
-	computed_salary,
-	total_contributions,
-	net_pay,
-	employee_id,
-	total_allowance,
-	sss_contribution,
-	phealth_contribution,
-	pagibig_contribution,
-	tax,
-	hourly_rate,
-	full_name,
-	position,
-	rice_subsidy,
-	phone_allowance,
-	cloth_allowance
-FROM report.payroll
-WHERE 
-    payroll_id = $P{payroll_id}]]></query>
+	<query language="SQL"><![CDATA[
+        SELECT * FROM report.vw_employee_payslip_report
+        WHERE payroll_id = $P{payroll_id}
+        ]]></query>
 	<field name="payroll_id" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="payroll_id"/>
 		<property name="com.jaspersoft.studio.field.label" value="payroll_id"/>
@@ -202,7 +184,7 @@ WHERE
 	<detail>
 		<band height="585" splitType="Stretch">
 			<element kind="staticText" uuid="c4ae10ef-6a85-47fb-9e81-aef9351cc6ae" mode="Opaque" x="0" y="517" width="555" height="20" forecolor="#030000" backcolor="#EFEFEF" fontSize="10.0" bold="true" vTextAlign="Middle">
-				<text><![CDATA[TOTAL HOME PAY]]></text>
+				<text><![CDATA[NET PAY]]></text>
 			</element>
 			<element kind="staticText" uuid="94a9d637-358a-4231-b3a7-60cccc924768" mode="Opaque" x="0" y="317" width="555" height="20" forecolor="#030000" backcolor="#EFEFEF" bold="true" vTextAlign="Middle">
 				<text><![CDATA[TOTAL CONTRIBUTIONS]]></text>
@@ -218,10 +200,10 @@ WHERE
 				<text><![CDATA[Hourly Rate]]></text>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="614e76bf-5d28-4a5f-8913-903a8dd30a64"/>
 			</element>
-			<element kind="textField" uuid="9b1fd83e-800b-46ae-9c2f-05048451d78d" x="451" y="27" width="100" height="20" fontSize="10.0" hTextAlign="Left">
+			<element kind="textField" uuid="9b1fd83e-800b-46ae-9c2f-05048451d78d" x="451" y="27" width="100" height="20" fontSize="10.0" hTextAlign="Right">
 				<expression><![CDATA[$F{hourly_rate}]]></expression>
 			</element>
-			<element kind="textField" uuid="6558e20c-2a8a-42ef-845c-d3070226a1a2" x="450" y="47" width="100" height="20" fontSize="10.0" hTextAlign="Left">
+			<element kind="textField" uuid="6558e20c-2a8a-42ef-845c-d3070226a1a2" x="450" y="47" width="100" height="20" fontSize="10.0" hTextAlign="Right">
 				<expression><![CDATA[$F{number_of_hours_worked}]]></expression>
 			</element>
 			<element kind="staticText" uuid="d88c7161-36cf-492b-99e9-be6c6e8d2eca" positionType="Float" x="1" y="147" width="154" height="20" forecolor="#000000" fontName="Arial" bold="false">
@@ -236,16 +218,16 @@ WHERE
 				<text><![CDATA[Rice Subsidy]]></text>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="614e76bf-5d28-4a5f-8913-903a8dd30a64"/>
 			</element>
-			<element kind="textField" uuid="7ae2cc3a-f09a-4f33-8b5b-4e7d7873d20d" x="453" y="127" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="7ae2cc3a-f09a-4f33-8b5b-4e7d7873d20d" x="453" y="127" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{rice_subsidy}]]></expression>
 			</element>
-			<element kind="textField" uuid="75b59946-eaf6-4e5e-a5be-3e4371222b44" x="453" y="147" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="75b59946-eaf6-4e5e-a5be-3e4371222b44" x="453" y="147" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{phone_allowance}]]></expression>
 			</element>
-			<element kind="textField" uuid="b68539f2-5981-4324-b9f0-46e9173340f3" x="454" y="168" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="b68539f2-5981-4324-b9f0-46e9173340f3" x="454" y="168" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{cloth_allowance}]]></expression>
 			</element>
-			<element kind="textField" uuid="93d3cccc-9655-4dac-bab3-13172b71376a" x="451" y="191" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="93d3cccc-9655-4dac-bab3-13172b71376a" x="451" y="191" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{total_allowance}]]></expression>
 			</element>
 			<element kind="staticText" uuid="81d9be55-8488-4f1a-9197-f929e6c110b9" positionType="Float" x="1" y="267" width="80" height="20" forecolor="#000000" fontName="Arial" bold="false">
@@ -260,23 +242,23 @@ WHERE
 				<text><![CDATA[SSS]]></text>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="614e76bf-5d28-4a5f-8913-903a8dd30a64"/>
 			</element>
-			<element kind="textField" uuid="485949d8-a6a4-46fc-8a5a-4b23515dc60e" x="455" y="247" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="485949d8-a6a4-46fc-8a5a-4b23515dc60e" x="455" y="247" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{sss_contribution}]]></expression>
 			</element>
-			<element kind="textField" uuid="1966b441-b476-4ad4-bf3e-b051381d62a6" x="454" y="267" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="1966b441-b476-4ad4-bf3e-b051381d62a6" x="454" y="267" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{phealth_contribution}]]></expression>
 			</element>
-			<element kind="textField" uuid="a6f9514b-f61c-4d6c-af4c-dc57156a6465" x="455" y="288" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="a6f9514b-f61c-4d6c-af4c-dc57156a6465" x="455" y="288" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{pagibig_contribution}]]></expression>
 			</element>
-			<element kind="textField" uuid="1fba7673-53a1-4e0d-a086-09439f262643" x="453" y="317" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="1fba7673-53a1-4e0d-a086-09439f262643" x="453" y="317" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{total_contributions}]]></expression>
 			</element>
 			<element kind="staticText" uuid="4e209359-6908-43a0-b6b8-483e18c582d0" positionType="Float" x="1" y="375" width="130" height="20" forecolor="#000000" fontName="Arial" bold="false">
 				<text><![CDATA[Withholding Tax]]></text>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="614e76bf-5d28-4a5f-8913-903a8dd30a64"/>
 			</element>
-			<element kind="textField" uuid="e0a6b73e-fc6e-4a28-8556-642e9ba9758b" x="452" y="375" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="e0a6b73e-fc6e-4a28-8556-642e9ba9758b" x="452" y="375" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{tax}]]></expression>
 			</element>
 			<element kind="staticText" uuid="2ba3fa58-986b-45b4-87f2-b8f86be16e55" positionType="Float" x="1" y="453" width="80" height="20" forecolor="#000000" fontName="Arial" bold="false">
@@ -291,23 +273,23 @@ WHERE
 				<text><![CDATA[Computed Salary]]></text>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="614e76bf-5d28-4a5f-8913-903a8dd30a64"/>
 			</element>
-			<element kind="textField" uuid="ec824cb2-ff19-4c1b-867d-400686f150b6" x="453" y="433" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="ec824cb2-ff19-4c1b-867d-400686f150b6" x="453" y="433" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{computed_salary}]]></expression>
 			</element>
-			<element kind="textField" uuid="891df4c0-b26c-465d-a6b7-588c75083e38" x="452" y="453" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="891df4c0-b26c-465d-a6b7-588c75083e38" x="452" y="453" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{total_allowance}]]></expression>
 			</element>
-			<element kind="textField" uuid="bc35db9e-8689-43de-9d42-440c79f10d44" x="453" y="474" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="bc35db9e-8689-43de-9d42-440c79f10d44" x="453" y="474" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{total_contributions}]]></expression>
 			</element>
 			<element kind="staticText" uuid="944db655-1c1e-4981-bdb0-e46948ad252f" positionType="Float" x="1" y="496" width="140" height="20" forecolor="#000000" fontName="Arial" bold="false">
 				<text><![CDATA[Withholding Tax]]></text>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="235c11dc-9a7e-4aa7-844d-7426f73a66f4"/>
 			</element>
-			<element kind="textField" uuid="04a57fc3-5195-46a3-8435-2252c019265e" x="453" y="495" width="100" height="20" hTextAlign="Left">
+			<element kind="textField" uuid="04a57fc3-5195-46a3-8435-2252c019265e" x="453" y="495" width="100" height="20" hTextAlign="Right">
 				<expression><![CDATA[$F{tax}]]></expression>
 			</element>
-			<element kind="textField" uuid="a23838d6-83c1-45be-bcdf-0b9cdc769df6" x="452" y="520" width="100" height="20" fontSize="10.0" bold="true" hTextAlign="Left">
+			<element kind="textField" uuid="a23838d6-83c1-45be-bcdf-0b9cdc769df6" x="452" y="520" width="100" height="20" fontSize="10.0" bold="true" hTextAlign="Right">
 				<expression><![CDATA[$F{net_pay}]]></expression>
 			</element>
 			<element kind="staticText" uuid="d642dd76-73cd-4a49-9a4d-15f32b0e782f" mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#FFFFFF" backcolor="#333F4F" fontSize="12.0" bold="true">
@@ -328,7 +310,7 @@ WHERE
 			<element kind="staticText" uuid="15aea16e-99cc-4379-a117-ba9497d21d48" mode="Opaque" x="0" y="68" width="555" height="20" forecolor="#030000" backcolor="#EFEFEF" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
 				<text><![CDATA[COMPUTED SALARY]]></text>
 			</element>
-			<element kind="textField" uuid="26ccec23-ec20-4e17-a62a-6de851ec997c" x="451" y="70" width="100" height="20" fontSize="10.0" hTextAlign="Left">
+			<element kind="textField" uuid="26ccec23-ec20-4e17-a62a-6de851ec997c" x="451" y="70" width="100" height="20" fontSize="10.0" hTextAlign="Right">
 				<expression><![CDATA[$F{computed_salary}]]></expression>
 			</element>
 		</band>

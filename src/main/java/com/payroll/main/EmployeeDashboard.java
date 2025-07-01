@@ -18,6 +18,7 @@ import com.payroll.services.FinanceService;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.domain.SalaryCalculation;
 import com.payroll.util.ReportGenerator;
+import com.toedter.calendar.JDateChooser;
 import java.awt.CardLayout;
 import java.sql.Connection;
 import java.sql.Date;
@@ -36,6 +37,11 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.lang3.StringUtils;
+import com.toedter.calendar.IDateEvaluator;
+import com.toedter.calendar.JDateChooser;
+
+import java.awt.Color;
+import java.util.Calendar;
 
 /**
  *
@@ -47,7 +53,6 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     private DatabaseConnection dbConnection;
     private CardLayout cardLayout;
     private IT empAccount;
-    private HR leaveDetails;
     private ITService empAccountService;
     private FinanceService payrollService;
     private EmployeeService empService;
@@ -77,6 +82,10 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         loadAllYears();
         loadAllMonths();
         loadAllLeaveTypes();
+        disableWeekendSelection(leaveDateFromChooser);
+        disableWeekendSelection(leaveDateToChooser);
+        
+        
     }
     public EmployeeDashboard(){
         
@@ -92,6 +101,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     public void setEmpAccount(IT empAccount) {
         this.empAccount = empAccount;
     }
+    
     
     
     private void updateUserLabels(IT empAccount) {
@@ -322,7 +332,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         birthdayPayLabelValue = new javax.swing.JLabel();
         computedSalaryLabel = new javax.swing.JLabel();
         computedSalaryLabelValue = new javax.swing.JLabel();
-        exportAttendaceButton = new javax.swing.JButton();
+        exportAttendanceButton = new javax.swing.JButton();
         PayrollButtonGenerator = new javax.swing.JButton();
         leaveRequest = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
@@ -1097,11 +1107,11 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
         computedSalaryLabelValue.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
 
-        exportAttendaceButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/export.png"))); // NOI18N
-        exportAttendaceButton.setText("Export");
-        exportAttendaceButton.addActionListener(new java.awt.event.ActionListener() {
+        exportAttendanceButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/export.png"))); // NOI18N
+        exportAttendanceButton.setText("Export");
+        exportAttendanceButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportAttendaceButtonActionPerformed(evt);
+                exportAttendanceButtonActionPerformed(evt);
             }
         });
 
@@ -1138,7 +1148,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(yearDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(exportAttendaceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(exportAttendanceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(hourlyRatePayLabel)
@@ -1312,7 +1322,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                             .addComponent(taxPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(PayrollButtonGenerator, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(exportAttendaceButton))
+                                .addComponent(exportAttendanceButton))
                             .addComponent(taxPayLabel))
                         .addGap(21, 21, 21))
                     .addGroup(jPanel9Layout.createSequentialGroup()
@@ -1695,33 +1705,33 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             }
         } 
     }//GEN-LAST:event_changePasswordActionPerformed
-    private void validateAttendanceData(List<Employee> empHours, int selectedMonth, int selectedYear) {
+    
+    private boolean isPayrollPeriodValid = false;
+    
+    private void validatePayrollData(List<Employee> empHours, int selectedMonth, int selectedYear) {
         // Get current system month and year
         Calendar currentCal = Calendar.getInstance();
-        int currentMonth = currentCal.get(Calendar.MONTH); // Calendar.MONTH is 0-based (Jan = 0)
-
+        int currentMonth = currentCal.get(Calendar.MONTH); // 0-based (Jan = 0)
         int currentYear = currentCal.get(Calendar.YEAR);
 
-        // DEBUGGING (optional – remove in production)
-        //System.out.println("Selected: " + selectedMonth + "/" + selectedYear);
-        //System.out.println("Current: " + currentMonth + "/" + currentYear);
+        // Reset flag before checks
+        isPayrollPeriodValid = false;
 
-        // Disallow current month or future months
+        // Disallow current/future months
         if ((selectedYear > currentYear) ||
             (selectedYear == currentYear && selectedMonth > currentMonth) ||
             (selectedYear == currentYear && selectedMonth == currentMonth)) {
 
-            System.out.println("BLOCKED — current/future month selected"); // Debug
             JOptionPane.showMessageDialog(null,
-                "Attendance and payroll details for the selected period are not yet available.",
+                "Payroll details for the selected period are not yet available.",
                 "Unavailable Data",
                 JOptionPane.WARNING_MESSAGE);
-            clearAttendanceTable();
+            populateAttendanceTable(empHours);
             clearPayrollLabels();
             return;
         }
 
-        // If no records are found
+        // No attendance records
         if (empHours.isEmpty()) {
             JOptionPane.showMessageDialog(null,
                 "No attendance records found for the selected month and year.",
@@ -1730,9 +1740,10 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             clearAttendanceTable();
             clearPayrollLabels();
         } else {
-            // Load data
+            // Valid data
             populateAttendanceTable(empHours);
             updatePayrollLabels(empHours);
+            isPayrollPeriodValid = true;
         }
     }
     private void clearPayrollLabels() {
@@ -1759,7 +1770,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
             if (monthValue != null && year != null) {
                 List<Employee> empHours = getEmployeeHours(monthValue, year);
-                validateAttendanceData(empHours, monthValue, year);
+                validatePayrollData(empHours, monthValue, year);
             }
         }
     }//GEN-LAST:event_monthDropdownActionPerformed
@@ -1771,7 +1782,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
             if (monthValue != null && year != null) {
                 List<Employee> empHours = getEmployeeHours(monthValue, year);
-                validateAttendanceData(empHours, monthValue, year);
+                validatePayrollData(empHours, monthValue, year);
             }
         }
     }//GEN-LAST:event_yearDropdownActionPerformed
@@ -1780,12 +1791,12 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) attendanceTable.getModel();
         model.setRowCount(0);
 
-        for(Employee employeeHours : empHours) {
+        for (Employee employeeHours : empHours) {
             Vector<Object> rowData = new Vector<>();
             rowData.add(employeeHours.getDate());
             rowData.add(employeeHours.getTimeIn());
             rowData.add(employeeHours.getTimeOut());
-            rowData.add((employeeHours.getTimeOut() != null) ? employeeHours.getTimeOut() : "Still Active");
+            rowData.add(employeeHours.getFormattedHoursWorked());
             model.addRow(rowData);
         }
     }
@@ -1949,6 +1960,28 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                   "Date Validation Error", JOptionPane.ERROR_MESSAGE);
               throw new RuntimeException("Leave start date is in the past.");
           }
+          
+        // --- Leave Balance Validation ---
+        long diffInMillies = Math.abs(dateTo.getTime() - dateFrom.getTime());
+        long requestedLeaveDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) + 1;
+
+        LeaveBalance leaveBalance = empService.getLeaveBalance(empAccount.getEmpID());
+
+        if (leaveBalance == null) {
+            JOptionPane.showMessageDialog(this,
+                "Unable to retrieve leave balance for validation.",
+                "Leave Balance Error", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Leave balance not found.");
+        }
+
+        int availableBalance = leaveBalance.getAvailable();
+
+        if (requestedLeaveDays > availableBalance) {
+            JOptionPane.showMessageDialog(this,
+                "Requested leave duration (" + requestedLeaveDays + " days) exceeds available leave balance (" + availableBalance + " days).",
+                "Leave Balance Exceeded", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Leave request exceeds available leave balance.");
+        }
     }
    
     
@@ -2013,30 +2046,33 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                return;
            }
 
-           try {
-               Employee attendanceDetails = new Employee();
-               attendanceDetails.setEmpID(currentEmployeeId);
+        try {
+            // Step 1: Create attendance object
+            Employee attendanceDetails = new Employee();
+            attendanceDetails.setEmpID(currentEmployeeId);
 
-               Employee result = empService.timeIn(attendanceDetails);
+            // ✅ Step 2: Auto-fill time-out from *yesterday* if missing
+            empService.autoFillLastUnclosedTimeOut(currentEmployeeId);
+            // Step 3: Proceed with time-in
+            Employee result = empService.timeIn(attendanceDetails);
 
-               if (result.getAttendanceId() > 0) {
-                   JOptionPane.showMessageDialog(this, 
-                       "Time-in successful for Employee ID: " + result.getEmpID(), 
-                       "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (result.getAttendanceId() > 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Time-in successful for Employee ID: " + result.getEmpID(),
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                   timeIn.setEnabled(false);
-                   timeOut.setEnabled(true);
-               } else {
-                   JOptionPane.showMessageDialog(this, 
-                       "Time-in failed!", 
-                       "Error", JOptionPane.ERROR_MESSAGE);
-               }
-
-           } catch (Exception ex) {
-               ex.printStackTrace();
-               JOptionPane.showMessageDialog(this, 
-                   "Database error occurred while timing in: " + ex.getMessage(), 
-                   "Error", JOptionPane.ERROR_MESSAGE);
+                timeIn.setEnabled(false);
+                timeOut.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Time-in failed!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, 
+                "Database error occurred while timing in: " + ex.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
            }
     }//GEN-LAST:event_timeInActionPerformed
 
@@ -2103,11 +2139,22 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         return 0.0;
     }
     
+    private LocalDate[] getStartAndEndOfMonth(int year, int zeroBasedMonth) {
+        LocalDate start = LocalDate.of(year, zeroBasedMonth + 1, 1); // Add 1 if your months are 0-based
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+        return new LocalDate[]{start, end};
+    }
+    
     
     private void savePayrollDetails(){
+        if (!isPayrollPeriodValid) {
+            JOptionPane.showMessageDialog(this,
+                "Cannot generate payroll. The selected period is either invalid or incomplete.",
+                "Payroll Blocked",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         try {
-            //Header
-           // Step 1: Collect required input 
             Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
             Integer year = ((ComboItem) yearDropdown.getSelectedItem()).getKey();
             int empId = (currentEmployeeId != 0) ? currentEmployeeId : empAccount.getEmpID();
@@ -2116,9 +2163,8 @@ public class EmployeeDashboard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Please select a valid employee, month, and year.");
                 return;
             }
-
-            // Step 2: Determine payroll period
-            LocalDate[] period = payrollService.getPayrollPeriodFromEmployeeHours(empId, monthValue, year);
+            
+            LocalDate[] period = getStartAndEndOfMonth(year, monthValue); 
             if (period == null) {
                 JOptionPane.showMessageDialog(this, "No attendance records found for the selected period.");
                 return;
@@ -2126,42 +2172,31 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
             LocalDate startDate = period[0];
             LocalDate endDate = period[1];
-
-            // Step 3: Retrieve payroll values from UI
             String payName = namePayLabelValue.getText();
             String payPosition = positionPayLabelValue.getText();
-            //int empID = Integer.parseInt(empIDPayLabelValue.getText());
-
-            //Earnings
             double payHourlyRate = Double.parseDouble(hourlyRatePayLabelValue.getText());
             double payTotalHoursWorked = convertHoursStringToDecimal(totalHoursPayLabelValue.getText());
+            
+            if (payTotalHoursWorked == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Total hours worked is zero. Cannot generate payroll report.",
+                    "No Hours Worked",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
             double payComputedSalary = Double.parseDouble(computedSalaryLabelValue.getText());
-
-            //benefits
             double payRiceSubsidy = Double.parseDouble(ricePayLabelValue.getText());
             double payPhoneAllowance = Double.parseDouble(phonePayLabelValue.getText());
             double payClothingAllowance = Double.parseDouble(clothingPayLabelValue.getText());
             double payTotalAllowance = Double.parseDouble(totalAllowPayLabelValue.getText());
-
-
-            //Contri
             double paySssContri = Double.parseDouble(sssContriPayLabelValue.getText());
             double payPhealthContri = Double.parseDouble(philhealthContriPayLabelValue.getText());
             double payPagibigContri = Double.parseDouble(pagibigContriPayLabelValue.getText());
             double payTotalContri = Double.parseDouble(totalDeductionsPayLabelValue.getText());
-
-            //tax
             double payTax = Double.parseDouble(taxPayLabelValue.getText());
-
-            /*Summary 
-            computedSalary
-            totalAllowPay
-            TotalDeduct
-            */;
             double payNetPay = Double.parseDouble(netPayLabelValue.getText());
 
-
-            // Step 4: Create and save Finance object
             Finance payroll = new Finance();
             payroll.setPayEmpId(empId);
             payroll.setPayrollPeriodStart(java.sql.Date.valueOf(startDate));
@@ -2181,8 +2216,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             payroll.setPayTotalContributions(payTotalContri);
             payroll.setPayWithholdingTax(payTax);
             payroll.setPayNetPay(payNetPay);
-
-
+            
            Finance saved = payrollService.savePayrollReport(payroll);
            reportGenerator.generatePayrollReport(saved.getPayrollId());
        } catch (NumberFormatException ex) {
@@ -2197,7 +2231,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
         savePayrollDetails();
     }//GEN-LAST:event_PayrollButtonGeneratorActionPerformed
 
-    private void exportAttendaceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAttendaceButtonActionPerformed
+    private void exportAttendanceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAttendanceButtonActionPerformed
         try {
             if (currentEmployeeId == 0 && empAccount == null) {
                 JOptionPane.showMessageDialog(this, "Please search for a valid employee first.", "Missing Info", JOptionPane.WARNING_MESSAGE);
@@ -2242,7 +2276,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Something went wrong when exporting the attendance report.\n" + ex.getMessage(), "Export Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_exportAttendaceButtonActionPerformed
+    }//GEN-LAST:event_exportAttendanceButtonActionPerformed
 
     private void updateLeaveBalance(){
         List<HR> leaveDetails =  empService.getLeavesByEmployee(empAccount.getEmpID());
@@ -2278,6 +2312,32 @@ public class EmployeeDashboard extends javax.swing.JFrame {
             model.addRow(rowData);
         }
     }
+    
+    private void disableWeekendSelection(JDateChooser dateChooser) {
+      dateChooser.getJCalendar().getDayChooser().addDateEvaluator(new IDateEvaluator() {
+          @Override
+          public boolean isInvalid(java.util.Date date) {
+              Calendar cal = Calendar.getInstance();
+              cal.setTime(date);
+              int day = cal.get(Calendar.DAY_OF_WEEK);
+              return (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
+          }
+
+          @Override public Color getInvalidForegroundColor() { return Color.GRAY; }
+
+          @Override public Color getInvalidBackroundColor() { return Color.LIGHT_GRAY; }
+
+          @Override public String getInvalidTooltip() { return "Weekends are not allowed for leave."; }
+
+          @Override public boolean isSpecial(java.util.Date date) { return false; }
+
+          @Override public Color getSpecialForegroundColor() { return null; }
+
+          @Override public Color getSpecialBackroundColor() { return null; }
+
+          @Override public String getSpecialTooltip() { return null; }
+      });
+  }
     
     /**
      * @param args the command line arguments
@@ -2344,7 +2404,7 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel empIDPayLabelValue;
     private javax.swing.JLabel empNumValue;
     private javax.swing.JPasswordField existingPasswordTField;
-    private javax.swing.JButton exportAttendaceButton;
+    private javax.swing.JButton exportAttendanceButton;
     private javax.swing.JLabel fullNameValue;
     private javax.swing.JLabel fullNameValue2;
     private javax.swing.JLabel grossSalaryPayLabel;

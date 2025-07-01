@@ -42,7 +42,6 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.lang3.StringUtils;
-import com.toedter.calendar.JDateChooser;
 import javax.swing.JTable;
 
 
@@ -59,17 +58,19 @@ public class HRDashboard extends javax.swing.JFrame {
     private ITService empAccountService;
     private HRService hrService;
     private FinanceService payrollService;
-    private EmployeeService leaveDetailsService;
+    private EmployeeService employeeService;
     private Integer employeeSearchID;
     private long validatedPagibig;
     private long validatedPhilhealth;
     private ReportGenerator reportGenerator;
+    private int currentEmployeeId; 
     
     public HRDashboard(IT empAccount) {
         initComponents();
         cardLayout = (CardLayout) (mphCards.getLayout());
         this.empAccount = empAccount;
         this.reportGenerator = new ReportGenerator();
+        this.currentEmployeeId = empAccount.getEmpDetails().getEmpID(); 
         updateUserLabels(empAccount);
 
         try {
@@ -77,7 +78,7 @@ public class HRDashboard extends javax.swing.JFrame {
             this.empAccountService = new ITService(connection);
             this.hrService = new HRService(connection);
             this.payrollService = new FinanceService(connection);
-            this.leaveDetailsService = new EmployeeService(connection);
+            this.employeeService = new EmployeeService(connection);
         } catch (SQLException e) {
             e.printStackTrace(); // Optionally use JOptionPane for user-friendly error
         }
@@ -87,7 +88,7 @@ public class HRDashboard extends javax.swing.JFrame {
                 DefaultTableModel model = (DefaultTableModel) leaveManagementTable.getModel();
                 int leaveId = (int) model.getValueAt(row, 0); 
                 int empID = (int) model.getValueAt(row, 1); 
-                leaveDetailsService.updateLeaveRequestStatus(HR.LeaveStatus.APPROVED, leaveId);
+                employeeService.updateLeaveRequestStatus(HR.LeaveStatus.APPROVED, leaveId, currentEmployeeId);
                 updateLeaveBalance(empID);
                 refreshLeaveManagementTable();
             }
@@ -97,7 +98,7 @@ public class HRDashboard extends javax.swing.JFrame {
                 DefaultTableModel model = (DefaultTableModel) leaveManagementTable.getModel();
                 int leaveId = (int) model.getValueAt(row, 0);
                 int empID = (int) model.getValueAt(row, 1); 
-                leaveDetailsService.updateLeaveRequestStatus(HR.LeaveStatus.DECLINED, leaveId);
+                employeeService.updateLeaveRequestStatus(HR.LeaveStatus.DECLINED, leaveId, currentEmployeeId);
                 updateLeaveBalance(empID);
                 refreshLeaveManagementTable(); 
             }
@@ -127,11 +128,11 @@ public class HRDashboard extends javax.swing.JFrame {
     }
     
     private void updateLeaveBalance(int empID){
-        List<HR> leaveDetails =  leaveDetailsService.getLeavesByEmployee(empID);
+        List<HR> leaveDetails =  employeeService.getLeavesByEmployee(empID);
         LeaveBalance balance = new LeaveBalance();
         balance.setEmpID(empID);
         balance.updateLeaveBalance(leaveDetails);
-        leaveDetailsService.updateLeaveBalance(balance);
+        employeeService.updateLeaveBalance(balance);
     }
     
     private void updateUserLabels(IT empAccount) {
@@ -946,6 +947,11 @@ public class HRDashboard extends javax.swing.JFrame {
             }
         ));
         attendanceTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        attendanceTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                attendanceTableMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(attendanceTable);
 
         monthDropdown.setFont(new java.awt.Font("Century Gothic", 1, 15)); // NOI18N
@@ -986,9 +992,12 @@ public class HRDashboard extends javax.swing.JFrame {
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(51, 51, 51)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1057, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel9Layout.createSequentialGroup()
                                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -998,17 +1007,15 @@ public class HRDashboard extends javax.swing.JFrame {
                                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(empIDPayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(namePayLabelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 554, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel9Layout.createSequentialGroup()
                                 .addComponent(monthDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(yearDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(exportAttendance))))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addContainerGap(51, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 952, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(112, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(501, 501, 501)
+                        .addComponent(exportAttendance)
+                        .addGap(51, 51, 51))))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1064,14 +1071,14 @@ public class HRDashboard extends javax.swing.JFrame {
             attendanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(attendanceLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(attendanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(attendanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(attendanceLayout.createSequentialGroup()
                         .addComponent(salarySlips)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(477, 477, 477)
                         .addComponent(searchTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(searchButton1))
-                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
+                        .addComponent(searchButton1)))
                 .addContainerGap())
         );
         attendanceLayout.setVerticalGroup(
@@ -1723,12 +1730,16 @@ public class HRDashboard extends javax.swing.JFrame {
     cardLayout.show(mphCards, "card5"); 
     }//GEN-LAST:event_empManagementButtonActionPerformed
     private void refreshLeaveManagementTable(){  
-        List<HR> leaveDetails =  leaveDetailsService.getAllLeaveRequestByStatus(HR.LeaveStatus.PENDING);
+        List<HR> leaveDetails =  employeeService.getAllLeaveRequestByStatus(HR.LeaveStatus.PENDING);
             DefaultTableModel model = (DefaultTableModel) leaveManagementTable.getModel();
             model.setRowCount(0);
 
             for(HR leave : leaveDetails) {
+                if (leave.getEmpID() == currentEmployeeId) {
+                    continue;
+                }
                 Vector<Object> rowData = new Vector<>();
+               
                 rowData.add(leave.getLeaveId());
                 rowData.add(leave.getEmpID());
                 Person empDetails = hrService.getByEmpID(leave.getEmpID());
@@ -2122,8 +2133,7 @@ public class HRDashboard extends javax.swing.JFrame {
                     remarks = (day.equals("Sat") || day.equals("Sun")) ? "Weekend" : "Absent";
                 } else {
                     remarks = "Present";
-                }
-
+                }   
                 rowData.add(localDate.toString());
                 rowData.add(day);
                 rowData.add(timeIn != null ? timeIn.toString() : "-");
@@ -2215,9 +2225,9 @@ public class HRDashboard extends javax.swing.JFrame {
         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this employee?", "Confirmation", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try{
-                leaveDetailsService.deleteLeaveBalance(empID);
-                leaveDetailsService.deleteLeaveRequestbyEmpID(empID);
-                leaveDetailsService.deleteAttendanceRecords(empID);
+                employeeService.deleteLeaveBalance(empID);
+                employeeService.deleteLeaveRequestbyEmpID(empID);
+                employeeService.deleteAttendanceRecords(empID);
                 empAccountService.deleteEmpAccount(empID);
                 hrService.deleteEmployeeDetails(empID);
                 
@@ -2278,7 +2288,7 @@ public class HRDashboard extends javax.swing.JFrame {
 
                 LeaveBalance leaveBalance = new LeaveBalance();
                 leaveBalance.setEmpID(empDetails.getEmpID());
-                leaveDetailsService.saveLeaveBalance(leaveBalance);
+                employeeService.saveLeaveBalance(leaveBalance);
 
                 JOptionPane.showMessageDialog(this, "Account added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
@@ -2291,29 +2301,6 @@ public class HRDashboard extends javax.swing.JFrame {
 
         clearButtonActionPerformed(null);
         refreshTable();
-        
-         
-        /*Person empDetails = updateEmpDetailValues();
-        IT empAccount = updateEmpAccountValues();
-        if (!validateRequiredFields(empAccount,empDetails)) {
-            return; // Stop execution if validation fails
-        }
-        if (hrService.isDuplicateEmployee(empDetails)) {
-            JOptionPane.showMessageDialog(null, "Employee already exists. No new record created.");
-        } else {
-            // Only save if it's a new employee
-            hrService.addEmployeeDetails(empDetails);
-            empAccountService.saveUserAccount(empAccount, empDetails);
-
-            LeaveBalance leaveBalance = new LeaveBalance();
-            leaveBalance.setEmpID(empDetails.getEmpID());
-            leaveDetailsService.saveLeaveBalance(leaveBalance);
-
-            JOptionPane.showMessageDialog(null, "Account added successfully!");
-        }
-
-        clearButtonActionPerformed(null);
-        refreshTable();*/
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void changePasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordButtonActionPerformed
@@ -2438,39 +2425,6 @@ public class HRDashboard extends javax.swing.JFrame {
     }
     
     
-    private void monthDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthDropdownActionPerformed
-        loadAttendanceIfReady();
-        /*    if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
-            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-            Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
-            Integer empId = employeeSearchID != null ? employeeSearchID : empAccount.getEmpID();
-
-
-            if(monthValue != null & year != null){
-                List<Employee> empHours = getEmployeeHours(monthValue,year,empId);
-                populateAttendanceTable(empHours);
-
-            }
-        }
-    */
-    }//GEN-LAST:event_monthDropdownActionPerformed
-
-    private void yearDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearDropdownActionPerformed
-         loadAttendanceIfReady();
-        /*    if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
-            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
-            Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
-            Integer empId = employeeSearchID != null ? employeeSearchID : empAccount.getEmpID();
-
-            if(monthValue != null & year != null){
-                List<Employee> empHours = getEmployeeHours(monthValue,year,empId);
-                populateAttendanceTable(empHours);
-
-            }
-        } 
-    */
-    }//GEN-LAST:event_yearDropdownActionPerformed
-
     private void clothingTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clothingTFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_clothingTFieldActionPerformed
@@ -2505,6 +2459,14 @@ public class HRDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_printAllEmployeesActionPerformed
 
+    private void hourlyTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourlyTFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_hourlyTFieldActionPerformed
+
+    private void biMonthlyTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_biMonthlyTFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_biMonthlyTFieldActionPerformed
+
     private void exportAttendanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportAttendanceActionPerformed
         try {
             if (employeeSearchID == null && empAccount == null) {
@@ -2535,14 +2497,43 @@ public class HRDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_exportAttendanceActionPerformed
 
-    private void hourlyTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourlyTFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_hourlyTFieldActionPerformed
+    private void yearDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearDropdownActionPerformed
+        loadAttendanceIfReady();
+        /*    if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
+            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+            Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
+            Integer empId = employeeSearchID != null ? employeeSearchID : empAccount.getEmpID();
 
-    private void biMonthlyTFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_biMonthlyTFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_biMonthlyTFieldActionPerformed
+            if(monthValue != null & year != null){
+                List<Employee> empHours = getEmployeeHours(monthValue,year,empId);
+                populateAttendanceTable(empHours);
 
+            }
+        }
+        */
+    }//GEN-LAST:event_yearDropdownActionPerformed
+
+    private void monthDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthDropdownActionPerformed
+        loadAttendanceIfReady();
+        /*    if(monthDropdown.getSelectedItem() != null && yearDropdown.getSelectedItem() != null ){
+            Integer monthValue = ((ComboItem) monthDropdown.getSelectedItem()).getKey();
+            Integer year = ((ComboItem)yearDropdown.getSelectedItem()).getKey();
+            Integer empId = employeeSearchID != null ? employeeSearchID : empAccount.getEmpID();
+
+            if(monthValue != null & year != null){
+                List<Employee> empHours = getEmployeeHours(monthValue,year,empId);
+                populateAttendanceTable(empHours);
+
+            }
+        }
+        */
+    }//GEN-LAST:event_monthDropdownActionPerformed
+
+    private void attendanceTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_attendanceTableMouseClicked
+
+    }//GEN-LAST:event_attendanceTableMouseClicked
+
+    
     
     private List<Employee> getEmployeeHours(int month, int year, int empID){
        Calendar dateFrom = Calendar.getInstance();

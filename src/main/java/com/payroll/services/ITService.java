@@ -8,14 +8,17 @@ import com.payroll.domain.IT;
 import com.payroll.domain.Person;
 import com.payroll.subdomain.UserRole;
 import com.payroll.util.DatabaseConnection;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import javax.swing.JOptionPane;
+import java.util.Map;
 
 /**
  *
@@ -24,15 +27,11 @@ import javax.swing.JOptionPane;
 public class ITService {
     private Connection connection;
     private HRService hrService;
-    private FinanceService financeService;
-    private EmployeeService leaveDetailsService;
 
     public ITService(Connection connection) {
         try {
             this.connection = DatabaseConnection.getConnection();
             this.hrService = new HRService(connection);
-            this.financeService = new FinanceService(connection);
-            this.leaveDetailsService = new EmployeeService(connection);
         } catch (SQLException e) {
             e.printStackTrace(); // Consider using a logger in real applications
         }
@@ -74,6 +73,40 @@ public class ITService {
         }                          
         return employeeAccount;
     }
+    public List<IT> getAllUserAccount() {
+    List<IT> userAccounts = new ArrayList<>();
+
+    if (connection != null) {
+        String query = "SELECT * FROM employee_account";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                IT employeeAccount = new IT();
+                employeeAccount.setAccountID(resultSet.getInt("account_id"));
+                employeeAccount.setEmpUserName(resultSet.getString("username"));
+                employeeAccount.setEmpPassword(resultSet.getString("password"));
+
+                int roleID = resultSet.getInt("role_id");
+                UserRole role = getByRolesId(roleID); // same as in getUserAccount
+                employeeAccount.setUserRole(role);
+
+                int empID = resultSet.getInt("employee_id");
+                Person employeeDetails = hrService.getByEmpID(empID); // full employee info
+                employeeAccount.setEmpDetails(employeeDetails);
+                employeeAccount.setEmpID(empID);
+
+                userAccounts.add(employeeAccount);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return userAccounts;
+}
     
     //CORRECTED
     public IT getByEmpID(int empID){
@@ -109,38 +142,6 @@ public class ITService {
         return employeeAccount;
     }
     
-    //ERROR
-    /*public IT getByEmpID(int empID){
-        IT employeeAccount = null ;
-            if (connection != null) {
-            String Query = "SELECT * FROM public.employee_account where employee_id = ?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setInt(1,empID);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()){
-                    employeeAccount = new IT();
-                    employeeAccount.setAccountID(resultSet.getInt("account_id"));
-                    employeeAccount.setEmpUserName(resultSet.getString("username"));
-                    employeeAccount.setEmpPassword(resultSet.getString("password"));
-                    
-                    int roleID = resultSet.getInt("role_id");
-                    UserRole role = getByRolesId(roleID);
-                    employeeAccount.setUserRole(role);
-
-                    Person employeeDetails = hrService.getByEmpID(empID);
-                    employeeAccount.setEmpDetails(employeeDetails);
-                }
-                
-                resultSet.close();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }        
-        }                          
-        return employeeAccount;
-    }*/
-    
     public void updateEmployeeCredentials(IT empAccount){
         if(connection !=null){
             String Query = "UPDATE public.employee_account SET username = ?, password = ? WHERE employee_id = ?";
@@ -160,63 +161,84 @@ public class ITService {
         }
     }
     
-    public void updateEmployeeAccountWithRole(IT empAccount) {
-        if (connection == null) {
-            throw new IllegalStateException("Database connection is not established.");
-        }
+    public List<String> getMissingRolesAfterUpdate(int empId, String newRoleName) {
+        List<String> requiredRoles = Arrays.asList("HR", "Finance", "IT");
+        Map<String, Integer> roleCounts = new HashMap<>();
 
-        Integer roleId = (empAccount.getUserRole() != null) ? empAccount.getUserRole().getId() : null;
-        String query = "UPDATE public.employee_account SET username = ?, password = ?, role_id = ? WHERE employee_id = ?";
+        String query = "SELECT role, assigned_count FROM vw_role_assignment_count";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, empAccount.getEmpUserName());
-            preparedStatement.setString(2, empAccount.getEmpPassword());
 
-            if (roleId != null) {
-                preparedStatement.setInt(3, roleId);
-            } else {
-                preparedStatement.setNull(3, java.sql.Types.INTEGER);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String role = resultSet.getString("role");
+                int count = resultSet.getInt("assigned_count");
+                roleCounts.put(role, count);
             }
 
-            preparedStatement.setInt(4, empAccount.getEmpID());
+            // Step 2: Get the current role of the employee being updated
+            String currentRoleQuery = "SELECT role FROM vw_employee_roles WHERE employee_id = ?";
+    
 
-            preparedStatement.executeUpdate();
+            try (PreparedStatement roleStmt = connection.prepareStatement(currentRoleQuery)) {
+                roleStmt.setInt(1, empId);
+                ResultSet roleRs = roleStmt.executeQuery();
+
+                if (roleRs.next()) {
+                    String currentRole = roleRs.getString("role");
+
+                    // If changing to a new role and that role is different
+                    if (!newRoleName.equalsIgnoreCase(currentRole)) {
+                        // Decrease the count of the current role by 1 (as if the change happened)
+                        roleCounts.put(currentRole, roleCounts.getOrDefault(currentRole, 0) - 1);
+                        // Increase the new role count
+                        roleCounts.put(newRoleName, roleCounts.getOrDefault(newRoleName, 0) + 1);
+                    }
+                }
+            }
+
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
+
+        // Step 3: Check if any required role has 0 or less
+        List<String> missingRoles = new ArrayList<>();
+        for (String role : requiredRoles) {
+            if (roleCounts.getOrDefault(role, 0) < 1) {
+                missingRoles.add(role);
+            }
+        }
+
+        return missingRoles;
     }
     
-     
-    public List<IT> getAllUserAccount(){
-        List<IT> allEmployeeAccount = new ArrayList<>();
-            if (connection != null) {
-            String Query = "SELECT * FROM public.employee_account";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()){
-                    IT employeeAccount = new IT();
-                    employeeAccount.setAccountID(resultSet.getInt("account_id"));
-                    employeeAccount.setEmpUserName(resultSet.getString("username"));
-                    employeeAccount.setEmpPassword(resultSet.getString("password"));
-                    
-                    int roleID = resultSet.getInt("role_id");
-                    UserRole role = getByRolesId(roleID);
-                    employeeAccount.setUserRole(role);
+    public void updateEmployeeAccountWithRole(IT empAccount) {
+        if (connection == null) {
+             throw new IllegalStateException("Database connection is not established.");
+         }
 
-                    int empID = resultSet.getInt("employee_id");
-                    Person employeeDetails = hrService.getByEmpID(empID);
-                    employeeAccount.setEmpDetails(employeeDetails);
-                    allEmployeeAccount.add(employeeAccount);
-                }
-                resultSet.close();
-                preparedStatement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }   
-        }                          
-        return allEmployeeAccount;
-    }
+         Integer roleId = (empAccount.getUserRole() != null) ? empAccount.getUserRole().getId() : null;
+
+         String sql = "CALL update_employee_account_with_role(?, ?, ?, ?)";
+
+         try (CallableStatement stmt = connection.prepareCall(sql)) {
+             stmt.setString(1, empAccount.getEmpUserName());
+             stmt.setString(2, empAccount.getEmpPassword());
+
+             if (roleId != null) {
+                 stmt.setInt(3, roleId);
+             } else {
+                 stmt.setNull(3, java.sql.Types.INTEGER);
+             }
+
+             stmt.setInt(4, empAccount.getEmpID());
+
+             stmt.execute();
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+     }
     
     public List<UserRole> getAllUserRole(){
         List<UserRole> userRoles = new ArrayList<>();
@@ -262,7 +284,7 @@ public class ITService {
         return userRole;
     }
 
-    public boolean employeeExistsByName(Person empDetails) {
+   /* public boolean employeeExistsByName(Person empDetails) {
         if (connection == null) {
         }
         String query = "SELECT COUNT(*) FROM public.employee WHERE firstname = ? AND lastname = ?";
@@ -281,109 +303,59 @@ public class ITService {
         }
 
         return false; // Employee does not exist
-    }
+    }*/
     
     public Person saveUserAccount(IT empAccount, Person empDetails) throws SQLException {
         if (connection == null) {
             throw new IllegalStateException("Database connection is not established.");
         }
 
-        String query = "INSERT INTO public.employee_account (employee_id, username, password, role_id) VALUES (?, ?, ?, ?)";
+        String sql = "CALL save_user_account(?, ?, ?, ?)";
 
-        // Remove the try-catch block to let exceptions propagate up
-        PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, empDetails.getEmpID());
-        preparedStatement.setString(2, empAccount.getEmpUserName());
-        preparedStatement.setString(3, empAccount.getEmpPassword());
-        preparedStatement.setInt(4, 2); // Default role_id = 2
+        try (CallableStatement stmt = connection.prepareCall(sql)) {
+            stmt.setInt(1, empDetails.getEmpID());
+            stmt.setString(2, empAccount.getEmpUserName());
+            stmt.setString(3, empAccount.getEmpPassword());
 
-        int affectedRows = preparedStatement.executeUpdate();
-        if (affectedRows > 0) {
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    empAccount.setAccountID(generatedKeys.getInt(1));
-                } else {
-                    // It's better to throw an exception here if the ID isn't returned
-                    throw new SQLException("Creating user account failed, no ID obtained.");
-                }
-            }
-        } else {
-            throw new SQLException("Creating user account failed, no rows affected.");
+            stmt.registerOutParameter(4, java.sql.Types.INTEGER);
+
+            stmt.execute();
+
+            int accountId = stmt.getInt(4);
+            empAccount.setAccountID(accountId);
+
+        } catch (SQLException e) {
+            System.err.println("Error calling save_user_account:");
+            e.printStackTrace();
+            throw e;
         }
-
-        // Don't forget to close the preparedStatement
-        preparedStatement.close();
 
         return empDetails;
     }
-   
-    
-    /*public Person saveUserAccount(IT empAccount,Person empDetails){
-        if (connection != null) {
-            
-        }
-       
-        String query = "INSERT INTO public.employee_account (employee_id, username, password, role_id) VALUES (?, ?, ?, ?)";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, empDetails.getEmpID());                
-            preparedStatement.setString(2, empAccount.getEmpUserName());
-            preparedStatement.setString(3, empAccount.getEmpPassword());
-            preparedStatement.setInt(4, 2); // Default role_id = 2
-
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                         empAccount.setAccountID(generatedKeys.getInt(1));
-                    } else {
-                         throw new SQLException("Creating user failed, no ID obtained.");
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, 
-                "An error occurred while saving the user account.\n" + e.getMessage(), 
-                "Database Error", 
-                JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-
-        return empDetails;
-    }*/
     
     public void deleteEmpAccount(int empID){
         if (connection != null) {
-            String Query = "delete from public.employee_account where employee_id =?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setInt(1,empID);    
-                
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-
+            String sql = "CALL delete_emp_account(?)";
+            try (CallableStatement stmt = connection.prepareCall(sql)) {
+                stmt.setInt(1, empID);
+                stmt.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }           
-        }                              
-    }   
+            }
+        }
+    }
        
     
     public void changePassword(IT empAccount){
-        if(connection !=null){
-            String Query = "UPDATE public.employee_account SET password = ? where employee_id = ?";
-        
-            try{
-                PreparedStatement preparedStatement = connection.prepareStatement(Query);
-                preparedStatement.setString(1,empAccount.getEmpPassword());
-                preparedStatement.setInt(2,empAccount.getEmpID());
-
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
+        if (connection != null) {
+            String sql = "CALL update_emp_account_password(?, ?)";
+            try (CallableStatement stmt = connection.prepareCall(sql)) {
+                stmt.setInt(1, empAccount.getEmpID());
+                stmt.setString(2, empAccount.getEmpPassword());
+                stmt.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }                                   
+            }
         }
     }
-   
 }
