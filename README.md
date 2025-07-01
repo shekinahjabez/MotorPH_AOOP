@@ -85,7 +85,7 @@ db.password=[yourpassword]
 - Homework 3 | Unified Plan for MotorPH Payroll System Expansion
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/b227bbe0-348e-4661-829f-6fdf4121bde1" alt="469kxyxh-400" width="500"/>
+  <img src="https://github.com/user-attachments/assets/b227bbe0-348e-4661-829f-6fdf4121bde1" alt="469kxyxh-200" width="300"/>
 </div>
 
 
