@@ -79,3 +79,8 @@ db.url=jdbc:postgresql://localhost:5432/postgres
 db.username=postgres
 db.password=[yourpassword]
 ```
+---
+### 📁 Project Documentation
+
+- Homework 3 | Unified Plan for MotorPH Payroll System Expansion: https://tinyurl.com/469kxyxh 
+- Homework 7 | Unit Testing: https://tinyurl.com/5f2t58x7 
