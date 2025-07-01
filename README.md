@@ -85,8 +85,11 @@ db.password=[yourpassword]
 <h3 align="center">Homework 3 | Unified Plan for MotorPH Payroll System Expansion</h3>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/b227bbe0-348e-4661-829f-6fdf4121bde1" alt="469kxyxh-200" width="300"/>
+  <a href="https://docs.google.com/spreadsheets/d/1HDd5QNA5HaLYVDqjb4cPjdZvc39bwnxxZYSiUCOSfws/edit?usp=sharing" target="_blank">
+    <img src="https://github.com/user-attachments/assets/b227bbe0-348e-4661-829f-6fdf4121bde1" alt="469kxyxh-200" width="300"/>
+  </a>
 </div>
+
 
 <h3 align="center">Homework 7 | Unit Testing</h3>
 
