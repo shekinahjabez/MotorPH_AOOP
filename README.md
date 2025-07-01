@@ -82,7 +82,7 @@ db.password=[yourpassword]
 ---
 ### 📁 Project Documentation
 
-<h4 align="center">Homework 3 | Unified Plan for MotorPH Payroll System Expansion</h4>
+<h3 align="center">Homework 3 | Unified Plan for MotorPH Payroll System Expansion</h3>
 
 <div align="center">
   <a href="https://docs.google.com/spreadsheets/d/1HDd5QNA5HaLYVDqjb4cPjdZvc39bwnxxZYSiUCOSfws/edit?usp=sharing" target="_blank">
@@ -91,7 +91,7 @@ db.password=[yourpassword]
 </div>
 
 
-<h4 align="center">Homework 7 | Unit Testing</h4>
+<h3 align="center">Homework 7 | Unit Testing</h3>
 
 <div align="center">
   <a href="https://docs.google.com/spreadsheets/d/1F3L0Za7bEWXZnBvyUVt2QsKkvnZ3Y8Q8ryHLwzJaAoU/edit?usp=sharing" target="_blank">
