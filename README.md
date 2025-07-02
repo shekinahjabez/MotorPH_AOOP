@@ -15,7 +15,7 @@ Before running this project, ensure you have installed:
 
 ## 🛠 Database Setup: Restoring `postgres.dump`
 
-### **Step 1: Download `postgres.dump`**
+### **Step 1: Download `motorph_db.dump`**
 Download the database dump file via the following link:  
 📥 **[Download postgres.dump](https://drive.google.com/file/d/1WwFq37e_yk4N4PvOtZx0H8D9JFq9JuEk/view?usp=sharing)**  
 
