@@ -27,7 +27,7 @@ public class EmployeeRepositoryTest {
         System.out.println("--- Starting EmployeeTest: Setting up database connection. ---");
         String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "postgres";
+        String password = "sj";
 
         connection = DriverManager.getConnection(url, user, password);
         System.out.println("Database connection established successfully.");

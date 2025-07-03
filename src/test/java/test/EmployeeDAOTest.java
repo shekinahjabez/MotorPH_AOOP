@@ -8,7 +8,7 @@ import com.payroll.domain.Employee;
 import com.payroll.domain.HR;
 import com.payroll.domain.LeaveBalance;
 import com.payroll.subdomain.LeaveType;
-import com.payroll.services.EmployeeService;
+import com.payroll.DAO.EmployeeDAO;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,10 +28,10 @@ import java.util.List;
  * @author paulomolina
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class EmployeeServiceTest {
+public class EmployeeDAOTest {
 
     private static Connection connection;
-    private static EmployeeService employeeService;
+    private static EmployeeDAO employeeService;
 
     // A test employee ID that we know exists in our database.
     private static final int TEST_EMPLOYEE_ID = 10002;
@@ -41,9 +41,9 @@ public class EmployeeServiceTest {
         System.out.println("--- Starting EmployeeServiceTest: Setting up database connection and service. ---");
         String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "postgres";
+        String password = "sj";
         connection = DriverManager.getConnection(url, user, password);
-        employeeService = new EmployeeService(connection);
+        employeeService = new EmployeeDAO(connection);
         System.out.println("Database connection and service initialized.");
         System.out.println("---------------------------------------------------------------------------------");
     }

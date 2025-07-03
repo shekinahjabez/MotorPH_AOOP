@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.payroll.services;
+package com.payroll.DAO;
 
 import com.payroll.domain.Employee;
 import com.payroll.domain.LeaveBalance;
@@ -26,10 +26,10 @@ import java.util.List;
  *
  * @author leniejoice
  */
-public class EmployeeService {
+public class EmployeeDAO {
     private Connection connection;
 
-    public EmployeeService(Connection connection) {
+    public EmployeeDAO(Connection connection) {
         try {
             this.connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {

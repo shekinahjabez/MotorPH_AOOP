@@ -2,15 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.payroll.main;
+package com.payroll.UI;
 
 import com.payroll.subdomain.ComboItem;
 import com.payroll.domain.IT;
 import com.payroll.domain.Person;
 import com.payroll.domain.Employee;
-import com.payroll.services.HRService;
-import com.payroll.services.ITService;
-import com.payroll.services.FinanceService;
+import com.payroll.DAO.HRDAO;
+import com.payroll.DAO.ITDAO;
+import com.payroll.DAO.FinanceDAO;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.domain.SalaryCalculation;
 import java.awt.CardLayout;
@@ -42,9 +42,9 @@ public class FinanceDashboard extends javax.swing.JFrame {
     private DatabaseConnection dbConnection;
     private CardLayout cardLayout;
     private IT empAccount;
-    private ITService empAccountService;
-    private HRService hrService;
-    private FinanceService payrollService;
+    private ITDAO empAccountService;
+    private HRDAO hrService;
+    private FinanceDAO payrollService;
     private Integer employeeSearchID;
     private ReportGenerator reportGenerator;
     
@@ -57,9 +57,9 @@ public class FinanceDashboard extends javax.swing.JFrame {
 
         try {
             Connection connection = DatabaseConnection.getConnection();
-            this.empAccountService = new ITService(connection);
-            this.hrService = new HRService(connection);
-            this.payrollService = new FinanceService(connection);
+            this.empAccountService = new ITDAO(connection);
+            this.hrService = new HRDAO(connection);
+            this.payrollService = new FinanceDAO(connection);
         } catch (SQLException e) {
             e.printStackTrace(); // Optional: show a JOptionPane for better user feedback
         }
