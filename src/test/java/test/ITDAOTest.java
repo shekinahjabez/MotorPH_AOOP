@@ -7,8 +7,8 @@ package test;
 import com.payroll.domain.Employee;
 import com.payroll.domain.IT;
 import com.payroll.domain.Person;
-import com.payroll.services.HRService;
-import com.payroll.services.ITService;
+import com.payroll.DAO.HRDAO;
+import com.payroll.DAO.ITDAO;
 import com.payroll.subdomain.EmployeePosition; 
 import com.payroll.subdomain.EmployeeStatus; 
 import org.junit.jupiter.api.*;
@@ -26,11 +26,11 @@ import java.sql.SQLException;
  *
  * @author paulomolina
  */
-public class ITServiceTest {
+public class ITDAOTest {
 
     private static Connection connection;
-    private static ITService itService;
-    private static HRService hrService; // Needed for creating/deleting employee details
+    private static ITDAO itService;
+    private static HRDAO hrService; // Needed for creating/deleting employee details
     
 
     // Use an employee ID that we know has an account in the test DB
@@ -41,14 +41,14 @@ public class ITServiceTest {
     @BeforeAll
     public static void setup() throws SQLException {
         System.out.println("--- Starting ITServiceTest: Setting up database connection and services. ---");
-        String url = "jdbc:postgresql://localhost:5432/motorph_db";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "postgres"; // change password
+        String password = "sj";
         connection = DriverManager.getConnection(url, user, password);
         
         // Initialize BOTH services
-        itService = new ITService(connection);
-        hrService = new HRService(connection); // <-- ADD THIS LINE
+        itService = new ITDAO(connection);
+        hrService = new HRDAO(connection); // <-- ADD THIS LINE
         
         System.out.println("Database connection and services initialized.");
         System.out.println("--------------------------------------------------------------------------");

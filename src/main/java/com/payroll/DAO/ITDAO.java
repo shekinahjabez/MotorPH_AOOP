@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.payroll.services;
+package com.payroll.DAO;
 
 import com.payroll.domain.IT;
 import com.payroll.domain.Person;
@@ -24,14 +24,14 @@ import java.util.Map;
  *
  * @author leniejoice
  */
-public class ITService {
+public class ITDAO {
     private Connection connection;
-    private HRService hrService;
+    private HRDAO hrService;
 
-    public ITService(Connection connection) {
+    public ITDAO(Connection connection) {
         try {
             this.connection = DatabaseConnection.getConnection();
-            this.hrService = new HRService(connection);
+            this.hrService = new HRDAO(connection);
         } catch (SQLException e) {
             e.printStackTrace(); // Consider using a logger in real applications
         }

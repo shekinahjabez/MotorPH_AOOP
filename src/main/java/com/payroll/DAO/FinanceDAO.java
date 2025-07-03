@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.payroll.services;
+package com.payroll.DAO;
 import com.payroll.domain.Employee;
 import com.payroll.domain.Finance;
 import com.payroll.domain.Person;
@@ -31,10 +31,10 @@ import java.util.logging.Logger;
  *
  * @author Computer leniejoice
  */
-public class FinanceService {
+public class FinanceDAO {
     private Connection connection;
     
-    public FinanceService(Connection connection) {
+    public FinanceDAO(Connection connection) {
         try {
             this.connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
@@ -92,7 +92,7 @@ public class FinanceService {
                     }
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(FinanceService.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FinanceDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

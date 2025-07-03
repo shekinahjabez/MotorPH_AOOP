@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.payroll.main;
+package com.payroll.UI;
 
 import com.payroll.subdomain.ComboItem;
 import com.payroll.domain.IT;
@@ -12,10 +12,10 @@ import com.payroll.subdomain.EmployeePosition;
 import com.payroll.subdomain.EmployeeStatus;
 import com.payroll.domain.LeaveBalance;
 import com.payroll.domain.HR;
-import com.payroll.services.HRService;
-import com.payroll.services.ITService;
-import com.payroll.services.EmployeeService;
-import com.payroll.services.FinanceService;
+import com.payroll.DAO.HRDAO;
+import com.payroll.DAO.ITDAO;
+import com.payroll.DAO.EmployeeDAO;
+import com.payroll.DAO.FinanceDAO;
 import com.payroll.table.TableActionCellEditor;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.table.TableActionCellRender;
@@ -55,10 +55,10 @@ public class HRDashboard extends javax.swing.JFrame {
     private DatabaseConnection dbConnection;
     private CardLayout cardLayout;
     private IT empAccount;
-    private ITService empAccountService;
-    private HRService hrService;
-    private FinanceService payrollService;
-    private EmployeeService employeeService;
+    private ITDAO empAccountService;
+    private HRDAO hrService;
+    private FinanceDAO payrollService;
+    private EmployeeDAO employeeService;
     private Integer employeeSearchID;
     private long validatedPagibig;
     private long validatedPhilhealth;
@@ -75,10 +75,10 @@ public class HRDashboard extends javax.swing.JFrame {
 
         try {
             Connection connection = DatabaseConnection.getConnection();
-            this.empAccountService = new ITService(connection);
-            this.hrService = new HRService(connection);
-            this.payrollService = new FinanceService(connection);
-            this.employeeService = new EmployeeService(connection);
+            this.empAccountService = new ITDAO(connection);
+            this.hrService = new HRDAO(connection);
+            this.payrollService = new FinanceDAO(connection);
+            this.employeeService = new EmployeeDAO(connection);
         } catch (SQLException e) {
             e.printStackTrace(); // Optionally use JOptionPane for user-friendly error
         }

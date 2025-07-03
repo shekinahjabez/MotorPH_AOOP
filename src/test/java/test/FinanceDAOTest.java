@@ -6,7 +6,7 @@ package test;
 
 import com.payroll.domain.Finance;
 import com.payroll.domain.Person;
-import com.payroll.services.FinanceService;
+import com.payroll.DAO.FinanceDAO;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,10 +22,10 @@ import java.sql.SQLException;
  *
  * @author paulomolina
  */
-public class FinanceServiceTest {
+public class FinanceDAOTest {
 
     private static Connection connection;
-    private static FinanceService financeService;
+    private static FinanceDAO financeService;
 
     // A test employee ID that we know exists and has payroll details.
     private static final int TEST_EMPLOYEE_ID = 10002;
@@ -33,11 +33,11 @@ public class FinanceServiceTest {
     @BeforeAll
     public static void setup() throws SQLException {
         System.out.println("--- Starting FinanceServiceTest: Setting up database connection and service. ---");
-        String url = "jdbc:postgresql://localhost:5432/motorph_db";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "postgres"; // change password
+        String password = "sj";
         connection = DriverManager.getConnection(url, user, password);
-        financeService = new FinanceService(connection);
+        financeService = new FinanceDAO(connection);
         System.out.println("Database connection and service initialized.");
         System.out.println("--------------------------------------------------------------------------------");
     }

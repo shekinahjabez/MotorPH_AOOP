@@ -6,7 +6,7 @@ package test;
 
 import com.payroll.domain.Employee;
 import com.payroll.domain.Person;
-import com.payroll.services.HRService;
+import com.payroll.DAO.HRDAO;
 import com.payroll.subdomain.EmployeePosition;
 import com.payroll.subdomain.EmployeeStatus;
 import org.junit.jupiter.api.*;
@@ -26,10 +26,10 @@ import java.util.List;
  *
  * @author paulomolina
  */
-public class HRServiceTest {
+public class HRDAOTest {
 
     private static Connection connection;
-    private static HRService hrService;
+    private static HRDAO hrService;
 
     // A temporary ID for our test employee that is unlikely to exist.
     private static int testEmployeeId;
@@ -37,11 +37,11 @@ public class HRServiceTest {
     @BeforeAll
     public static void setup() throws SQLException {
         System.out.println("--- Starting HRServiceTest: Setting up database connection and service. ---");
-        String url = "jdbc:postgresql://localhost:5432/motorph_db";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "postgres"; // change password
+        String password = "sj";
         connection = DriverManager.getConnection(url, user, password);
-        hrService = new HRService(connection);
+        hrService = new HRDAO(connection);
         System.out.println("Database connection and service initialized.");
         System.out.println("---------------------------------------------------------------------------");
     }

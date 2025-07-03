@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.payroll.main;
+package com.payroll.UI;
 
 import com.payroll.subdomain.ComboItem;
 import com.payroll.domain.IT;
 import com.payroll.domain.Person;
 import com.payroll.subdomain.UserRole;
-import com.payroll.services.HRService;
-import com.payroll.services.ITService;
+import com.payroll.DAO.HRDAO;
+import com.payroll.DAO.ITDAO;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.util.ReportGenerator;
 import java.awt.CardLayout;
@@ -35,8 +35,8 @@ public class ITDashboard extends javax.swing.JFrame {
     private DatabaseConnection dbConnection;
     private CardLayout cardLayout;
     private IT empAccount;
-    private ITService itService;
-    private HRService hrService;
+    private ITDAO itService;
+    private HRDAO hrService;
     private ReportGenerator reportGenerator;
     
     public ITDashboard(IT empAccount) {
@@ -48,8 +48,8 @@ public class ITDashboard extends javax.swing.JFrame {
 
         try {
             Connection connection = DatabaseConnection.getConnection();
-            this.itService = new ITService(connection);
-            this.hrService = new HRService(connection);
+            this.itService = new ITDAO(connection);
+            this.hrService = new HRDAO(connection);
         } catch (SQLException e) {
             e.printStackTrace(); // You can show a dialog box here for better UX
         }

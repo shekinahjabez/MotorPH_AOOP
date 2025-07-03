@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.payroll.main;
+package com.payroll.UI;
 
 import com.payroll.subdomain.ComboItem;
 import com.payroll.domain.IT;
@@ -12,9 +12,9 @@ import com.payroll.domain.LeaveBalance;
 import com.payroll.domain.HR;
 import com.payroll.domain.HR.LeaveStatus;
 import com.payroll.subdomain.LeaveType;
-import com.payroll.services.ITService;
-import com.payroll.services.EmployeeService;
-import com.payroll.services.FinanceService;
+import com.payroll.DAO.ITDAO;
+import com.payroll.DAO.EmployeeDAO;
+import com.payroll.DAO.FinanceDAO;
 import com.payroll.util.DatabaseConnection;
 import com.payroll.domain.SalaryCalculation;
 import com.payroll.util.ReportGenerator;
@@ -53,9 +53,9 @@ public class EmployeeDashboard extends javax.swing.JFrame {
     private DatabaseConnection dbConnection;
     private CardLayout cardLayout;
     private IT empAccount;
-    private ITService empAccountService;
-    private FinanceService payrollService;
-    private EmployeeService empService;
+    private ITDAO empAccountService;
+    private FinanceDAO payrollService;
+    private EmployeeDAO empService;
     private int currentEmployeeId;
     private ReportGenerator reportGenerator;
     
@@ -71,9 +71,9 @@ public class EmployeeDashboard extends javax.swing.JFrame {
 
         try {
             Connection connection = DatabaseConnection.getConnection();
-            this.empAccountService = new ITService(connection);
-            this.payrollService = new FinanceService(connection);
-            this.empService = new EmployeeService(connection);
+            this.empAccountService = new ITDAO(connection);
+            this.payrollService = new FinanceDAO(connection);
+            this.empService = new EmployeeDAO(connection);
         } catch (SQLException e) {
             e.printStackTrace(); // You can replace this with a popup if needed
         }

@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.payroll.main;
+package com.payroll.UI;
 
 import com.payroll.domain.IT;
 import javax.swing.JOptionPane;
-import com.payroll.main.HRDashboard;
-import com.payroll.services.ITService;
+import com.payroll.UI.HRDashboard;
+import com.payroll.DAO.ITDAO;
 import com.payroll.util.DatabaseConnection;
 import javax.swing.JOptionPane;
 import java.awt.Toolkit;
@@ -31,11 +31,11 @@ public class LogIn extends javax.swing.JFrame {
      * Creates new form LogIn
      */
     
-    private ITService empAccountService;
+    private ITDAO empAccountService;
     public LogIn() {
            try {
                Connection connection = DatabaseConnection.getConnection();
-               empAccountService = new ITService(connection);
+               empAccountService = new ITDAO(connection);
            } catch (SQLException e) {
                e.printStackTrace(); // You may also want to show a dialog to the user
            }
@@ -103,11 +103,9 @@ public class LogIn extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\Computer\\Downloads\\cp2 icons\\padlock .png")); // NOI18N
         jLabel3.setText("Password");
 
         jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon("C:\\Users\\Computer\\Downloads\\cp2 icons\\user.png")); // NOI18N
         jLabel4.setText("Username");
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -233,7 +231,7 @@ public class LogIn extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 538, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 1, Short.MAX_VALUE))))
