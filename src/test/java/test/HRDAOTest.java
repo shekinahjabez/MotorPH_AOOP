@@ -37,9 +37,9 @@ public class HRDAOTest {
     @BeforeAll
     public static void setup() throws SQLException {
         System.out.println("--- Starting HRServiceTest: Setting up database connection and service. ---");
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5432/motorph_db";
         String user = "postgres";
-        String password = "sj";
+        String password = "postgres";
         connection = DriverManager.getConnection(url, user, password);
         hrService = new HRDAO(connection);
         System.out.println("Database connection and service initialized.");
