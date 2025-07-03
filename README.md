@@ -5,6 +5,20 @@ MotorPH Payroll System is a **Java-based payroll management system** designed to
 
 ---
 
+## 👥 Development Team
+
+* Shekinah Jabez Florentino
+* Lenie Joice Mendoza
+* Maricar Punzalan
+* Mary Jullianne Maycacayan
+* Nicolas Lugtu
+* Paulo Martin Molina
+
+**Under the guidance of:**
+Sir Glenn Baluyot
+
+---
+
 ## 🔧 Prerequisites
 Before running this project, ensure you have installed:
 
@@ -13,11 +27,11 @@ Before running this project, ensure you have installed:
 - **Apache NetBeans (Recommended IDE)** → [Download NetBeans](https://netbeans.apache.org/download/index.html)
 ---
 
-## 🛠 Database Setup: Restoring `postgres.dump`
+## 🛠 Database Setup: Restoring `motorph_db.dump`
 
-### **Step 1: Download `postgres.dump`**
+### **Step 1: Download `motorph_db.dump`**
 Download the database dump file via the following link:  
-📥 **[Download postgres.dump](https://drive.google.com/file/d/1WwFq37e_yk4N4PvOtZx0H8D9JFq9JuEk/view?usp=sharing)**  
+📥 **[Download motorph_db.dump](https://drive.google.com/file/d/1a-K7YDQOH1LX3Znp4D1qyRnVP1DQad40/view?usp=sharing)**  
 
 Do not move the file from your **Downloads** directory.
 
@@ -46,12 +60,12 @@ cd $HOME\Downloads
 Run the following command to restore the database:  
 
 ```powershell
-& "C:\Program Files\PostgreSQL\16\bin\pg_restore.exe" -U postgres -d postgres "postgres.dump"
+& "C:\Program Files\PostgreSQL\16\bin\pg_restore.exe" -U postgres -d postgres "motorph_db.dump"
 ```
 ### 💡 Notes:
 - This assumes that **PostgreSQL** is installed in the **default location** (`C:\Program Files\PostgreSQL\16\`).
 - If prompted, **enter your PostgreSQL password**.
-- The database will be restored under the name **"postgres"** (you can modify this if needed).
+- The database will be restored under the name **"motorph_db"** (you can modify this if needed).
 - This assumes that the **admin role** is set up in PostgreSQL, as shown in **pgAdmin** under **Login/Group Roles**.
   - **If the `admin` role does not exist, create it manually in pgAdmin**:
     1. Open **pgAdmin**.
@@ -66,6 +80,27 @@ Run the following command to restore the database:
     7. Click **Save**.
 ---
 
+### **Alternative Database Setup (For Existing PostgreSQL Users)**
+
+If you already have PostgreSQL installed and prefer to use its built-in Query Tool:
+
+1.  **Download the SQL file** from the following link:
+    📥 **[Download motorph_db.sql](https://drive.google.com/file/d/1Z-0NXCIZyAGZOnCGvu7lEDkZii87_LLG/view?usp=sharing)**
+
+2.  Open **pgAdmin** (or your preferred PostgreSQL client).
+
+3.  Connect to your PostgreSQL 16 server.
+
+4.  Right-click on **Databases** and select **Create** → **Database...**. Name the new database `motorph_db`.
+
+5.  Right-click on the newly created `motorph_db` and select **Query Tool**.
+
+6.  In the Query Tool window:
+    * Click on the **"Open file" icon** (usually looks like an open folder) in the toolbar.
+    * Navigate to your **Downloads** folder (or wherever you saved `motorph_db.sql`).
+    * Select the `motorph_db.sql` file and click **"Open"**. The SQL commands will now appear in the Query Editor pane.
+    * To execute the contents, click on the **"Execute/Refresh" icon** (usually a lightning bolt or play button). This will run all the SQL commands in the file, creating the necessary tables and inserting data into your `motorph_db` database.
+
 ### 🔧 Configure the `db.properties` File
 In NetBeans, navigate to: 
 
@@ -79,3 +114,25 @@ db.url=jdbc:postgresql://localhost:5432/postgres
 db.username=postgres
 db.password=[yourpassword]
 ```
+---
+### 📁 Project Documentation
+
+<h3 align="center">Homework 3 | Unified Plan for MotorPH Payroll System Expansion</h3>
+
+<div align="center">
+  <a href="https://docs.google.com/spreadsheets/d/1HDd5QNA5HaLYVDqjb4cPjdZvc39bwnxxZYSiUCOSfws/edit?usp=sharing" target="_blank">
+    <img src="https://github.com/user-attachments/assets/b227bbe0-348e-4661-829f-6fdf4121bde1" alt="469kxyxh-200" width="300"/>
+  </a>
+</div>
+
+
+<h3 align="center">Homework 7 | Unit Testing</h3>
+
+<div align="center">
+  <a href="https://docs.google.com/spreadsheets/d/1F3L0Za7bEWXZnBvyUVt2QsKkvnZ3Y8Q8ryHLwzJaAoU/edit?usp=sharing" target="_blank">
+    <img src="https://github.com/user-attachments/assets/02f20e5f-195e-46be-820e-7064e74e0444" alt="5f2t58x7-400" width="300" height="300"/>
+  </a>
+</div>
+
+
+
