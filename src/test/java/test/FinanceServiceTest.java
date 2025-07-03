@@ -33,9 +33,9 @@ public class FinanceServiceTest {
     @BeforeAll
     public static void setup() throws SQLException {
         System.out.println("--- Starting FinanceServiceTest: Setting up database connection and service. ---");
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5432/motorph_db";
         String user = "postgres";
-        String password = "postgres";
+        String password = "postgres"; // change password
         connection = DriverManager.getConnection(url, user, password);
         financeService = new FinanceService(connection);
         System.out.println("Database connection and service initialized.");
