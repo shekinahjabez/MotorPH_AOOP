@@ -110,7 +110,7 @@ Ensure your `db.properties` file matches your PostgreSQL setup:
 
 ```java
 
-db.url=jdbc:postgresql://localhost:5432/postgres
+db.url=jdbc:postgresql://localhost:5432/motorph_db
 db.username=postgres
 db.password=[yourpassword]
 ```
