@@ -25,9 +25,9 @@ public class EmployeeRepositoryTest {
     public static void setup() throws SQLException {
         // This is a great place for an initial display message
         System.out.println("--- Starting EmployeeTest: Setting up database connection. ---");
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5432/motorph_db";
         String user = "postgres";
-        String password = "postgres";
+        String password = "postgres"; // change password
 
         connection = DriverManager.getConnection(url, user, password);
         System.out.println("Database connection established successfully.");
