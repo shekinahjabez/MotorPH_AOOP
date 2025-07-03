@@ -66,6 +66,31 @@ Run the following command to restore the database:
     7. Click **Save**.
 ---
 
+Alternative Database Setup (For Existing PostgreSQL Users)
+If you already have PostgreSQL installed and prefer to use its built-in Query Tool:
+
+Download the SQL file from the following link:
+📥 Download motorph_db.sql
+
+Open pgAdmin (or your preferred PostgreSQL client).
+
+Connect to your PostgreSQL 16 server.
+
+Right-click on Databases and select Create → Database.... Name the new database motorph_db.
+
+Right-click on the newly created motorph_db and select Query Tool.
+
+In the Query Tool window:
+
+Click on the "Open file" icon (usually looks like an open folder) in the toolbar.
+
+Navigate to your Downloads folder (or wherever you saved motorph_db.sql).
+
+Select the motorph_db.sql file and click "Open". The SQL commands will now appear in the Query Editor pane.
+
+To execute the contents, click on the "Execute/Refresh" icon (usually a lightning bolt or play button). This will run all the SQL commands in the file, creating the necessary tables and inserting data into your motorph_db database.
+
+
 ### 🔧 Configure the `db.properties` File
 In NetBeans, navigate to: 
 
