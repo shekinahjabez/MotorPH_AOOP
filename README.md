@@ -5,6 +5,20 @@ MotorPH Payroll System is a **Java-based payroll management system** designed to
 
 ---
 
+## 👥 Development Team
+
+* Shekinah Jabez Florentino
+* Lenie Joice Mendoza
+* Maricar Punzalan
+* Mary Jullianne Maycacayan
+* Nicolas Lugtu
+* Paulo Martin Molina
+
+**Under the guidance of:**
+Sir Glenn Baluyot
+
+---
+
 ## 🔧 Prerequisites
 Before running this project, ensure you have installed:
 
