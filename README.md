@@ -13,11 +13,11 @@ Before running this project, ensure you have installed:
 - **Apache NetBeans (Recommended IDE)** → [Download NetBeans](https://netbeans.apache.org/download/index.html)
 ---
 
-## 🛠 Database Setup: Restoring `postgres.dump`
+## 🛠 Database Setup: Restoring `motorph_db.dump`
 
 ### **Step 1: Download `motorph_db.dump`**
 Download the database dump file via the following link:  
-📥 **[Download postgres.dump](https://drive.google.com/file/d/1WwFq37e_yk4N4PvOtZx0H8D9JFq9JuEk/view?usp=sharing)**  
+📥 **[Download motorph_db.dump](https://drive.google.com/file/d/1a-K7YDQOH1LX3Znp4D1qyRnVP1DQad40/view?usp=sharing)**  
 
 Do not move the file from your **Downloads** directory.
 
@@ -46,12 +46,12 @@ cd $HOME\Downloads
 Run the following command to restore the database:  
 
 ```powershell
-& "C:\Program Files\PostgreSQL\16\bin\pg_restore.exe" -U postgres -d postgres "postgres.dump"
+& "C:\Program Files\PostgreSQL\16\bin\pg_restore.exe" -U postgres -d postgres "motorph_db.dump"
 ```
 ### 💡 Notes:
 - This assumes that **PostgreSQL** is installed in the **default location** (`C:\Program Files\PostgreSQL\16\`).
 - If prompted, **enter your PostgreSQL password**.
-- The database will be restored under the name **"postgres"** (you can modify this if needed).
+- The database will be restored under the name **"motorph_db"** (you can modify this if needed).
 - This assumes that the **admin role** is set up in PostgreSQL, as shown in **pgAdmin** under **Login/Group Roles**.
   - **If the `admin` role does not exist, create it manually in pgAdmin**:
     1. Open **pgAdmin**.
