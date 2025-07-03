@@ -41,9 +41,9 @@ public class ITDAOTest {
     @BeforeAll
     public static void setup() throws SQLException {
         System.out.println("--- Starting ITServiceTest: Setting up database connection and services. ---");
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5432/motorph_db";
         String user = "postgres";
-        String password = "sj";
+        String password = "postgres";
         connection = DriverManager.getConnection(url, user, password);
         
         // Initialize BOTH services
