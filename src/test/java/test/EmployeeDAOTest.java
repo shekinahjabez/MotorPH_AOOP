@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -41,7 +42,7 @@ public class EmployeeDAOTest {
         System.out.println("--- Starting EmployeeServiceTest: Setting up database connection and service. ---");
         String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "sj";
+        String password = "postgres";
         connection = DriverManager.getConnection(url, user, password);
         employeeService = new EmployeeDAO(connection);
         System.out.println("Database connection and service initialized.");

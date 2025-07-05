@@ -39,7 +39,7 @@ public class HRDAOTest {
         System.out.println("--- Starting HRServiceTest: Setting up database connection and service. ---");
         String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "sj";
+        String password = "postgres";
         connection = DriverManager.getConnection(url, user, password);
         hrService = new HRDAO(connection);
         System.out.println("Database connection and service initialized.");

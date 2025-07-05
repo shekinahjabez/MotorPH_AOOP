@@ -35,7 +35,7 @@ public class FinanceDAOTest {
         System.out.println("--- Starting FinanceServiceTest: Setting up database connection and service. ---");
         String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "sj";
+        String password = "postgres";
         connection = DriverManager.getConnection(url, user, password);
         financeService = new FinanceDAO(connection);
         System.out.println("Database connection and service initialized.");

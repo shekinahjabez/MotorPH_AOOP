@@ -43,7 +43,7 @@ public class ITDAOTest {
         System.out.println("--- Starting ITServiceTest: Setting up database connection and services. ---");
         String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
-        String password = "sj";
+        String password = "postgres";
         connection = DriverManager.getConnection(url, user, password);
         
         // Initialize BOTH services
@@ -192,5 +192,3 @@ public class ITDAOTest {
         System.out.println("Database connection closed.");
     }
 }
-
-
