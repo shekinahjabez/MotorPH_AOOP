@@ -226,9 +226,26 @@ public class HRDAO {
             preparedStatement.setLong(7, empDetails.getEmpPhilHealth());
             preparedStatement.setString(8, empDetails.getEmpTIN());
             preparedStatement.setLong(9, empDetails.getEmpPagibig());
-            preparedStatement.setObject(10, empDetails.getEmpStatus().getId(), Types.INTEGER);
-            preparedStatement.setObject(11, empDetails.getEmpPosition().getId(), Types.INTEGER);
-            preparedStatement.setObject(12, empDetails.getEmpImmediateSupervisor().getEmpID(), Types.INTEGER);
+            // Status
+            if (empDetails.getEmpStatus() != null) {
+                preparedStatement.setObject(10, empDetails.getEmpStatus().getId(), Types.INTEGER);
+            } else {
+                preparedStatement.setNull(10, Types.INTEGER);
+            }
+
+            // Position
+            if (empDetails.getEmpPosition() != null) {
+                preparedStatement.setObject(11, empDetails.getEmpPosition().getId(), Types.INTEGER);
+            } else {
+                preparedStatement.setNull(11, Types.INTEGER);
+            }
+
+            // Supervisor
+            if (empDetails.getEmpImmediateSupervisor() != null) {
+                preparedStatement.setObject(12, empDetails.getEmpImmediateSupervisor().getEmpID(), Types.INTEGER);
+            } else {
+                preparedStatement.setNull(12, Types.INTEGER);
+            }
 
             try (ResultSet resultset = preparedStatement.executeQuery()) {
                 return resultset.next();

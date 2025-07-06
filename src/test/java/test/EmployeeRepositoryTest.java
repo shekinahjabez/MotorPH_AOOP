@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -25,7 +26,7 @@ public class EmployeeRepositoryTest {
     public static void setup() throws SQLException {
         // This is a great place for an initial display message
         System.out.println("--- Starting EmployeeTest: Setting up database connection. ---");
-        String url = "jdbc:postgresql://localhost:5432/motorph_db";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         String user = "postgres";
         String password = "postgres"; // change password
 

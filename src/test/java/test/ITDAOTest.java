@@ -192,5 +192,3 @@ public class ITDAOTest {
         System.out.println("Database connection closed.");
     }
 }
-
-

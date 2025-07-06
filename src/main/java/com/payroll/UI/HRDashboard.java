@@ -1767,21 +1767,21 @@ public class HRDashboard extends javax.swing.JFrame {
             return;
         }
         employeeIDTField.setText(String.valueOf(empDetails.getEmpID()));
-        lastNameTField.setText(empDetails.getLastName());
-        firstNameTField.setText(empDetails.getFirstName());
-        sssTField.setText(empDetails.getEmpSSS());
-        philhealthTField.setText(String.valueOf(empDetails.getEmpPhilHealth()));
-        tinTField.setText(String.valueOf(empDetails.getEmpTIN()));
-        pagibigTField.setText(String.valueOf(empDetails.getEmpPagibig()));
-        addressTField.setText(empDetails.getEmpAddress());
+        lastNameTField.setText(empDetails.getLastName().trim());
+        firstNameTField.setText(empDetails.getFirstName().trim());
+        sssTField.setText(empDetails.getEmpSSS().trim());
+        philhealthTField.setText(String.valueOf(empDetails.getEmpPhilHealth()).trim());
+        tinTField.setText(String.valueOf(empDetails.getEmpTIN()).trim());
+        pagibigTField.setText(String.valueOf(empDetails.getEmpPagibig()).trim());
+        addressTField.setText(empDetails.getEmpAddress().trim());
         dateChooser.setDate(empDetails.getEmpBirthday());
-        phoneTField.setText(String.valueOf(empDetails.getEmpPhoneNumber()));
-        salaryTField.setText(String.valueOf(empDetails. getEmpBasicSalary()));
-        hourlyTField.setText(String.valueOf(empDetails.getEmpHourlyRate()));
-        biMonthlyTField.setText(String.valueOf(empDetails.getEmpMonthlyRate()));
-        riceTField.setText(String.valueOf(empDetails.getEmpRice()));
-        phoneAllowTField.setText(String.valueOf(empDetails.getEmpPhone()));
-        clothingTField.setText(String.valueOf(empDetails.getEmpClothing()));
+        phoneTField.setText(String.valueOf(empDetails.getEmpPhoneNumber()).trim());
+        salaryTField.setText(String.valueOf(empDetails.getEmpBasicSalary()).trim());
+        hourlyTField.setText(String.valueOf(empDetails.getEmpHourlyRate()).trim());
+        biMonthlyTField.setText(String.valueOf(empDetails.getEmpMonthlyRate()).trim());
+        riceTField.setText(String.valueOf(empDetails.getEmpRice()).trim());
+        phoneAllowTField.setText(String.valueOf(empDetails.getEmpPhone()).trim());
+        clothingTField.setText(String.valueOf(empDetails.getEmpClothing()).trim());
 
         
         statusDropdown.setSelectedIndex(0);
@@ -1798,8 +1798,8 @@ public class HRDashboard extends javax.swing.JFrame {
         }
         
         IT empAccount = empAccountService.getByEmpID(empID);
-        usernameTField.setText(empAccount.getEmpUserName());
-        passwordTField.setText(empAccount.getEmpPassword());   
+        usernameTField.setText(empAccount.getEmpUserName().trim());
+        passwordTField.setText(empAccount.getEmpPassword().trim());
 
     }
        
@@ -1822,14 +1822,14 @@ public class HRDashboard extends javax.swing.JFrame {
             // First Name - required and must contain only letters
             if (StringUtils.isEmpty(empDetails.getFirstName())) {
                 errors.add("First Name is required.");
-            } else if (!empDetails.getFirstName().matches("^[A-Za-z\\-]+$")) {
+            } else if (!empDetails.getFirstName().matches("^[A-Za-z\\-\\s]+$")) {
                 errors.add("First Name must contain letters and dashes only.");
             }
 
             // Last Name - required and must contain only letters
             if (StringUtils.isEmpty(empDetails.getLastName())) {
                 errors.add("Last Name is required.");
-            } else if (!empDetails.getLastName().matches("^[A-Za-z\\-]+$")) {
+            } else if (!empDetails.getLastName().matches("^[A-Za-z\\-\\s]+$")) {
                 errors.add("Last Name must contain letters and dashes only.");
             }
 
@@ -1881,15 +1881,15 @@ public class HRDashboard extends javax.swing.JFrame {
             // SSS - required and digits only
             if (StringUtils.isEmpty(empDetails.getEmpSSS())) {
                 errors.add("SSS# is required.");
-            } else if (!empDetails.getEmpSSS().matches("^\\d+$")) {
-                errors.add("SSS# must contain digits only.");
+            } else if (!empDetails.getEmpSSS().matches("^[\\d\\-]+$")) {
+                errors.add("SSS# must contain only digits and dashes (-).");
             }
 
             // TIN - required and digits only
             if (StringUtils.isEmpty(empDetails.getEmpTIN())) {
                 errors.add("TIN# is required.");
-            } else if (!empDetails.getEmpTIN().matches("^\\d+$")) {
-                errors.add("TIN# must contain digits only.");
+            } else if (!empDetails.getEmpTIN().matches("^[\\d\\-]+$")) {
+                errors.add("TIN# must contain only digits and dashes (-).");
             }
 
             String pagibigInput = pagibigTField.getText().trim();
@@ -1939,20 +1939,21 @@ public class HRDashboard extends javax.swing.JFrame {
 
     
     private Person updateEmpDetailValues(){
-        String lastname = lastNameTField.getText().trim() !=null ? lastNameTField.getText() : "";
-        String firstname= firstNameTField.getText().trim() !=null ?  firstNameTField.getText().trim() : "";
+
+        String lastname = lastNameTField.getText() != null ? lastNameTField.getText().trim() : "";
+        String firstname = firstNameTField.getText() != null ? firstNameTField.getText().trim() : "";
+        String address = addressTField.getText() != null ? addressTField.getText().trim() : "";
+        String phoneNumber = phoneTField.getText() != null ? phoneTField.getText().trim() : "";
+        String sss = sssTField.getText() != null ? sssTField.getText().trim() : "";
+        String tin = tinTField.getText() != null ? tinTField.getText().trim() : "";
         //String birthday = birthdayTField.getText().trim()) !=null ? Date(birthdayTField.getText().trim()) : "";
-        String address = addressTField.getText().trim() !=null ? addressTField.getText().trim():"";
         double salary = !salaryTField.getText().trim().equals("") ? Double.parseDouble(salaryTField.getText().trim()) : 0;
-        String phoneNumber = phoneTField.getText().trim() !=null ? phoneTField.getText().trim() :"";
         double hourlyRate = !hourlyTField.getText().trim().equals("") ? Double.parseDouble(hourlyTField.getText().trim()) : 0;
         double biMonthly = !biMonthlyTField.getText().trim().equals("") ?  Double.parseDouble(biMonthlyTField.getText().trim()): 0;
         double rice = !riceTField.getText().trim().equals("") ? Double.parseDouble(riceTField.getText().trim()): 0;
         double phoneAllow= !phoneAllowTField.getText().trim().equals("") ? Double.parseDouble(phoneAllowTField.getText().trim()): 0;
         double clothing = !clothingTField.getText().trim().equals("")? Double.parseDouble(clothingTField.getText().trim()): 0;
         //long pagibig = !pagibigTField.getText().trim().equals("")? Long.valueOf(pagibigTField.getText().trim()): 0;
-        String sss = sssTField.getText().trim() !=null ? sssTField.getText().trim() :"";
-        String tin = tinTField.getText().trim() !=null ? tinTField.getText().trim():"";
         //long philhealth = !philhealthTField.getText().equals("") ? Long.valueOf(philhealthTField.getText().trim()): 0;
         long pagibig = 0;
         String pagibigInput = pagibigTField.getText().trim();
@@ -2270,6 +2271,7 @@ public class HRDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
+    
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         Person empDetails = updateEmpDetailValues();
         IT empAccount = updateEmpAccountValues();
