@@ -134,5 +134,53 @@ db.password=[yourpassword]
   </a>
 </div>
 
+## 📁 Project Documentation
+
+### 🧾 Homework 3 – Unified Plan for MotorPH Payroll System Expansion
+
+This document outlines the strategic roadmap for scaling the MotorPH Payroll System. It includes proposed infrastructure changes, resource allocation, and branch-level coordination to ensure a seamless rollout.
+
+🔗 [View Homework 3 - Unified Plan Spreadsheet](https://docs.google.com/spreadsheets/d/1HDd5QNA5HaLYVDqjb4cPjdZvc39bwnxxZYSiUCOSfws/edit?usp=sharing)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b227bbe0-348e-4661-829f-6fdf4121bde1" alt="Unified Plan Preview" width="300"/>
+</p>
+
+---
+
+### 🧪 Homework 7 – Unit Testing
+
+This document contains detailed unit test cases used to validate key modules in the MotorPH Payroll System. It ensures that all components perform correctly and catch errors early during the development cycle.
+
+🔗 [View Homework 7 - Unit Testing Spreadsheet](https://docs.google.com/spreadsheets/d/1F3L0Za7bEWXZnBvyUVt2QsKkvnZ3Y8Q8ryHLwzJaAoU/edit?usp=sharing)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/02f20e5f-195e-46be-820e-7064e74e0444" alt="Unit Testing Preview" width="300" height="300"/>
+</p>
+
+---
+
+### 📄 Expanded MotorPH Payroll System – Software Requirements Specification (SRS)
+
+This document serves as the official Software Requirements Specification (SRS) for the expanded MotorPH Payroll System. It details the purpose, scope, system features, non-functional requirements, user roles, assumptions, and diagrams supporting the system design.
+
+Key contents include:
+
+- 📌 **System Features**: Employee self-service, leave application, payroll processing, report generation, role-based access, and IT admin tools  
+- ⚙️ **Non-functional Requirements**: Security, performance, accuracy, reliability, and maintainability  
+- 👥 **User Roles**: Employees, HR, Finance, and IT Admins, each with tailored functionality  
+- 📊 **Diagrams**: Use Case, Class, and Entity Relationship Diagram  
+- 📚 **Glossary**: Definitions of technical terms and acronyms used throughout the system
+
+Prepared by:
+- Lenie Joice Mendoza  
+- Maricar Punzalan  
+- Mary Jullianne Maycacayan  
+- Nicolas Lugtu  
+- Paulo Martin Molina  
+- Shekinah Jabez Florentino
+
+🔗 [View SRS Document](https://docs.google.com/document/d/1vB5lh3BgKx0Eh3Q6CYR_sYkr_jsyKrs6eeQdrjF639U/edit?usp=sharing)
+
 
 
