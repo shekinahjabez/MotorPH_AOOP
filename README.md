@@ -115,25 +115,6 @@ db.username=postgres
 db.password=[yourpassword]
 ```
 ---
-### 📁 Project Documentation
-
-<h3 align="center">Homework 3 | Unified Plan for MotorPH Payroll System Expansion</h3>
-
-<div align="center">
-  <a href="https://docs.google.com/spreadsheets/d/1HDd5QNA5HaLYVDqjb4cPjdZvc39bwnxxZYSiUCOSfws/edit?usp=sharing" target="_blank">
-    <img src="https://github.com/user-attachments/assets/b227bbe0-348e-4661-829f-6fdf4121bde1" alt="469kxyxh-200" width="300"/>
-  </a>
-</div>
-
-
-<h3 align="center">Homework 7 | Unit Testing</h3>
-
-<div align="center">
-  <a href="https://docs.google.com/spreadsheets/d/1F3L0Za7bEWXZnBvyUVt2QsKkvnZ3Y8Q8ryHLwzJaAoU/edit?usp=sharing" target="_blank">
-    <img src="https://github.com/user-attachments/assets/02f20e5f-195e-46be-820e-7064e74e0444" alt="5f2t58x7-400" width="300" height="300"/>
-  </a>
-</div>
-
 ## 📁 Project Documentation
 
 ### 🧾 Homework 3 – Unified Plan for MotorPH Payroll System Expansion
@@ -163,14 +144,6 @@ This document contains detailed unit test cases used to validate key modules in 
 ### 📄 Expanded MotorPH Payroll System – Software Requirements Specification (SRS)
 
 This document serves as the official Software Requirements Specification (SRS) for the expanded MotorPH Payroll System. It includes purpose, scope, user needs, features, non-functional requirements, and diagrams.
-
-Prepared by:
-- Lenie Joice Mendoza  
-- Maricar Punzalan  
-- Mary Jullianne Maycacayan  
-- Nicolas Lugtu  
-- Paulo Martin Molina  
-- Shekinah Jabez Florentino
 
 <p align="center">
   <a href="https://docs.google.com/document/d/1vB5lh3BgKx0Eh3Q6CYR_sYkr_jsyKrs6eeQdrjF639U/edit?usp=sharing" target="_blank">
