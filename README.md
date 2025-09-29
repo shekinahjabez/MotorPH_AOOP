@@ -151,8 +151,3 @@ This document serves as the official Software Requirements Specification (SRS) f
   </a>
 </p>
 
-<p align="center">
-  <a href="https://docs.google.com/document/d/1vB5lh3BgKx0Eh3Q6CYR_sYkr_jsyKrs6eeQdrjF639U/edit?usp=sharing" target="_blank">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://docs.google.com/document/d/1vB5lh3BgKx0Eh3Q6CYR_sYkr_jsyKrs6eeQdrjF639U/edit?usp=sharing" alt="SRS QR Code" width="200" style="border:0;"/>
-  </a>
-</p>
